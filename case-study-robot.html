@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robot Delivery Case Study — Pratiksha Kulam</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="site-nav" id="siteNav">
+    <div class="container nav-inner">
+      <a class="monogram" href="index.html">PK</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
+      <div class="nav-menu" id="navMenu">
+        <a class="nav-link" href="index.html#work">Work</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="index.html#contact">Contact</a>
+        <a class="btn resume-btn" href="#" target="_blank" rel="noopener noreferrer">Resume ↗</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="container case-header">
+    <a class="case-back text-link" href="index.html#work">← All work</a>
+    <p class="case-meta">2025 · UX Research, Interaction Design, Conceptual</p>
+    <h1 class="case-title reveal-heading">Redesigning Robot Delivery in Third-Party Delivery Platforms</h1>
+    <p class="case-subtitle">Content coming soon — full write-up in progress.</p>
+    <div class="stats-row">
+      <div class="stat"><p class="stat-value">3 → 12</p><p class="stat-label">Screens</p></div>
+      <div class="stat"><p class="stat-value">4</p><p class="stat-label">Research Methods</p></div>
+      <div class="stat"><p class="stat-value">1</p><p class="stat-label">Real Product Gap</p></div>
+    </div>
+    <div class="case-hero reveal-card">Hero Image Placeholder</div>
+    <p class="caption">Project overview</p>
+  </header>
+
+  <main class="case-body">
+    <section class="case-section reveal-card">
+      <p class="case-section-label">Overview</p>
+      <h2>Understanding autonomous delivery trust</h2>
+      <p>This project explores how people perceive robot-assisted food delivery when the interface gives limited context and control.</p>
+    </section>
+    <section class="case-section reveal-card">
+      <p class="case-section-label">The Problem</p>
+      <h2>Trust drops when the handoff is unclear</h2>
+      <p>Users can track drivers but struggle to understand how robot delivery works, especially around pickup moments and failure states.</p>
+    </section>
+    <section class="case-section reveal-card">
+      <p class="case-section-label">Research</p>
+      <h2>Mixed methods for behavior and sentiment</h2>
+      <p>Research blended secondary analysis, competitor scans, moderated interviews, and flow heuristics to define the highest-friction moments.</p>
+      <div class="case-placeholder">Research Artifact Placeholder</div>
+    </section>
+    <section class="case-section reveal-card">
+      <p class="case-section-label">Process</p>
+      <h2>From current-state mapping to iterative flow redesign</h2>
+      <p>The concept evolved from 3 low-fidelity screens into a 12-screen journey focused on confidence cues, progress visibility, and clearer recovery paths.</p>
+      <div class="case-placeholder">Process Flow Placeholder</div>
+    </section>
+    <section class="case-section reveal-card">
+      <p class="case-section-label">Solution</p>
+      <h2>A calmer, clearer delivery narrative</h2>
+      <p>The redesign introduces transparent status updates, contextual microcopy, and key moments where users regain control without increasing cognitive load.</p>
+    </section>
+    <section class="case-section reveal-card">
+      <p class="case-section-label">Outcomes / Impact</p>
+      <h2>A stronger concept for product readiness</h2>
+      <p>The final direction surfaces one meaningful product gap and outlines a practical framework teams can use to evaluate robot delivery rollouts.</p>
+    </section>
+    <section class="case-section reveal-card">
+      <p class="case-section-label">Reflection</p>
+      <h2>Designing emerging tech needs narrative clarity</h2>
+      <p>New interaction models require confidence-building language and predictable states as much as visual polish.</p>
+    </section>
+  </main>
+
+  <footer class="case-footer">
+    <div class="container case-footer-inner">
+      <a class="text-link" href="index.html#work">← All work</a>
+      <a class="text-link" href="case-study-moodmode.html">Next project → MoodMode — AI-Powered Productivity App</a>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById("siteNav");
+    const menuToggle = document.getElementById("menuToggle");
+    const navMenu = document.getElementById("navMenu");
+
+    const updateNavBorder = () => {
+      nav.classList.toggle("scrolled", window.scrollY > 60);
+    };
+    updateNavBorder();
+    window.addEventListener("scroll", updateNavBorder);
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = nav.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    navMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        nav.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll(".reveal-heading").forEach((el) => observer.observe(el));
+    document.querySelectorAll(".reveal-card").forEach((el, index) => {
+      el.style.transitionDelay = `${index * 0.1}s`;
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

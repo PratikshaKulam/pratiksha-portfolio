@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Pratiksha Kulam</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="site-nav" id="siteNav">
+    <div class="container nav-inner">
+      <a class="monogram" href="index.html">PK</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
+      <div class="nav-menu" id="navMenu">
+        <a class="nav-link" href="index.html#work">Work</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="index.html#contact">Contact</a>
+        <a class="btn resume-btn" href="#" target="_blank" rel="noopener noreferrer">Resume ↗</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="section">
+    <div class="container">
+      <section class="about-hero">
+        <div>
+          <p class="section-label">About</p>
+          <h1 class="about-name reveal-heading">Pratiksha Kulam</h1>
+          <p class="pronunciation">(pruh-tick-sha)</p>
+          <p class="about-role">UX Designer &amp; Researcher</p>
+          <p class="about-meta">Chicago, IL · Open to Work</p>
+          <p class="about-bio">
+            I design at the intersection of research, empathy, and emerging technology.
+            With a CS background and an MS in Human-Computer Interaction, I bridge the
+            gap between how things work and how people feel using them.
+          </p>
+        </div>
+        <div class="flip-card reveal-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="assets/photo.jpg" alt="Pratiksha Kulam portrait" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+              <div class="photo-fallback" style="display:none;">PK</div>
+              <span class="photo-badge">Chicago, IL</span>
+            </div>
+            <div class="flip-card-back">
+              <p class="flip-emoji">🍔</p>
+              <p class="flip-text">Designer by day.</p>
+              <p class="flip-text">Burger explorer by night.</p>
+              <p class="flip-subtext">Currently obsessing over: AI + human behavior</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-bar reveal-card">
+        <div class="stat">
+          <p class="stat-value">MS HCI</p>
+          <p class="stat-label">DePaul University</p>
+        </div>
+        <div class="stat">
+          <p class="stat-value">BS CS</p>
+          <p class="stat-label">Computer Science Background</p>
+        </div>
+        <div class="stat">
+          <p class="stat-value">Chicago</p>
+          <p class="stat-label">Currently Based</p>
+        </div>
+        <div class="stat">
+          <p class="stat-value">Open to Work</p>
+          <p class="stat-label">Full-time &amp; Freelance</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <section class="section">
+    <div class="container">
+      <div class="story-grid">
+        <h2 class="story-title reveal-heading">My story</h2>
+        <div class="story-copy reveal-card">
+          <p>
+            I started in computer science — writing code, thinking in systems,
+            solving problems with logic. Then I discovered that the most interesting problems
+            weren't technical. They were human.
+          </p>
+          <p>
+            That shift led me to Human-Computer Interaction. Now I sit at the
+            intersection of both worlds: I understand how the system works, and I advocate
+            for the person using it. That combination is rare — and it's what makes my work different.
+          </p>
+          <p>
+            When I'm not designing, I'm probably testing a new restaurant in
+            Chicago, doom-scrolling design Twitter, or pretending I'll finish that Duolingo streak.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section-label">Toolbox</p>
+      <h2 class="section-heading reveal-heading">Tools I work with</h2>
+      <div class="tool-grid">
+        <span class="tool-pill reveal-card">Figma</span>
+        <span class="tool-pill reveal-card">FigJam</span>
+        <span class="tool-pill reveal-card">Maze</span>
+        <span class="tool-pill reveal-card">UserTesting</span>
+        <span class="tool-pill reveal-card">Miro</span>
+        <span class="tool-pill reveal-card">Notion</span>
+        <span class="tool-pill reveal-card">Jira</span>
+        <span class="tool-pill reveal-card">Confluence</span>
+        <span class="tool-pill reveal-card">HTML</span>
+        <span class="tool-pill reveal-card">CSS</span>
+        <span class="tool-pill reveal-card">JavaScript</span>
+        <span class="tool-pill reveal-card">React (basics)</span>
+        <span class="tool-pill reveal-card">Claude</span>
+        <span class="tool-pill reveal-card">ChatGPT</span>
+        <span class="tool-pill reveal-card">Framer</span>
+        <span class="tool-pill reveal-card">Webflow</span>
+        <span class="tool-pill reveal-card">After Effects</span>
+        <span class="tool-pill reveal-card">Principle</span>
+        <span class="tool-pill reveal-card">Zeplin</span>
+        <span class="tool-pill reveal-card">GitHub</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section-label">Education</p>
+      <h2 class="section-heading reveal-heading">Academic foundation</h2>
+      <div class="education-grid">
+        <article class="edu-card reveal-card">
+          <p class="year-tag">2024</p>
+          <h3 class="edu-degree">MS Human-Computer Interaction</h3>
+          <p class="edu-school">DePaul University</p>
+        </article>
+        <article class="edu-card reveal-card">
+          <p class="year-tag">2022</p>
+          <h3 class="edu-degree">BS Computer Science</h3>
+          <p class="edu-school">DePaul University</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const nav = document.getElementById("siteNav");
+    const menuToggle = document.getElementById("menuToggle");
+    const navMenu = document.getElementById("navMenu");
+
+    const updateNavBorder = () => {
+      nav.classList.toggle("scrolled", window.scrollY > 60);
+    };
+    updateNavBorder();
+    window.addEventListener("scroll", updateNavBorder);
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = nav.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    navMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        nav.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll(".reveal-heading").forEach((el) => observer.observe(el));
+    document.querySelectorAll(".reveal-card").forEach((el, index) => {
+      el.style.transitionDelay = `${index * 0.1}s`;
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
