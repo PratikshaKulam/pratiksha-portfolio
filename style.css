@@ -1700,6 +1700,27 @@ img {
   font-style: italic;
   font-weight: 600;
 }
+/* Project card gap increase */
+.work-list {
+  gap: 48px !important;
+}
+
+/* Hover effect — tint + accent border */
+.project-card {
+  transition: all 0.3s ease !important;
+}
+
+.project-card:hover {
+  background: #F5F2EC !important;
+  border: 2px solid #C8A97E !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08) !important;
+}
+.nav-home-logo img {
+  height: 48px;
+  width: auto;
+  display: block;
+}
 
 /* CHANGE 9: Tools card spans 3 rows to fill empty space */
 /* Already handled in HTML via grid-row:1/4 */
