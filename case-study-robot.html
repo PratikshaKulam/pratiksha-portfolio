@@ -241,30 +241,48 @@
     }
 
     /* ── QUICK STATS ── */
-    .stats-section { background: var(--white); border-top: 1px solid var(--gray-mid); border-bottom: 1px solid var(--gray-mid); }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 0;
-    }
-    .stat-cell {
-      padding: 48px 32px;
-      border-right: 1px solid var(--gray-mid);
-    }
-    .stat-cell:last-child { border-right: none; }
-    .stat-label {
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gray-text);
-      margin-bottom: 10px;
-    }
-    .stat-value {
-      font-family: var(--font-heading);
-      font-size: 15px;
-      color: var(--black);
-      line-height: 1.4;
-    }
+    .stats-section {
+  background: var(--white);
+  border-top: 1px solid var(--gray-mid);
+  border-bottom: 1px solid var(--gray-mid);
+  position: sticky;
+  top: 61px;
+  z-index: 90;
+}
+.stats-grid {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.stat-cell {
+  padding: 18px 28px;
+  border-right: 1px solid var(--gray-mid);
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s;
+}
+.stat-cell:hover { background: var(--gray-light); }
+.stat-cell:last-child { border-right: none; }
+.stat-cell.active { border-bottom: 2px solid var(--black); }
+.stat-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-text);
+  font-family: var(--font-body);
+}
+.stat-value {
+  font-size: 13px;
+  color: var(--black);
+  font-family: var(--font-body);
+  font-weight: 500;
+}
 
     /* ── THE PROBLEM ── */
     .problem-section { background: var(--white); }
@@ -1144,12 +1162,38 @@
 <!-- ── QUICK STATS ── -->
 <section class="stats-section">
   <div class="stats-grid">
-    <div class="stat-cell"><p class="stat-label">Role</p><p class="stat-value">UX Researcher &amp; Interaction Designer</p></div>
-    <div class="stat-cell"><p class="stat-label">Timeline</p><p class="stat-value">Sep – Nov 2025<br>10 weeks</p></div>
-    <div class="stat-cell"><p class="stat-label">Team</p><p class="stat-value">Solo designer<br>Academic capstone</p></div>
-    <div class="stat-cell"><p class="stat-label">Tools</p><p class="stat-value">Figma · FigJam<br>OptimalWorkshop · Zoom</p></div>
-    <div class="stat-cell"><p class="stat-label">Platform</p><p class="stat-value">UberEats<br>Serve Robotics integration</p></div>
-    <div class="stat-cell"><p class="stat-label">Methods</p><p class="stat-value">Interviews · Affinity Mapping · Card Sorting · Usability Testing</p></div>
+    <a href="#problem" class="stat-cell">
+      <span class="stat-label">01</span>
+      <span class="stat-value">Problem</span>
+    </a>
+    <a href="#accessibility" class="stat-cell">
+      <span class="stat-label">02</span>
+      <span class="stat-value">Accessibility</span>
+    </a>
+    <a href="#personas" class="stat-cell">
+      <span class="stat-label">03</span>
+      <span class="stat-value">Personas</span>
+    </a>
+    <a href="#research" class="stat-cell">
+      <span class="stat-label">04</span>
+      <span class="stat-value">Research</span>
+    </a>
+    <a href="#findings" class="stat-cell">
+      <span class="stat-label">05</span>
+      <span class="stat-value">Findings</span>
+    </a>
+    <a href="#redesign" class="stat-cell">
+      <span class="stat-label">06</span>
+      <span class="stat-value">Redesign</span>
+    </a>
+    <a href="#results" class="stat-cell">
+      <span class="stat-label">07</span>
+      <span class="stat-value">Results</span>
+    </a>
+    <a href="#reflection" class="stat-cell">
+      <span class="stat-label">08</span>
+      <span class="stat-value">Reflection</span>
+    </a>
   </div>
 </section>
 
