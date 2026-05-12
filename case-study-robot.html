@@ -1198,7 +1198,7 @@
 </section>
 
 <!-- ── THE PROBLEM ── -->
-<section class="problem-section">
+<section class="problem-section" id="problem">
   <div class="section-inner fade-in">
     <div class="problem-grid">
       <div>
@@ -1242,7 +1242,7 @@
 </section>
 
 <!-- ── ACCESSIBILITY GAP ── -->
-<section class="access-section">
+<section class="access-section" id="accessibility">
   <div class="section-inner fade-in">
     <p class="section-label">The Accessibility Gap</p>
     <h2 class="section-heading" style="max-width:700px;">The people who need this most<br>are the ones it fails hardest.</h2>
@@ -1298,7 +1298,7 @@
 </section>
 
 <!-- ── PERSONAS ── -->
-<section class="personas-section">
+<section class="personas-section" id="personas">
   <div class="section-inner fade-in">
     <p class="section-label">Who we designed for</p>
     <h2 class="section-heading">Four perspectives. One broken experience.</h2>
@@ -1360,7 +1360,7 @@
 </section>
 
 <!-- ── RESEARCH APPROACH ── -->
-<section class="research-section">
+<section class="research-section" id="research">
   <div class="section-inner fade-in">
     <div class="research-grid">
       <div>
@@ -1438,7 +1438,7 @@
 </section>
 
 <!-- ── KEY FINDINGS ── -->
-<section class="findings-section">
+<section class="findings-section" id="findings">
   <div class="section-inner fade-in">
     <p class="section-label">Key Findings</p>
     <h2 class="section-heading" style="color:var(--white);margin-bottom:56px;">What we learned that shaped everything</h2>
@@ -1494,7 +1494,7 @@
 </section>
 
 <!-- ── THE REDESIGN ── -->
-<section class="redesign-section">
+<section class="redesign-section" id="redesign">
   <div class="section-inner fade-in">
     <p class="section-label">The Redesign</p>
     <h2 class="section-heading">5 screens that fill the silence</h2>
@@ -1564,7 +1564,7 @@
 </section>
 
 <!-- ── USABILITY TESTING ── -->
-<section class="testing-section">
+<section class="testing-section" id="results">
   <div class="section-inner fade-in">
     <p class="section-label">Usability Testing Results</p>
     <h2 class="section-heading">Validated through testing</h2>
@@ -1655,7 +1655,7 @@
 </section>
 
 <!-- ── REFLECTION ── -->
-<section class="reflection-section">
+<section class="reflection-section" id="reflection">
   <div class="section-inner fade-in">
     <div class="reflection-grid">
       <div>
@@ -1695,6 +1695,24 @@
   }, { threshold: 0.08 });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Active section highlight
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('.stat-cell');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    if (window.scrollY >= section.offsetTop - 120) {
+      current = section.getAttribute('id');
+    }
+  });
+  navItems.forEach(item => {
+    item.classList.remove('active');
+    if (item.getAttribute('href') === '#' + current) {
+      item.classList.add('active');
+    }
+  });
+});
 </script>
 </body>
 </html>
