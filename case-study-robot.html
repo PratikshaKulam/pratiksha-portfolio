@@ -539,14 +539,46 @@
     .research-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 80px;
+      gap: 64px;
       align-items: start;
     }
-    .method-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+    .research-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 80px;
+  align-items: start;
+  margin-top: 40px;
+}
+
+.method-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.method-card {
+  background: var(--gray-light);
+  border-radius: 4px;
+  padding: 24px 20px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.research-image {
+  background: var(--gray-mid);
+  border-radius: 4px;
+  min-height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.research-image span {
+  font-size: 12px;
+  color: var(--gray-text);
+  font-style: italic;
+}
     .method-card {
       background: var(--gray-light);
       border-radius: 4px;
@@ -1366,33 +1398,40 @@
         <p class="section-label">How we researched</p>
         <h2 class="section-heading">A mixed-methods approach across 10 weeks</h2>
         <p class="research-left-body">Every design decision was grounded in evidence - not assumption. Each card built on the previous, creating a research-to-design pipeline.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
-        <div class="method-cards">
-          <div class="method-card">
-            <div class="method-icon"></div>
-            <p class="method-title">User Interviews</p>
-            <p class="method-sub">4 in-depth interviews · 3 receivers, 1 restaurant manager · 20–25 min each via Zoom</p>
-          </div>
-          <div class="method-card">
-            <div class="method-icon"></div>
-            <p class="method-title">Affinity Mapping</p>
-            <p class="method-sub">Interview transcripts + competitive findings → 4 insight clusters in FigJam</p>
-          </div>
-          <div class="method-card">
-            <div class="method-icon"></div>
-            <p class="method-title">Card Sorting</p>
-            <p class="method-sub">37 cards · 7+ participants · Hybrid open/closed via OptimalWorkshop</p>
-          </div>
-          <div class="method-card">
-            <div class="method-icon"></div>
-            <p class="method-title">Usability Testing</p>
-            <p class="method-sub">Mid-fi prototype · 5 participants · Think-aloud · 4 core task flows</p>
-          </div>
-        </div>
-        <div style="background:var(--gray-mid);border-radius:4px;height:100%;min-height:300px;display:flex;align-items:center;justify-content:center;">
-          <span style="font-size:12px;color:var(--gray-text);font-style:italic;">Card sorting image — drop in when ready</span>
-        </div>
-      </div>
+      <div class="research-layout">
+  <div class="method-cards">
+    
+    <div class="method-card">
+      <div class="method-icon"></div>
+      <p class="method-title">User Interviews</p>
+      <p class="method-sub">4 in-depth interviews · 3 receivers, 1 restaurant manager · 20–25 min each via Zoom</p>
+    </div>
+
+    <div class="method-card">
+      <div class="method-icon"></div>
+      <p class="method-title">Affinity Mapping</p>
+      <p class="method-sub">Interview transcripts + competitive findings → 4 insight clusters in FigJam</p>
+    </div>
+
+    <div class="method-card">
+      <div class="method-icon"></div>
+      <p class="method-title">Card Sorting</p>
+      <p class="method-sub">37 cards · 7+ participants · Hybrid open/closed via OptimalWorkshop</p>
+    </div>
+
+    <div class="method-card">
+      <div class="method-icon"></div>
+      <p class="method-title">Usability Testing</p>
+      <p class="method-sub">Mid-fi prototype · 5 participants · Think-aloud · 4 core task flows</p>
+    </div>
+
+  </div>
+
+  <div class="research-image">
+    <span>Card sorting image — drop in when ready</span>
+  </div>
+
+</div>
     </div>
   </div>
 </section>
