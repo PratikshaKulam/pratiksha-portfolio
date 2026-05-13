@@ -1467,13 +1467,13 @@
       <div class="cluster-card">
         <div class="cluster-num">01</div>
         <h3 class="cluster-title">Trust &amp; Transparency</h3>
-        <p class="cluster-body">Users want clear statuses, updated ETAs, and confidence the robot will actually arrive. Every participant experienced anxiety from unclear robot status — not from the robot itself.</p>
+        <p class="cluster-body">Users want clear statuses, updated ETAs, and confidence that robot will actually arrive. Every participant experienced anxiety from unclear robot status, not from the robot itself.</p>
         <p class="cluster-quote">"I didn't know if it was coming or if something went wrong."</p>
       </div>
       <div class="cluster-card">
         <div class="cluster-num">02</div>
         <h3 class="cluster-title">Navigation &amp; Clarity</h3>
-        <p class="cluster-body">Users struggled with where to go and what to do at pickup. Drop-off ambiguity forced physical searching — users walked down the street looking for robots parked at corners.</p>
+        <p class="cluster-body">Users struggled with where to go and what to do at pickup. Drop-off ambiguity forced physical searching. Users walked down the street looking for robots parked at corners.</p>
         <p class="cluster-quote">"I had to walk around looking for it. That's not delivery."</p>
       </div>
       <div class="cluster-card">
@@ -1485,7 +1485,7 @@
       <div class="cluster-card">
         <div class="cluster-num">04</div>
         <h3 class="cluster-title">Error &amp; Edge Cases</h3>
-        <p class="cluster-body">When something went wrong — tracking froze, robot paused, ETA jumped — users had no path forward. No explanation. No support. No recovery. This single failure moment destroyed trust entirely.</p>
+        <p class="cluster-body">When something went wrong like tracking froze, robot paused, ETA jumped and users had no path forward. No explanation. No support. No recovery. This single failure moment destroyed trust entirely.</p>
         <p class="cluster-quote">"There was no way to get help. I just stared at the screen."</p>
       </div>
     </div>
@@ -1501,7 +1501,7 @@
       <div class="finding-card">
         <p class="finding-num">Finding 01</p>
         <h3 class="finding-title">The silence was the problem</h3>
-        <p class="finding-body">All 4 participants reported anxiety from unclear robot status — not from the robot itself. When users understood what was happening, anxiety dropped immediately. Transparency IS the product.</p>
+        <p class="finding-body">All 4 participants reported anxiety from unclear robot status - not from the robot itself. When users understood what was happening, anxiety dropped immediately. Transparency is the product.</p>
       </div>
       <div class="finding-card">
         <p class="finding-num">Finding 02</p>
@@ -1511,7 +1511,7 @@
       <div class="finding-card">
         <p class="finding-num">Finding 03</p>
         <h3 class="finding-title">Trust collapsed without transparency</h3>
-        <p class="finding-body">Users perceived the service as unreliable even when the robot performed perfectly. Perception of reliability was entirely driven by communication quality — not actual delivery performance.</p>
+        <p class="finding-body">Users perceived the service as unreliable even when the robot performed perfectly. Perception of reliability was entirely driven by communication quality and not by actual delivery performance.</p>
       </div>
       <div class="finding-card">
         <p class="finding-num">Finding 04</p>
@@ -1532,16 +1532,16 @@
         <p class="cardsort-body">37 cards sorted by 7+ participants revealed one critical mental model: users clearly separate "tracking what's happening" from "getting help when something goes wrong." These are two distinct cognitive modes — not one.</p>
         <div class="cardsort-implication">
           <strong>Design implication</strong>
-          We kept tracking and support as entirely separate surfaces in the redesign. "Watch live" and "Report a problem" are never combined into a single action. Users in tracking mode should never be pulled into a support flow unless they choose it.
+          This directly informed our decision to give the error and pause state its own dedicated screen rather than embedding it as a small alert inside the tracking view. When something goes wrong, users need a completely different experience and not a banner on top of a map. Tracking is "tell me what is happening". Error handling is "something went wrong, what do I do now?". These are not the same moment and should not look the same.
         </div>
       </div>
       <div class="cardsort-insight">
         <p class="cardsort-stat">37</p>
         <p class="cardsort-stat-sub">cards · 7+ participants · OptimalWorkshop</p>
         <div class="ia-split">
-          <div class="ia-box">Watch live<br><span style="font-size:10px;color:var(--gray-text);font-weight:400;">Tracking mode</span></div>
+          <div class="ia-box">Screen 2: Enhanced Tracking<br><span style="font-size:10px;color:var(--gray-text);font-weight:400;">"Tell me what is happening?"</span></div>
           <div class="ia-divider">≠</div>
-          <div class="ia-box">Report a problem<br><span style="font-size:10px;color:var(--gray-text);font-weight:400;">Support mode</span></div>
+          <div class="ia-box">Screen 4: Error and Pause State<br><span style="font-size:10px;color:var(--gray-text);font-weight:400;">"Something went wrong — what now?</span></div>
         </div>
       </div>
     </div>
