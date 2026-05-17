@@ -174,7 +174,6 @@
     .btn-secondary:hover { opacity: 0.5; }
 
     /* PHOTO */
-    .hero-photo { position: relative; align-self: end; }
     .photo-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
     .photo-placeholder {
       width: 100%;
@@ -196,6 +195,86 @@
       text-transform: uppercase;
       color: var(--black);
     }
+
+    /* FLIP CARD */
+.flip-wrap {
+  position: relative;
+  width: 380px;
+  perspective: 1200px;
+}
+.flip-card {
+  width: 100%;
+  aspect-ratio: 3/4;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.flip-wrap:hover .flip-card {
+  transform: rotateY(180deg);
+}
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: visible;
+}
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+.photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* BUBBLES */
+.bubble {
+  position: absolute;
+  background: var(--white);
+  border: 1px solid var(--gray-border);
+  border-radius: 18px;
+  padding: 8px 14px;
+  font-size: 11px;
+  color: var(--black);
+  font-family: var(--font-body);
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  animation: floatBubble 3s ease-in-out infinite;
+  z-index: 10;
+}
+/* each bubble floats at different speed and position */
+.b1 {
+  top: 8%;
+  right: -30%;
+  animation-delay: 0s;
+  animation-duration: 3.2s;
+}
+.b2 {
+  top: 30%;
+  left: -38%;
+  animation-delay: 0.6s;
+  animation-duration: 3.8s;
+}
+.b3 {
+  bottom: 28%;
+  right: -32%;
+  animation-delay: 1.1s;
+  animation-duration: 3.5s;
+}
+.b4 {
+  bottom: 8%;
+  left: -28%;
+  animation-delay: 0.3s;
+  animation-duration: 4s;
+}
+@keyframes floatBubble {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-7px); }
+  100% { transform: translateY(0px); }
+}
 
     /* IMPACT BAR */
     .impact-bar {
@@ -471,21 +550,42 @@
       <div class="title-row">
         <span class="title-main">Product Designer</span>
         <span class="title-dot"></span>
-        <span class="title-fun">Part-time prompt whisperer <span class="accent-text">✦</span></span>
+        <span class="title-fun"><span class="accent-text">✦</span></span>
       </div>
       <p class="hero-bio">
-        I design at the intersection of <strong>research, systems thinking, and emerging technology.</strong> CS foundation. MS in HCI. Currently at <strong>Northern Trust</strong> — shipping enterprise products at scale, leading research that changes how teams prioritize, and building design systems that outlast any single project.
+        Started in code. Found my way to design. Turns out the best product decisions live somewhere in between. I design at the intersection of <strong>research, systems thinking, and emerging technology</strong> — currently at <strong>Northern Trust</strong>, shipping enterprise products at scale, leading research that changes how teams prioritize, and building design systems that outlast any single project.
       </p>
       <div class="hero-btns">
         <a href="index.html#work" class="btn-primary">View my work →</a>
         <a href="resume.pdf" target="_blank" class="btn-secondary">Download resume ↗</a>
       </div>
     </div>
-    <div class="hero-photo fade-in" style="transition-delay:0.15s;">
-      <div class="photo-placeholder">
-        <span>Upload photo.jpg to your GitHub repo</span>
+    <div class="flip-wrap fade-in" style="transition-delay:0.15s;">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+
+          <!-- FRONT -->
+          <div class="flip-card-front">
+            <img src="photo-pro.jpg" alt="Pratiksha Kulam" class="photo-img" />
+            <!-- bubbles outside frame -->
+            <div class="bubble b1">Currently at Northern Trust 🏢</div>
+            <div class="bubble b2">Obsessing over AI + humans 🤖</div>
+            <div class="bubble b3">Reads error states for fun 🙃</div>
+            <div class="bubble b4">Research first. Always. 🔍</div>
+          </div>
+
+          <!-- BACK -->
+          <div class="flip-card-back">
+            <img src="photo-fun.jpg" alt="Pratiksha having fun" class="photo-img" />
+            <!-- bubbles outside frame -->
+            <div class="bubble b1">Always moody ☁️</div>
+            <div class="bubble b2">Coffee addict ☕</div>
+            <div class="bubble b3">Burger enthusiast 🍔</div>
+            <div class="bubble b4">Funny by accident 😅</div>
+          </div>
+
+        </div>
       </div>
-      <div class="photo-badge">Chicago, IL · Open to work</div>
     </div>
   </div>
 </section>
