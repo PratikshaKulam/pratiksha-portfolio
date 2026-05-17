@@ -29,7 +29,7 @@
       overflow-x: hidden;
     }
 
-    /* ── NAVBAR ── */
+    /* NAVBAR */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -74,9 +74,9 @@
       border-radius: 2px;
     }
 
-    /* ── HERO ── */
+    /* HERO */
     .hero {
-      padding: 160px 0 0;
+      padding: 160px 0 100px;
       background: var(--bg);
     }
     .hero-inner {
@@ -98,7 +98,7 @@
     }
     .hero-name {
       font-family: var(--font-heading);
-      font-size: clamp(56px, 8vw, 104px);
+      font-size: clamp(56px, 8vw, 100px);
       color: var(--black);
       line-height: 0.95;
       letter-spacing: -3px;
@@ -127,10 +127,9 @@
       justify-content: center;
       font-size: 12px;
       transition: all 0.2s;
-      flex-shrink: 0;
     }
     .speak-btn:hover { border-color: var(--black); background: var(--gray-light); }
-    .speak-btn.playing { border-color: var(--accent); background: rgba(200,169,126,0.1); }
+    .speak-btn.playing { border-color: var(--accent); }
     .title-row {
       display: flex;
       align-items: center;
@@ -141,7 +140,7 @@
     .title-main { font-size: 15px; font-weight: 500; color: var(--black); }
     .title-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--gray-border); }
     .title-fun { font-size: 13px; color: var(--gray-text); font-style: italic; }
-    .title-fun .accent-text { color: var(--accent); }
+    .accent-text { color: var(--accent); }
     .hero-bio {
       font-size: 15px;
       color: var(--gray-text);
@@ -174,7 +173,7 @@
     }
     .btn-secondary:hover { opacity: 0.5; }
 
-    /* photo */
+    /* PHOTO */
     .hero-photo { position: relative; align-self: end; }
     .photo-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
     .photo-placeholder {
@@ -182,10 +181,8 @@
       aspect-ratio: 3/4;
       background: var(--gray-mid);
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
     }
     .photo-placeholder span { font-size: 12px; color: var(--gray-text); font-style: italic; text-align: center; padding: 0 20px; }
     .photo-badge {
@@ -200,12 +197,11 @@
       color: var(--black);
     }
 
-    /* ── IMPACT BAR ── */
+    /* IMPACT BAR */
     .impact-bar {
       border-top: 1px solid var(--gray-mid);
       border-bottom: 1px solid var(--gray-mid);
       background: var(--white);
-      margin-top: 80px;
     }
     .impact-grid {
       max-width: 1200px;
@@ -230,7 +226,7 @@
     .impact-num em { font-style: normal; color: var(--accent); }
     .impact-label { font-size: 11px; color: var(--gray-text); line-height: 1.5; }
 
-    /* ── I AM SECTION ── */
+    /* I AM SECTION */
     .iam-section { padding: 100px 0; background: var(--bg); }
     .iam-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
     .section-label {
@@ -258,8 +254,6 @@
       padding: 24px 0;
       border-bottom: 1px solid var(--gray-mid);
       cursor: default;
-      transition: background 0.2s, padding 0.2s, margin 0.2s;
-      border-radius: 2px;
     }
     .iam-line:first-child { border-top: 1px solid var(--gray-mid); }
     .iam-line:hover { background: var(--gray-light); padding: 24px 20px; margin: 0 -20px; }
@@ -269,7 +263,6 @@
       font-size: clamp(17px, 1.8vw, 22px);
       color: var(--black);
       line-height: 1.3;
-      margin-bottom: 0;
     }
     .iam-sub {
       font-size: 13px;
@@ -279,8 +272,8 @@
       max-height: 0;
       overflow: hidden;
       opacity: 0;
-      transition: max-height 0.35s ease, opacity 0.35s ease, margin-top 0.35s;
       margin-top: 0;
+      transition: max-height 0.35s ease, opacity 0.35s ease, margin-top 0.35s;
     }
     .iam-line:hover .iam-sub {
       max-height: 80px;
@@ -288,7 +281,7 @@
       margin-top: 8px;
     }
 
-    /* ── OUTSIDE THE SCREEN ── */
+    /* OUTSIDE SECTION */
     .outside-section { padding: 100px 0; background: var(--gray-light); }
     .outside-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
     .outside-header {
@@ -306,11 +299,7 @@
       letter-spacing: -0.5px;
     }
     .outside-intro { font-size: 14px; color: var(--gray-text); line-height: 1.7; }
-    .outside-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
+    .outside-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
     .outside-card {
       background: var(--white);
       border: 1px solid var(--gray-border);
@@ -318,10 +307,7 @@
       overflow: hidden;
       transition: transform 0.25s, box-shadow 0.25s;
     }
-    .outside-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.07);
-    }
+    .outside-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.07); }
     .outside-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
     .outside-img-placeholder {
       width: 100%;
@@ -337,12 +323,8 @@
     .outside-card-title { font-family: var(--font-heading); font-size: 15px; color: var(--black); margin-bottom: 6px; }
     .outside-card-connect { font-size: 11px; color: var(--accent); font-style: italic; line-height: 1.5; }
 
-    /* ── EXPERIENCE ── */
-    .exp-section {
-      padding: 100px 0;
-      background: var(--white);
-      border-top: 1px solid var(--gray-mid);
-    }
+    /* EXPERIENCE */
+    .exp-section { padding: 100px 0; background: var(--white); border-top: 1px solid var(--gray-mid); }
     .exp-inner {
       max-width: 1200px;
       margin: 0 auto;
@@ -382,12 +364,8 @@
     }
     .exp-period { font-size: 11px; color: var(--gray-text); white-space: nowrap; letter-spacing: 0.04em; padding-top: 4px; }
 
-    /* ── CLOSING ── */
-    .quote-section {
-      padding: 100px 0;
-      background: var(--bg);
-      border-top: 1px solid var(--gray-mid);
-    }
+    /* CLOSING */
+    .quote-section { padding: 100px 0; background: var(--bg); border-top: 1px solid var(--gray-mid); }
     .quote-inner {
       max-width: 1200px;
       margin: 0 auto;
@@ -424,7 +402,7 @@
     }
     .quote-link:hover { background: var(--black); color: var(--white); border-color: var(--black); }
 
-    /* ── FOOTER ── */
+    /* FOOTER */
     footer {
       background: var(--black);
       color: rgba(255,255,255,0.4);
@@ -437,7 +415,7 @@
     footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
     footer a:hover { color: rgba(255,255,255,0.7); }
 
-    /* ── FADE IN ── */
+    /* FADE IN */
     .fade-in {
       opacity: 0;
       transform: translateY(22px);
@@ -445,7 +423,7 @@
     }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── RESPONSIVE ── */
+    /* RESPONSIVE */
     @media (max-width: 1024px) {
       nav { padding: 18px 32px; }
       .hero-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -471,7 +449,6 @@
 </head>
 <body>
 
-<!-- ── NAVBAR ── -->
 <nav>
   <a class="nav-logo" href="index.html">प्र</a>
   <ul class="nav-links">
@@ -482,7 +459,6 @@
   </ul>
 </nav>
 
-<!-- ── HERO ── -->
 <section class="hero">
   <div class="hero-inner">
     <div class="fade-in">
@@ -505,10 +481,7 @@
         <a href="resume.pdf" target="_blank" class="btn-secondary">Download resume ↗</a>
       </div>
     </div>
-
     <div class="hero-photo fade-in" style="transition-delay:0.15s;">
-      <!-- To add photo replace below div with:
-           <img src="photo.jpg" alt="Pratiksha Kulam" class="photo-img" /> -->
       <div class="photo-placeholder">
         <span>Upload photo.jpg to your GitHub repo</span>
       </div>
@@ -517,12 +490,11 @@
   </div>
 </section>
 
-<!-- ── IMPACT BAR ── -->
 <div class="impact-bar fade-in">
   <div class="impact-grid">
     <div class="impact-cell">
       <p class="impact-num">3<em>+</em></p>
-      <p class="impact-label">Years in product & enterprise design</p>
+      <p class="impact-label">Years in product and enterprise design</p>
     </div>
     <div class="impact-cell">
       <p class="impact-num">30<em>%</em></p>
@@ -534,7 +506,7 @@
     </div>
     <div class="impact-cell">
       <p class="impact-num">AI<em>-first</em></p>
-      <p class="impact-label">Designing LLM-integrated & conversational experiences</p>
+      <p class="impact-label">Designing LLM-integrated and conversational experiences</p>
     </div>
     <div class="impact-cell">
       <p class="impact-num">4</p>
@@ -543,13 +515,11 @@
   </div>
 </div>
 
-<!-- ── I AM... ── -->
 <section class="iam-section">
   <div class="iam-inner fade-in">
     <span class="section-label">The designer</span>
     <h2 class="iam-heading">I am the kind of designer who…</h2>
     <div class="iam-lines">
-
       <div class="iam-line">
         <span class="iam-num">01</span>
         <div>
@@ -557,7 +527,6 @@
           <p class="iam-sub">Edge cases aren't edge cases to real users. I design for the moment things go wrong — because that's when trust is built or broken.</p>
         </div>
       </div>
-
       <div class="iam-line">
         <span class="iam-num">02</span>
         <div>
@@ -565,7 +534,6 @@
           <p class="iam-sub">70% of my time is in research. Finding the right problem is half the solution — the other half is making sure you've actually talked to the people who have it.</p>
         </div>
       </div>
-
       <div class="iam-line">
         <span class="iam-num">03</span>
         <div>
@@ -573,7 +541,6 @@
           <p class="iam-sub">CS degree + frontend experience means I design with implementation in mind and hand off without surprises. No redlines that can't actually be built.</p>
         </div>
       </div>
-
       <div class="iam-line">
         <span class="iam-num">04</span>
         <div>
@@ -581,7 +548,6 @@
           <p class="iam-sub">I design for LLM-integrated experiences and conversational UI — not because it's trendy, but because that's where the hardest UX problems are right now.</p>
         </div>
       </div>
-
       <div class="iam-line">
         <span class="iam-num">05</span>
         <div>
@@ -589,12 +555,10 @@
           <p class="iam-sub">WCAG compliance, screen reader logic, keyboard navigation — baked in from day one. If it doesn't work for everyone, it's not done.</p>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ── OUTSIDE THE SCREEN ── -->
 <section class="outside-section">
   <div class="outside-inner fade-in">
     <div class="outside-header">
@@ -604,30 +568,24 @@
       </div>
       <p class="outside-intro">Everything I do outside work feeds back into how I see composition, detail, pattern, and depth — the same things that make design feel considered rather than assembled.</p>
     </div>
-
     <div class="outside-grid">
       <div class="outside-card">
-        <!-- Replace with: <img src="hobby-photo.jpg" alt="Nature photography" class="outside-img" /> -->
         <div class="outside-img-placeholder">📷</div>
         <div class="outside-card-body">
           <p class="outside-card-tag">Photography</p>
           <p class="outside-card-title">Moment catcher</p>
-          <p class="outside-card-connect">Trains the eye for composition, light & the decisive moment — the same instincts that make a UI layout feel right.</p>
+          <p class="outside-card-connect">Trains the eye for composition, light and the decisive moment — the same instincts that make a UI layout feel right.</p>
         </div>
       </div>
-
       <div class="outside-card">
-        <!-- Replace with: <img src="hobby-mandala.jpg" alt="Mandala art" class="outside-img" /> -->
         <div class="outside-img-placeholder">🔴</div>
         <div class="outside-card-body">
-          <p class="outside-card-tag">Mandala & Painting</p>
+          <p class="outside-card-tag">Mandala and Painting</p>
           <p class="outside-card-title">Pattern thinker</p>
-          <p class="outside-card-connect">Demands precision, repetition & patience — the exact mindset behind building a design system that actually scales.</p>
+          <p class="outside-card-connect">Demands precision, repetition and patience — the exact mindset behind building a design system that actually scales.</p>
         </div>
       </div>
-
       <div class="outside-card">
-        <!-- Replace with: <img src="hobby-books.jpg" alt="Books" class="outside-img" /> -->
         <div class="outside-img-placeholder">📚</div>
         <div class="outside-card-body">
           <p class="outside-card-tag">Reading</p>
@@ -635,12 +593,10 @@
           <p class="outside-card-connect">Books build the mental models that Figma can't. Research, psychology, design theory — and the occasional novel to stay human.</p>
         </div>
       </div>
-
       <div class="outside-card">
-        <!-- Replace with: <img src="hobby-food.jpg" alt="Food photography" class="outside-img" /> -->
         <div class="outside-img-placeholder">🍜</div>
         <div class="outside-card-body">
-          <p class="outside-card-tag">Food & Chicago</p>
+          <p class="outside-card-tag">Food and Chicago</p>
           <p class="outside-card-title">Unofficial critic</p>
           <p class="outside-card-connect">Chicago has opinions about food. So do I. Also a great excuse to practice food photography and think about sensory experience.</p>
         </div>
@@ -649,7 +605,6 @@
   </div>
 </section>
 
-<!-- ── EXPERIENCE ── -->
 <section class="exp-section">
   <div class="exp-inner fade-in">
     <div>
@@ -677,7 +632,7 @@
           <p class="exp-company">Mphasis · India</p>
           <div class="exp-highlights">
             <span class="exp-highlight">28% satisfaction increase</span>
-            <span class="exp-highlight">Responsive web & mobile</span>
+            <span class="exp-highlight">Responsive web and mobile</span>
             <span class="exp-highlight">95% dev accuracy</span>
             <span class="exp-highlight">Frontend collaboration</span>
           </div>
@@ -688,7 +643,6 @@
   </div>
 </section>
 
-<!-- ── CLOSING QUOTE ── -->
 <section class="quote-section">
   <div class="quote-inner fade-in">
     <blockquote class="quote-text">
@@ -705,7 +659,6 @@
   </div>
 </section>
 
-<!-- ── FOOTER ── */
 <footer>
   <span>© 2025 Pratiksha Kulam</span>
   <span>Designed with a side of coffee, code & AI</span>
@@ -713,7 +666,6 @@
 </footer>
 
 <script>
-  // Scroll fade-in
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(el => {
       if (el.isIntersecting) {
@@ -724,7 +676,6 @@
   }, { threshold: 0.06 });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-  // 🔊 Pronunciation via Web Speech API
   const speakBtn = document.getElementById('speakBtn');
   speakBtn.addEventListener('click', () => {
     if ('speechSynthesis' in window) {
