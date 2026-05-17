@@ -1,187 +1,743 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About — Pratiksha Kulam</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #FAFAFA;
+      --black: #0A0A0A;
+      --white: #FFFFFF;
+      --gray-light: #F5F5F5;
+      --gray-mid: #E8E8E8;
+      --gray-text: #6B6B6B;
+      --gray-border: #E0E0E0;
+      --accent: #C8A97E;
+      --font-heading: 'Georgia', 'Times New Roman', serif;
+      --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 68px;
+      background: rgba(250,250,250,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-mid);
+    }
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--black);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+      padding: 0; margin: 0;
+    }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--black);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-resume {
+      font-size: 13px !important;
+      opacity: 1 !important;
+      border: 1px solid var(--black);
+      padding: 7px 18px;
+      border-radius: 2px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 160px 0 0;
+      background: var(--bg);
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 48px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 80px;
+      align-items: end;
+    }
+    .hero-tag {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-text);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .hero-name {
+      font-family: var(--font-heading);
+      font-size: clamp(56px, 8vw, 104px);
+      color: var(--black);
+      line-height: 0.95;
+      letter-spacing: -3px;
+      font-weight: normal;
+      margin-bottom: 16px;
+    }
+    .pronunciation-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .pronunciation-text {
+      font-size: 13px;
+      color: var(--gray-text);
+      font-style: italic;
+    }
+    .speak-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--gray-border);
+      background: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .speak-btn:hover { border-color: var(--black); background: var(--gray-light); }
+    .speak-btn.playing { border-color: var(--accent); background: rgba(200,169,126,0.1); }
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .title-main { font-size: 15px; font-weight: 500; color: var(--black); }
+    .title-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--gray-border); }
+    .title-fun { font-size: 13px; color: var(--gray-text); font-style: italic; }
+    .title-fun .accent-text { color: var(--accent); }
+    .hero-bio {
+      font-size: 15px;
+      color: var(--gray-text);
+      line-height: 1.85;
+      max-width: 520px;
+      margin-bottom: 36px;
+    }
+    .hero-bio strong { color: var(--black); font-weight: 500; }
+    .hero-btns { display: flex; gap: 16px; align-items: center; }
+    .btn-primary {
+      background: var(--black);
+      color: var(--white);
+      padding: 11px 24px;
+      border-radius: 2px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.75; }
+    .btn-secondary {
+      color: var(--black);
+      font-size: 13px;
+      text-decoration: none;
+      border-bottom: 1px solid var(--black);
+      padding-bottom: 2px;
+      letter-spacing: 0.04em;
+      transition: opacity 0.2s;
+    }
+    .btn-secondary:hover { opacity: 0.5; }
+
+    /* photo */
+    .hero-photo { position: relative; align-self: end; }
+    .photo-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+    .photo-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--gray-mid);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .photo-placeholder span { font-size: 12px; color: var(--gray-text); font-style: italic; text-align: center; padding: 0 20px; }
+    .photo-badge {
+      position: absolute;
+      bottom: 16px; left: 16px;
+      background: rgba(250,250,250,0.92);
+      backdrop-filter: blur(8px);
+      padding: 7px 14px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    /* ── IMPACT BAR ── */
+    .impact-bar {
+      border-top: 1px solid var(--gray-mid);
+      border-bottom: 1px solid var(--gray-mid);
+      background: var(--white);
+      margin-top: 80px;
+    }
+    .impact-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 48px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .impact-cell {
+      padding: 40px 28px;
+      border-right: 1px solid var(--gray-mid);
+    }
+    .impact-cell:last-child { border-right: none; }
+    .impact-num {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      color: var(--black);
+      line-height: 1;
+      margin-bottom: 6px;
+      letter-spacing: -1px;
+    }
+    .impact-num em { font-style: normal; color: var(--accent); }
+    .impact-label { font-size: 11px; color: var(--gray-text); line-height: 1.5; }
+
+    /* ── I AM SECTION ── */
+    .iam-section { padding: 100px 0; background: var(--bg); }
+    .iam-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-text);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .iam-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(28px, 3vw, 40px);
+      color: var(--black);
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 56px;
+    }
+    .iam-lines { display: flex; flex-direction: column; }
+    .iam-line {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 20px;
+      align-items: start;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--gray-mid);
+      cursor: default;
+      transition: background 0.2s, padding 0.2s, margin 0.2s;
+      border-radius: 2px;
+    }
+    .iam-line:first-child { border-top: 1px solid var(--gray-mid); }
+    .iam-line:hover { background: var(--gray-light); padding: 24px 20px; margin: 0 -20px; }
+    .iam-num { font-size: 11px; color: var(--gray-border); padding-top: 4px; }
+    .iam-statement {
+      font-family: var(--font-heading);
+      font-size: clamp(17px, 1.8vw, 22px);
+      color: var(--black);
+      line-height: 1.3;
+      margin-bottom: 0;
+    }
+    .iam-sub {
+      font-size: 13px;
+      color: var(--gray-text);
+      line-height: 1.6;
+      max-width: 580px;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.35s ease, margin-top 0.35s;
+      margin-top: 0;
+    }
+    .iam-line:hover .iam-sub {
+      max-height: 80px;
+      opacity: 1;
+      margin-top: 8px;
+    }
+
+    /* ── OUTSIDE THE SCREEN ── */
+    .outside-section { padding: 100px 0; background: var(--gray-light); }
+    .outside-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+    .outside-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: end;
+      margin-bottom: 48px;
+    }
+    .outside-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(28px, 3vw, 40px);
+      color: var(--black);
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+    }
+    .outside-intro { font-size: 14px; color: var(--gray-text); line-height: 1.7; }
+    .outside-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .outside-card {
+      background: var(--white);
+      border: 1px solid var(--gray-border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .outside-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.07);
+    }
+    .outside-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+    .outside-img-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--gray-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+    .outside-card-body { padding: 18px 16px; }
+    .outside-card-tag { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 6px; }
+    .outside-card-title { font-family: var(--font-heading); font-size: 15px; color: var(--black); margin-bottom: 6px; }
+    .outside-card-connect { font-size: 11px; color: var(--accent); font-style: italic; line-height: 1.5; }
+
+    /* ── EXPERIENCE ── */
+    .exp-section {
+      padding: 100px 0;
+      background: var(--white);
+      border-top: 1px solid var(--gray-mid);
+    }
+    .exp-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 48px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 80px;
+    }
+    .exp-heading {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      color: var(--black);
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      position: sticky;
+      top: 100px;
+    }
+    .exp-list { display: flex; flex-direction: column; }
+    .exp-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--gray-mid);
+    }
+    .exp-item:first-child { border-top: 1px solid var(--gray-mid); }
+    .exp-role { font-family: var(--font-heading); font-size: 18px; color: var(--black); margin-bottom: 4px; }
+    .exp-company { font-size: 12px; color: var(--gray-text); letter-spacing: 0.04em; margin-bottom: 14px; }
+    .exp-highlights { display: flex; flex-wrap: wrap; gap: 8px; }
+    .exp-highlight {
+      font-size: 11px;
+      color: var(--black);
+      background: var(--gray-light);
+      border: 1px solid var(--gray-border);
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+    .exp-period { font-size: 11px; color: var(--gray-text); white-space: nowrap; letter-spacing: 0.04em; padding-top: 4px; }
+
+    /* ── CLOSING ── */
+    .quote-section {
+      padding: 100px 0;
+      background: var(--bg);
+      border-top: 1px solid var(--gray-mid);
+    }
+    .quote-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .quote-text {
+      font-family: var(--font-heading);
+      font-size: clamp(20px, 2.5vw, 30px);
+      font-style: italic;
+      color: var(--black);
+      line-height: 1.45;
+      letter-spacing: -0.5px;
+    }
+    .quote-text em { color: var(--accent); font-style: normal; }
+    .quote-cta-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 20px; }
+    .quote-cta-links { display: flex; flex-direction: column; gap: 12px; }
+    .quote-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border: 1px solid var(--gray-border);
+      border-radius: 2px;
+      text-decoration: none;
+      color: var(--black);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .quote-link:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      color: rgba(255,255,255,0.4);
+      padding: 32px 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+    footer a:hover { color: rgba(255,255,255,0.7); }
+
+    /* ── FADE IN ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      nav { padding: 18px 32px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .hero-photo { max-width: 340px; }
+      .impact-grid { grid-template-columns: repeat(3, 1fr); }
+      .impact-cell:nth-child(3) { border-right: none; }
+      .impact-cell:nth-child(4) { border-top: 1px solid var(--gray-mid); }
+      .outside-header { grid-template-columns: 1fr; gap: 20px; }
+      .outside-grid { grid-template-columns: 1fr 1fr; }
+      .exp-inner { grid-template-columns: 1fr; gap: 40px; }
+      .exp-heading { position: static; }
+      .quote-inner { grid-template-columns: 1fr; gap: 40px; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 16px 20px; }
+      .nav-links { gap: 20px; }
+      .hero-inner, .iam-inner, .outside-inner, .exp-inner, .quote-inner { padding: 0 24px; }
+      .impact-grid { grid-template-columns: 1fr 1fr; padding: 0 24px; }
+      .outside-grid { grid-template-columns: 1fr 1fr; }
+      footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
 </head>
 <body>
-  <nav class="site-nav" id="siteNav">
-    <div class="container nav-inner">
-      <a class="monogram" href="index.html">PK</a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
-      <div class="nav-menu" id="navMenu">
-        <a class="nav-link" href="index.html#work">Work</a>
-        <a class="nav-link" href="about.html">About</a>
-        <a class="nav-link" href="index.html#contact">Contact</a>
-        <a class="btn resume-btn" href="#" target="_blank" rel="noopener noreferrer">Resume ↗</a>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <a class="nav-logo" href="index.html">प्र</a>
+  <ul class="nav-links">
+    <li><a href="index.html#work">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="resume.pdf" class="nav-resume">Resume</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="fade-in">
+      <span class="hero-tag">About</span>
+      <h1 class="hero-name">Pratiksha<br>Kulam</h1>
+      <div class="pronunciation-row">
+        <span class="pronunciation-text">(pruh-tick-sha)</span>
+        <button class="speak-btn" id="speakBtn" title="Hear my name" aria-label="Play name pronunciation">🔊</button>
+      </div>
+      <div class="title-row">
+        <span class="title-main">Product Designer</span>
+        <span class="title-dot"></span>
+        <span class="title-fun">Part-time prompt whisperer <span class="accent-text">✦</span></span>
+      </div>
+      <p class="hero-bio">
+        I design at the intersection of <strong>research, systems thinking, and emerging technology.</strong> CS foundation. MS in HCI. Currently at <strong>Northern Trust</strong> — shipping enterprise products at scale, leading research that changes how teams prioritize, and building design systems that outlast any single project.
+      </p>
+      <div class="hero-btns">
+        <a href="index.html#work" class="btn-primary">View my work →</a>
+        <a href="resume.pdf" target="_blank" class="btn-secondary">Download resume ↗</a>
       </div>
     </div>
-  </nav>
 
-  <main class="section">
-    <div class="container">
-      <section class="about-hero">
+    <div class="hero-photo fade-in" style="transition-delay:0.15s;">
+      <!-- To add photo replace below div with:
+           <img src="photo.jpg" alt="Pratiksha Kulam" class="photo-img" /> -->
+      <div class="photo-placeholder">
+        <span>Upload photo.jpg to your GitHub repo</span>
+      </div>
+      <div class="photo-badge">Chicago, IL · Open to work</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── IMPACT BAR ── -->
+<div class="impact-bar fade-in">
+  <div class="impact-grid">
+    <div class="impact-cell">
+      <p class="impact-num">3<em>+</em></p>
+      <p class="impact-label">Years in product & enterprise design</p>
+    </div>
+    <div class="impact-cell">
+      <p class="impact-num">30<em>%</em></p>
+      <p class="impact-label">Usability improvement at Northern Trust</p>
+    </div>
+    <div class="impact-cell">
+      <p class="impact-num">25<em>%</em></p>
+      <p class="impact-label">User engagement lift through product thinking</p>
+    </div>
+    <div class="impact-cell">
+      <p class="impact-num">AI<em>-first</em></p>
+      <p class="impact-label">Designing LLM-integrated & conversational experiences</p>
+    </div>
+    <div class="impact-cell">
+      <p class="impact-num">4</p>
+      <p class="impact-label">End-to-end case studies from real research</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── I AM... ── -->
+<section class="iam-section">
+  <div class="iam-inner fade-in">
+    <span class="section-label">The designer</span>
+    <h2 class="iam-heading">I am the kind of designer who…</h2>
+    <div class="iam-lines">
+
+      <div class="iam-line">
+        <span class="iam-num">01</span>
         <div>
-          <p class="section-label">About</p>
-          <h1 class="about-name reveal-heading">Pratiksha Kulam</h1>
-          <p class="pronunciation">(pruh-tick-sha)</p>
-          <p class="about-role">UX Designer &amp; Researcher</p>
-          <p class="about-meta">Chicago, IL · Open to Work</p>
-          <p class="about-bio">
-            I design at the intersection of research, empathy, and emerging technology.
-            With a CS background and an MS in Human-Computer Interaction, I bridge the
-            gap between how things work and how people feel using them.
-          </p>
+          <p class="iam-statement">…reads the error state before the happy path.</p>
+          <p class="iam-sub">Edge cases aren't edge cases to real users. I design for the moment things go wrong — because that's when trust is built or broken.</p>
         </div>
-        <div class="flip-card reveal-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <img src="assets/photo.jpg" alt="Pratiksha Kulam portrait" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
-              <div class="photo-fallback" style="display:none;">PK</div>
-              <span class="photo-badge">Chicago, IL</span>
-            </div>
-            <div class="flip-card-back">
-              <p class="flip-emoji">🍔</p>
-              <p class="flip-text">Designer by day.</p>
-              <p class="flip-text">Burger explorer by night.</p>
-              <p class="flip-subtext">Currently obsessing over: AI + human behavior</p>
-            </div>
+      </div>
+
+      <div class="iam-line">
+        <span class="iam-num">02</span>
+        <div>
+          <p class="iam-statement">…interviews users before touching Figma.</p>
+          <p class="iam-sub">70% of my time is in research. Finding the right problem is half the solution — the other half is making sure you've actually talked to the people who have it.</p>
+        </div>
+      </div>
+
+      <div class="iam-line">
+        <span class="iam-num">03</span>
+        <div>
+          <p class="iam-statement">…speaks developer — because I used to be one.</p>
+          <p class="iam-sub">CS degree + frontend experience means I design with implementation in mind and hand off without surprises. No redlines that can't actually be built.</p>
+        </div>
+      </div>
+
+      <div class="iam-line">
+        <span class="iam-num">04</span>
+        <div>
+          <p class="iam-statement">…thinks AI should serve people, not impress them.</p>
+          <p class="iam-sub">I design for LLM-integrated experiences and conversational UI — not because it's trendy, but because that's where the hardest UX problems are right now.</p>
+        </div>
+      </div>
+
+      <div class="iam-line">
+        <span class="iam-num">05</span>
+        <div>
+          <p class="iam-statement">…treats accessibility as a starting point, not a checkbox.</p>
+          <p class="iam-sub">WCAG compliance, screen reader logic, keyboard navigation — baked in from day one. If it doesn't work for everyone, it's not done.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── OUTSIDE THE SCREEN ── -->
+<section class="outside-section">
+  <div class="outside-inner fade-in">
+    <div class="outside-header">
+      <div>
+        <span class="section-label">Outside the screen</span>
+        <h2 class="outside-heading">The eye that trains<br>the designer.</h2>
+      </div>
+      <p class="outside-intro">Everything I do outside work feeds back into how I see composition, detail, pattern, and depth — the same things that make design feel considered rather than assembled.</p>
+    </div>
+
+    <div class="outside-grid">
+      <div class="outside-card">
+        <!-- Replace with: <img src="hobby-photo.jpg" alt="Nature photography" class="outside-img" /> -->
+        <div class="outside-img-placeholder">📷</div>
+        <div class="outside-card-body">
+          <p class="outside-card-tag">Photography</p>
+          <p class="outside-card-title">Moment catcher</p>
+          <p class="outside-card-connect">Trains the eye for composition, light & the decisive moment — the same instincts that make a UI layout feel right.</p>
+        </div>
+      </div>
+
+      <div class="outside-card">
+        <!-- Replace with: <img src="hobby-mandala.jpg" alt="Mandala art" class="outside-img" /> -->
+        <div class="outside-img-placeholder">🔴</div>
+        <div class="outside-card-body">
+          <p class="outside-card-tag">Mandala & Painting</p>
+          <p class="outside-card-title">Pattern thinker</p>
+          <p class="outside-card-connect">Demands precision, repetition & patience — the exact mindset behind building a design system that actually scales.</p>
+        </div>
+      </div>
+
+      <div class="outside-card">
+        <!-- Replace with: <img src="hobby-books.jpg" alt="Books" class="outside-img" /> -->
+        <div class="outside-img-placeholder">📚</div>
+        <div class="outside-card-body">
+          <p class="outside-card-tag">Reading</p>
+          <p class="outside-card-title">Perpetual learner</p>
+          <p class="outside-card-connect">Books build the mental models that Figma can't. Research, psychology, design theory — and the occasional novel to stay human.</p>
+        </div>
+      </div>
+
+      <div class="outside-card">
+        <!-- Replace with: <img src="hobby-food.jpg" alt="Food photography" class="outside-img" /> -->
+        <div class="outside-img-placeholder">🍜</div>
+        <div class="outside-card-body">
+          <p class="outside-card-tag">Food & Chicago</p>
+          <p class="outside-card-title">Unofficial critic</p>
+          <p class="outside-card-connect">Chicago has opinions about food. So do I. Also a great excuse to practice food photography and think about sensory experience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ── -->
+<section class="exp-section">
+  <div class="exp-inner fade-in">
+    <div>
+      <span class="section-label">Experience</span>
+      <h2 class="exp-heading">Where I've<br>shipped work.</h2>
+    </div>
+    <div class="exp-list">
+      <div class="exp-item">
+        <div>
+          <p class="exp-role">Product Designer</p>
+          <p class="exp-company">Northern Trust · Chicago, IL</p>
+          <div class="exp-highlights">
+            <span class="exp-highlight">30% usability improvement</span>
+            <span class="exp-highlight">3+ enterprise apps</span>
+            <span class="exp-highlight">Design systems</span>
+            <span class="exp-highlight">Stakeholder research</span>
+            <span class="exp-highlight">25% engagement lift</span>
           </div>
         </div>
-      </section>
-
-      <section class="stats-bar reveal-card">
-        <div class="stat">
-          <p class="stat-value">MS HCI</p>
-          <p class="stat-label">DePaul University</p>
+        <p class="exp-period">Sep 2025 – Present</p>
+      </div>
+      <div class="exp-item">
+        <div>
+          <p class="exp-role">UX/UI Designer</p>
+          <p class="exp-company">Mphasis · India</p>
+          <div class="exp-highlights">
+            <span class="exp-highlight">28% satisfaction increase</span>
+            <span class="exp-highlight">Responsive web & mobile</span>
+            <span class="exp-highlight">95% dev accuracy</span>
+            <span class="exp-highlight">Frontend collaboration</span>
+          </div>
         </div>
-        <div class="stat">
-          <p class="stat-value">BS CS</p>
-          <p class="stat-label">Computer Science Background</p>
-        </div>
-        <div class="stat">
-          <p class="stat-value">Chicago</p>
-          <p class="stat-label">Currently Based</p>
-        </div>
-        <div class="stat">
-          <p class="stat-value">Open to Work</p>
-          <p class="stat-label">Full-time &amp; Freelance</p>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <section class="section">
-    <div class="container">
-      <div class="story-grid">
-        <h2 class="story-title reveal-heading">My story</h2>
-        <div class="story-copy reveal-card">
-          <p>
-            I started in computer science — writing code, thinking in systems,
-            solving problems with logic. Then I discovered that the most interesting problems
-            weren't technical. They were human.
-          </p>
-          <p>
-            That shift led me to Human-Computer Interaction. Now I sit at the
-            intersection of both worlds: I understand how the system works, and I advocate
-            for the person using it. That combination is rare — and it's what makes my work different.
-          </p>
-          <p>
-            When I'm not designing, I'm probably testing a new restaurant in
-            Chicago, doom-scrolling design Twitter, or pretending I'll finish that Duolingo streak.
-          </p>
-        </div>
+        <p class="exp-period">Mar 2021 – Jul 2023</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section">
-    <div class="container">
-      <p class="section-label">Toolbox</p>
-      <h2 class="section-heading reveal-heading">Tools I work with</h2>
-      <div class="tool-grid">
-        <span class="tool-pill reveal-card">Figma</span>
-        <span class="tool-pill reveal-card">FigJam</span>
-        <span class="tool-pill reveal-card">Maze</span>
-        <span class="tool-pill reveal-card">UserTesting</span>
-        <span class="tool-pill reveal-card">Miro</span>
-        <span class="tool-pill reveal-card">Notion</span>
-        <span class="tool-pill reveal-card">Jira</span>
-        <span class="tool-pill reveal-card">Confluence</span>
-        <span class="tool-pill reveal-card">HTML</span>
-        <span class="tool-pill reveal-card">CSS</span>
-        <span class="tool-pill reveal-card">JavaScript</span>
-        <span class="tool-pill reveal-card">React (basics)</span>
-        <span class="tool-pill reveal-card">Claude</span>
-        <span class="tool-pill reveal-card">ChatGPT</span>
-        <span class="tool-pill reveal-card">Framer</span>
-        <span class="tool-pill reveal-card">Webflow</span>
-        <span class="tool-pill reveal-card">After Effects</span>
-        <span class="tool-pill reveal-card">Principle</span>
-        <span class="tool-pill reveal-card">Zeplin</span>
-        <span class="tool-pill reveal-card">GitHub</span>
+<!-- ── CLOSING QUOTE ── -->
+<section class="quote-section">
+  <div class="quote-inner fade-in">
+    <blockquote class="quote-text">
+      "I design for the person who doesn't read the manual, doesn't have time to figure it out, and just needs it to <em>work.</em>"
+    </blockquote>
+    <div>
+      <p class="quote-cta-label">What's next</p>
+      <div class="quote-cta-links">
+        <a href="index.html#work" class="quote-link"><span>See my case studies</span><span>→</span></a>
+        <a href="mailto:pratiksham.kulam@gmail.com" class="quote-link"><span>Get in touch</span><span>→</span></a>
+        <a href="resume.pdf" target="_blank" class="quote-link"><span>Download resume</span><span>↗</span></a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section">
-    <div class="container">
-      <p class="section-label">Education</p>
-      <h2 class="section-heading reveal-heading">Academic foundation</h2>
-      <div class="education-grid">
-        <article class="edu-card reveal-card">
-          <p class="year-tag">2024</p>
-          <h3 class="edu-degree">MS Human-Computer Interaction</h3>
-          <p class="edu-school">DePaul University</p>
-        </article>
-        <article class="edu-card reveal-card">
-          <p class="year-tag">2022</p>
-          <h3 class="edu-degree">BS Computer Science</h3>
-          <p class="edu-school">DePaul University</p>
-        </article>
-      </div>
-    </div>
-  </section>
+<!-- ── FOOTER ── */
+<footer>
+  <span>© 2025 Pratiksha Kulam</span>
+  <span>Designed with a side of coffee, code & AI</span>
+  <span><a href="index.html">Back to home</a></span>
+</footer>
 
-  <script>
-    const nav = document.getElementById("siteNav");
-    const menuToggle = document.getElementById("menuToggle");
-    const navMenu = document.getElementById("navMenu");
-
-    const updateNavBorder = () => {
-      nav.classList.toggle("scrolled", window.scrollY > 60);
-    };
-    updateNavBorder();
-    window.addEventListener("scroll", updateNavBorder);
-
-    menuToggle.addEventListener("click", () => {
-      const isOpen = nav.classList.toggle("open");
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
+<script>
+  // Scroll fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.classList.add('visible');
+        observer.unobserve(el.target);
+      }
     });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-    navMenu.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        nav.classList.remove("open");
-        menuToggle.setAttribute("aria-expanded", "false");
-      });
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-
-    document.querySelectorAll(".reveal-heading").forEach((el) => observer.observe(el));
-    document.querySelectorAll(".reveal-card").forEach((el, index) => {
-      el.style.transitionDelay = `${index * 0.1}s`;
-      observer.observe(el);
-    });
-  </script>
+  // 🔊 Pronunciation via Web Speech API
+  const speakBtn = document.getElementById('speakBtn');
+  speakBtn.addEventListener('click', () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance('Pruh tick sha');
+      utter.rate = 0.75;
+      utter.pitch = 1.05;
+      utter.lang = 'en-US';
+      speakBtn.classList.add('playing');
+      utter.onend = () => speakBtn.classList.remove('playing');
+      window.speechSynthesis.speak(utter);
+    }
+  });
+</script>
 </body>
 </html>
