@@ -196,21 +196,15 @@
       color: var(--black);
     }
 
-    /* FLIP CARD */
+   /* FLIP CARD */
 .flip-wrap {
   position: relative;
   width: 380px;
-  perspective: 1200px;
 }
 .flip-card {
   width: 100%;
   aspect-ratio: 3/4;
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
-}
-.flip-wrap:hover .flip-card {
-  transform: rotateY(180deg);
 }
 .flip-card-front,
 .flip-card-back {
@@ -218,27 +212,21 @@
   top: 0; left: 0;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   overflow: visible;
+  transition: opacity 0.4s ease;
 }
-.flip-card-front {
-  transform: rotateY(0deg);
-  z-index: 2;
-}
-.flip-card-back {
-  transform: rotateY(180deg);
-  z-index: 1;
-}
-.flip-card-back .bubble {
-  transform: rotateY(180deg);
-}
+.flip-card-front { opacity: 1; z-index: 2; }
+.flip-card-back { opacity: 0; z-index: 1; }
+.flip-wrap:hover .flip-card-front { opacity: 0; z-index: 1; }
+.flip-wrap:hover .flip-card-back { opacity: 1; z-index: 2; }
+.flip-card-back .bubble { transform: none; }
 .photo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
+    
 /* BUBBLES */
 .bubble {
   position: absolute;
