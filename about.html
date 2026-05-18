@@ -215,12 +215,22 @@
 .flip-card-front,
 .flip-card-back {
   position: absolute;
-  inset: 0;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   overflow: visible;
 }
+.flip-card-front {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
 .flip-card-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+.flip-card-back .bubble {
   transform: rotateY(180deg);
 }
 .photo-img {
@@ -229,7 +239,6 @@
   object-fit: cover;
   display: block;
 }
-
 /* BUBBLES */
 .bubble {
   position: absolute;
