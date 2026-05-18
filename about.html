@@ -510,8 +510,30 @@
       color: var(--black);
       line-height: 1.45;
       letter-spacing: -0.5px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
     .quote-text em { color: var(--accent); font-style: normal; }
+    .quote-cite {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-style: normal;
+      color: var(--gray-text);
+      letter-spacing: 0.08em;
+    }
+    .quote-invite {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-style: normal;
+      color: var(--black);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--black);
+      padding-bottom: 2px;
+      align-self: flex-start;
+      cursor: pointer;
+    }
     .quote-cta-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 20px; }
     .quote-cta-links { display: flex; flex-direction: column; gap: 12px; }
     .quote-link {
@@ -778,8 +800,9 @@
           <div class="exp-highlights">
             <span class="exp-highlight">28% satisfaction increase</span>
             <span class="exp-highlight">Responsive web and mobile</span>
-            <span class="exp-highlight">95% dev accuracy</span>
-            <span class="exp-highlight">Frontend collaboration</span>
+            <span class="exp-highlight">Agile delivery</span>
+            <span class="exp-highlight">Cross-functional collaboration</span>
+            <span class="exp-highlight">Interaction design</span>
           </div>
         </div>
         <p class="exp-period">Mar 2021 – Jul 2023</p>
@@ -791,7 +814,9 @@
 <section class="quote-section">
   <div class="quote-inner fade-in">
     <blockquote class="quote-text">
-      "I design for the person who doesn't read the manual, doesn't have time to figure it out, and just needs it to <em>work.</em>"
+      "Design is really an act of communication."
+      <cite class="quote-cite">— Don Norman</cite>
+      <span class="quote-invite">Let's start that communication →</span>
     </blockquote>
     <div>
       <p class="quote-cta-label">What's next</p>
