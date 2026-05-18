@@ -202,6 +202,18 @@
   width: 380px;
   margin-right: 60px;
 }
+.flip-wrap::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: -12px;
+  bottom: -12px;
+  border: 1.5px solid var(--gray-border);
+  border-radius: 18px;
+  z-index: 0;
+  pointer-events: none;
+}
 .flip-card {
   width: 100%;
   aspect-ratio: 3/4;
@@ -603,11 +615,6 @@
           <!-- FRONT -->
           <div class="flip-card-front">
             <img src="prof-me1.jpeg" alt="Pratiksha Kulam" class="photo-img" />
-            <!-- bubbles outside frame -->
-            <div class="bubble b1 sent">Currently at Northern Trust 🏢</div>
-            <div class="bubble b2 received">Obsessing over AI + humans 🤖</div>
-            <div class="bubble b3 sent">Reads error states for fun 🙃</div>
-            <div class="bubble b4 received">Research first. Always. 🔍</div>
           </div>
 
           <!-- BACK -->
