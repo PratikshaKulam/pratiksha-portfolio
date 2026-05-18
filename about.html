@@ -202,18 +202,19 @@
   width: 380px;
   margin-right: 60px;
 }
-.flip-wrap::after {
+.flip-wrap::before {
   content: '';
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: -12px;
+  left: -12px;
   right: -12px;
   bottom: -12px;
-  border: 1.5px solid var(--gray-border);
-  border-radius: 18px;
+  border: 2.5px solid var(--gray-border);
+  border-radius: 22px;
   z-index: 0;
   pointer-events: none;
 }
+    
 .flip-card {
   width: 100%;
   aspect-ratio: 3/4;
