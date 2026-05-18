@@ -196,7 +196,7 @@
       color: var(--black);
     }
 
-   /* FLIP CARD */
+/* FLIP CARD */
 .flip-wrap {
   position: relative;
   width: 380px;
@@ -205,6 +205,8 @@
   width: 100%;
   aspect-ratio: 3/4;
   position: relative;
+  border-radius: 16px;
+  overflow: visible;
 }
 .flip-card-front,
 .flip-card-back {
@@ -212,7 +214,8 @@
   top: 0; left: 0;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  overflow: hidden;
+  border-radius: 16px;
   transition: opacity 0.4s ease;
 }
 .flip-card-front { opacity: 1; z-index: 2; }
@@ -225,48 +228,79 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 16px;
 }
-    
-/* BUBBLES */
+
+/* BUBBLES — iMessage style */
 .bubble {
   position: absolute;
-  background: var(--white);
-  border: 1px solid var(--gray-border);
-  border-radius: 18px;
-  padding: 8px 14px;
-  font-size: 11px;
-  color: var(--black);
+  padding: 9px 14px;
+  font-size: 12px;
   font-family: var(--font-body);
   white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
   animation: floatBubble 3s ease-in-out infinite;
   z-index: 10;
+  border-radius: 18px;
+  line-height: 1.3;
 }
-/* each bubble floats at different speed and position */
+
+/* received — gray, tail on left */
+.bubble.received {
+  background: #E8E8E8;
+  color: var(--black);
+  border-bottom-left-radius: 4px;
+}
+.bubble.received::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: -6px;
+  width: 12px; height: 12px;
+  background: #E8E8E8;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+/* sent — black, tail on right */
+.bubble.sent {
+  background: var(--black);
+  color: var(--white);
+  border-bottom-right-radius: 4px;
+}
+.bubble.sent::before {
+  content: '';
+  position: absolute;
+  bottom: 0; right: -6px;
+  width: 12px; height: 12px;
+  background: var(--black);
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+
+/* positions — all kept inside viewport */
 .b1 {
-  top: 8%;
-  right: -30%;
+  top: 6%;
+  right: -10%;
   animation-delay: 0s;
   animation-duration: 3.2s;
 }
 .b2 {
-  top: 30%;
-  left: -38%;
+  top: 35%;
+  left: -5%;
   animation-delay: 0.6s;
   animation-duration: 3.8s;
 }
 .b3 {
-  bottom: 28%;
-  right: -32%;
+  bottom: 30%;
+  right: -8%;
   animation-delay: 1.1s;
   animation-duration: 3.5s;
 }
 .b4 {
   bottom: 8%;
-  left: -28%;
+  left: -3%;
   animation-delay: 0.3s;
   animation-duration: 4s;
 }
+
 @keyframes floatBubble {
   0%   { transform: translateY(0px); }
   50%  { transform: translateY(-7px); }
@@ -565,20 +599,20 @@
           <div class="flip-card-front">
             <img src="prof-me1.jpeg" alt="Pratiksha Kulam" class="photo-img" />
             <!-- bubbles outside frame -->
-            <div class="bubble b1">Currently at Northern Trust 🏢</div>
-            <div class="bubble b2">Obsessing over AI + humans 🤖</div>
-            <div class="bubble b3">Reads error states for fun 🙃</div>
-            <div class="bubble b4">Research first. Always. 🔍</div>
+            <div class="bubble b1 sent">Currently at Northern Trust 🏢</div>
+            <div class="bubble b2 received">Obsessing over AI + humans 🤖</div>
+            <div class="bubble b3 sent">Reads error states for fun 🙃</div>
+            <div class="bubble b4 received">Research first. Always. 🔍</div>
           </div>
 
           <!-- BACK -->
           <div class="flip-card-back">
             <img src="me2.jpeg" alt="Pratiksha having fun" class="photo-img" />
             <!-- bubbles outside frame -->
-            <div class="bubble b1">Always moody ☁️</div>
-            <div class="bubble b2">Coffee addict ☕</div>
-            <div class="bubble b3">Burger enthusiast 🍔</div>
-            <div class="bubble b4">Funny by accident 😅</div>
+            <div class="bubble b1 received">Always moody ☁️</div>
+            <div class="bubble b2 sent">Coffee addict ☕</div>
+            <div class="bubble b3 received">Burger enthusiast 🍔</div>
+            <div class="bubble b4 sent">Funny by accident 😅</div>
           </div>
 
         </div>
