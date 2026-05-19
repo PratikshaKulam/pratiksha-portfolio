@@ -7,20 +7,15 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav class="site-nav site-nav--home" id="siteNav">
-    <div class="nav-shell">
-      <a class="nav-home-logo" href="index.html"><img src="logo.png" alt="Pratiksha Kulam" style="height:48px;width:auto;display:block;"></a>
-      <button class="menu-toggle menu-toggle--home" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
-      <div class="nav-home-right" id="navMenu">
-        <div class="nav-home-links">
-          <a class="nav-home-link" href="#work">Work</a>
-          <a class="nav-home-link" href="about.html">About</a>
-          <a class="nav-home-link" href="#contact">Contact</a>
-        </div>
-        <a class="nav-home-resume" href="resume.pdf">Resume ↗</a>
-      </div>
-    </div>
-  </nav>
+  <nav style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 68px;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);border-bottom:1px solid #E8E8E8;">
+  <a href="index.html" style="font-family:Georgia,serif;font-size:36px;font-weight:700;color:#0A0A0A;text-decoration:none;letter-spacing:-0.5px;line-height:1;margin-left:8px;">प्र</a>
+  <div style="display:flex;align-items:center;gap:36px;">
+    <a href="#work" style="font-size:15px;font-weight:500;color:#0A0A0A;text-decoration:none;opacity:0.8;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Work</a>
+    <a href="about.html" style="font-size:15px;font-weight:500;color:#0A0A0A;text-decoration:none;opacity:0.8;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">About</a>
+    <a href="#contact" style="font-size:15px;font-weight:500;color:#0A0A0A;text-decoration:none;opacity:0.8;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">Contact</a>
+    <a href="resume.pdf" target="_blank" style="font-size:13px;font-weight:500;color:#0A0A0A;text-decoration:none;border:1px solid #0A0A0A;padding:7px 18px;border-radius:2px;">Resume</a>
+  </div>
+</nav>
 
   <header class="home-hero">
     <canvas class="home-hero__grain" id="grainCanvas" aria-hidden="true"></canvas>
