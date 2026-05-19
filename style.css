@@ -303,6 +303,7 @@ img {
   align-items: stretch;
   min-height: 100vh;
   min-height: 100svh;
+  padding-top: 80px;
 }
 
 .home-hero__left {
