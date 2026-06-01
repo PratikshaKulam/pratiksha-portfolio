@@ -466,55 +466,129 @@
   </div>
 </section>
 
-<!-- PRELIMINARY RESEARCH -->
+<!-- ── PRELIMINARY RESEARCH ── -->
 <section class="prelim-section" id="prelim">
   <div class="section-inner fade-in">
-    <p class="section-label purple">Before Testing</p>
-    <h2 class="section-heading">We already knew something was wrong.</h2>
-    <p class="section-sub">Before running user sessions we conducted a heuristic evaluation across Nielsen's 10 principles and a cognitive walkthrough using Lewis & Rieman's four questions. Both confirmed the same thing — meaningful usability problems before a single real user touched it.</p>
-    <div class="prelim-grid">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-bottom:40px;">
+
+      <!-- LEFT: heading + two stat pills + short para -->
       <div>
-        <p class="section-label" style="margin-bottom:16px;">Heuristic Evaluation — Nielsen's 10 Principles</p>
-        <div class="heuristic-table">
-          <div class="heuristic-table-head"><span>Heuristic</span><span style="text-align:right;">Violations</span></div>
-          <div class="heuristic-row"><div><div class="heuristic-name">Visibility of System Status</div><div class="heuristic-bar"><div class="heuristic-bar-fill" style="width:29%"></div></div></div><div class="heuristic-count">5</div></div>
-          <div class="heuristic-row"><div><div class="heuristic-name">Match between System and Real World</div><div class="heuristic-bar"><div class="heuristic-bar-fill" style="width:12%"></div></div></div><div class="heuristic-count">2</div></div>
-          <div class="heuristic-row"><div><div class="heuristic-name">User Control and Freedom</div><div class="heuristic-bar"><div class="heuristic-bar-fill" style="width:24%"></div></div></div><div class="heuristic-count">4</div></div>
-          <div class="heuristic-row"><div><div class="heuristic-name">Consistency and Standards</div><div class="heuristic-bar"><div class="heuristic-bar-fill" style="width:12%"></div></div></div><div class="heuristic-count">2</div></div>
-          <div class="heuristic-row"><div><div class="heuristic-name">Error Prevention</div><div class="heuristic-bar"><div class="heuristic-bar-fill" style="width:47%"></div></div></div><div class="heuristic-count">8</div></div>
-          <div class="heuristic-row"><div><div class="heuristic-name">Recognition rather than Recall</div><div class="heuristic-bar"><div class="heuristic-bar-fill" style="width:29%"></div></div></div><div class="heuristic-count">5</div></div>
-          <div class="heuristic-row"><div><div class="heuristic-name">Flexibility and Efficiency of Use</div><div class="heuristic-bar"><div class="heuristic-bar-fill" style="width:18%"></div></div></div><div class="heuristic-count">3</div></div>
-          <div class="heuristic-row highlight"><div><div class="heuristic-name" style="font-weight:600;">Aesthetic and Minimalist Design</div><div class="heuristic-bar"><div class="heuristic-bar-fill" style="width:100%"></div></div></div><div class="heuristic-count big">17</div></div>
-          <div class="heuristic-row"><div><div class="heuristic-name">Help Users Recognize and Recover from Errors</div><div class="heuristic-bar"><div class="heuristic-bar-fill" style="width:6%"></div></div></div><div class="heuristic-count">1</div></div>
-          <div class="heuristic-row"><div><div class="heuristic-name">Help and Documentation</div><div class="heuristic-bar"><div class="heuristic-bar-fill" style="width:24%"></div></div></div><div class="heuristic-count">4</div></div>
-        </div>
-        <div class="prelim-total">
-          <div class="prelim-total-num">56</div>
-          <div class="prelim-total-text">total violations before a single user session. Biggest offender: Aesthetic and Minimalist Design with 17 — cluttered, inconsistent, cognitively demanding.</div>
+        <p class="section-label purple">Before Testing</p>
+        <h2 class="section-heading">We already knew something was wrong.</h2>
+        <p style="font-size:13px;color:var(--gray-text);line-height:1.65;margin-top:10px;">Two evaluations ran before users sat down. Both pointed to the same gap — a system built without the user in mind.</p>
+        <div style="display:flex;gap:12px;margin-top:24px;">
+          <div style="flex:1;background:var(--purple-dark);border-radius:4px;padding:20px 22px;">
+            <div style="font-family:var(--font-heading);font-size:36px;color:#fff;line-height:1;margin-bottom:4px;">56</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.4;">heuristic violations across Nielsen's 10 principles</div>
+          </div>
+          <div style="flex:1;background:var(--purple-dark);border-radius:4px;padding:20px 22px;">
+            <div style="font-family:var(--font-heading);font-size:36px;color:#fff;line-height:1;margin-bottom:4px;">25.6%</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.4;">cognitive walkthrough failure rate before any user touched it</div>
+          </div>
         </div>
       </div>
-      <div>
-        <p class="section-label" style="margin-bottom:16px;">Cognitive Walkthrough — Lewis & Rieman</p>
-        <div class="walkthrough-card">
-          <div class="walkthrough-stat">25.6%</div>
-          <p style="font-size:13px;color:var(--gray-text);line-height:1.7;margin-bottom:16px;">failure rate — 1 in 4 expected user actions was likely to fail or confuse, before any real user was involved.</p>
-          <p class="section-label" style="margin-bottom:10px;">Four evaluation questions applied</p>
-          <div class="walkthrough-q">Will users be trying to produce whatever effect the action has?</div>
-          <div class="walkthrough-q">Will users see the control (button, menu, switch) for the action?</div>
-          <div class="walkthrough-q">Once found, will they recognize it produces the effect they want?</div>
-          <div class="walkthrough-q">Will users understand the feedback they get after taking the action?</div>
+
+      <!-- RIGHT: what we did -->
+      <div style="padding-top:6px;">
+        <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--gray-border);">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--purple-light);border:1px solid var(--purple-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:var(--purple);">①</div>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--black);margin-bottom:3px;">Heuristic Evaluation</p>
+            <p style="font-size:12px;color:var(--gray-text);line-height:1.5;">Assessed the interface against Nielsen's 10 usability principles. Found violations across all 10 — most severely in Aesthetic &amp; Minimalist Design.</p>
+          </div>
         </div>
-        <div class="walkthrough-card" style="margin-top:0">
-          <p class="section-label" style="margin-bottom:12px;">Three tasks selected for testing</p>
-          <p style="font-size:13px;color:var(--gray-text);line-height:1.7;margin-bottom:14px;">Based on the walkthrough, we prioritized the three most vulnerable, high-stakes tasks.</p>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="padding:12px 16px;background:var(--gray-light);border-radius:4px;font-size:13px;color:var(--black);display:flex;align-items:center;gap:10px;"><span style="width:22px;height:22px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>Submit "Vacation" Request</div>
-            <div style="padding:12px 16px;background:var(--gray-light);border-radius:4px;font-size:13px;color:var(--black);display:flex;align-items:center;gap:10px;"><span style="width:22px;height:22px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>Add KPIs for the Year</div>
-            <div style="padding:12px 16px;background:var(--gray-light);border-radius:4px;font-size:13px;color:var(--black);display:flex;align-items:center;gap:10px;"><span style="width:22px;height:22px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>Submit "Internal Recruitment" Request</div>
+        <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--gray-border);">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--purple-light);border:1px solid var(--purple-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:var(--purple);">②</div>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--black);margin-bottom:3px;">Cognitive Walkthrough</p>
+            <p style="font-size:12px;color:var(--gray-text);line-height:1.5;">Applied Lewis &amp; Rieman's 4 evaluation questions to each task flow. 1 in 4 steps was predicted to fail before a real user ever sat down.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 0;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--purple-light);border:1px solid var(--purple-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:var(--purple);">③</div>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--black);margin-bottom:3px;">3 Tasks Selected</p>
+            <p style="font-size:12px;color:var(--gray-text);line-height:1.5;">Vacation request, KPI submission, internal recruitment — prioritized based on frequency, stakes, and walkthrough failure rate.</p>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- full heuristic table — compact 2-col grid -->
+    <p style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gray-text);margin-bottom:14px;">Violation breakdown — all 10 heuristics</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--gray-border);border:1px solid var(--gray-border);border-radius:4px;overflow:hidden;margin-bottom:16px;">
+      <div style="background:var(--purple);padding:12px 16px;grid-column:span 2;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.6);">Nielsen's 10 Heuristics</span>
+        <span style="font-family:var(--font-heading);font-size:22px;color:#fff;">56 <span style="font-size:11px;color:rgba(255,255,255,0.45);font-family:var(--font-body);">total violations</span></span>
+      </div>
+      <div style="background:var(--purple-light);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;font-weight:600;color:var(--purple-dark);">Aesthetic &amp; Minimalist Design</span>
+        <span style="font-family:var(--font-heading);font-size:24px;color:var(--purple-dark);">17</span>
+      </div>
+      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--black);">Error Prevention</span>
+        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">8</span>
+      </div>
+      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--black);">Visibility of System Status</span>
+        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">5</span>
+      </div>
+      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--black);">Recognition rather than Recall</span>
+        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">5</span>
+      </div>
+      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--black);">User Control and Freedom</span>
+        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">4</span>
+      </div>
+      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--black);">Help and Documentation</span>
+        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">4</span>
+      </div>
+      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--black);">Flexibility and Efficiency of Use</span>
+        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">3</span>
+      </div>
+      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--black);">Match — System &amp; Real World</span>
+        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">2</span>
+      </div>
+      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--black);">Consistency and Standards</span>
+        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">2</span>
+      </div>
+      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--black);">Help Users Recover from Errors</span>
+        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">1</span>
+      </div>
+    </div>
+
+    <!-- tasks as cards -->
+    <div style="display:flex;gap:12px;">
+      <div style="flex:1;background:#fff;border:1px solid var(--gray-border);border-radius:4px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px;">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+        <div>
+          <p style="font-size:12px;font-weight:600;color:var(--black);line-height:1.4;">Submit Vacation Request</p>
+          <p style="font-size:11px;color:var(--gray-text);margin-top:2px;">Ideal: 1 min · 19 clicks</p>
+        </div>
+      </div>
+      <div style="flex:1;background:#fff;border:1px solid var(--gray-border);border-radius:4px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px;">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+        <div>
+          <p style="font-size:12px;font-weight:600;color:var(--black);line-height:1.4;">Add KPIs for the Year</p>
+          <p style="font-size:11px;color:var(--gray-text);margin-top:2px;">Ideal: 4 min · 23 clicks</p>
+        </div>
+      </div>
+      <div style="flex:1;background:#fff;border:1px solid var(--gray-border);border-radius:4px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px;">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+        <div>
+          <p style="font-size:12px;font-weight:600;color:var(--black);line-height:1.4;">Submit Internal Recruitment</p>
+          <p style="font-size:11px;color:var(--gray-text);margin-top:2px;">Ideal: 3 min · 35 clicks</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
