@@ -3,11 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MoodMode Case Study — Pratiksha Kulam</title>
-  <meta name="description" content="MoodMode: an emotion-adaptive iOS productivity app that asks how you feel before it asks what you need to do.">
+  <title>MoodMode — Case Study · Pratiksha Kulam</title>
+  <meta name="description" content="MoodMode: an emotion-adaptive iOS productivity app for ADHD brains that asks how you feel before it asks what you need to do.">
   <link rel="stylesheet" href="case-study.css">
+  <link rel="stylesheet" href="motion.css">
+  <style>
+    body { --project: #6B3FD4; --project-soft: #ECE6F8; --project-deep: #1B1236; }
+
+    /* hero orbs */
+    .orbs { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .orb { position: absolute; width: var(--s, 76px); height: var(--s, 76px); border-radius: 50%; display: grid; place-items: center; font-size: calc(var(--s, 76px) * .5);
+      background: radial-gradient(circle at 30% 25%, #fff, #EDE6FB 60%, #D8CCF6); box-shadow: 0 20px 40px -18px rgba(80,40,160,.45), inset 0 -6px 16px rgba(107,63,212,.15);
+      animation: m-float var(--t, 7s) ease-in-out infinite; animation-delay: var(--delay, 0s); }
+    .orb-wrap { position: absolute; transition: transform 1.2s cubic-bezier(.2,.7,.1,1); }
+    .hero .wrap { position: relative; z-index: 1; }
+    .hero-blob { position: absolute; width: 720px; height: 720px; right: -220px; top: -160px; border-radius: 50%; z-index: 0;
+      background: radial-gradient(circle at 40% 40%, rgba(150,110,255,.35), rgba(255,170,210,.18) 45%, transparent 70%); filter: blur(10px); }
+
+    /* demo */
+    .demo { display: grid; grid-template-columns: 1fr 360px 1fr; gap: 56px; align-items: center; margin-top: 56px; padding: 64px 56px; border-radius: 22px;
+      background: linear-gradient(160deg, #F1ECFB, #F8EEF4 60%, #EFE8DD); position: relative; overflow: hidden; }
+    .demo-moods { display: flex; flex-direction: column; gap: 12px; }
+    .demo-moods p.eyebrow { margin-bottom: 8px; }
+    .mood-btn { display: flex; align-items: center; gap: 16px; padding: 14px 18px; border-radius: 16px; background: rgba(255,255,255,.7); border: 1px solid transparent; cursor: pointer; text-align: left; transition: transform .4s var(--ease), background .3s, border-color .3s, box-shadow .3s; }
+    .mood-btn .em { font-size: 34px; line-height: 1; transition: transform .5s var(--ease); }
+    .mood-btn b { display: block; font-family: var(--serif); font-weight: normal; font-size: 19px; }
+    .mood-btn small { color: var(--subtle); font-size: 12.5px; }
+    .mood-btn:hover { transform: translateX(6px); }
+    .mood-btn[aria-pressed="true"] { background: #fff; border-color: var(--project); box-shadow: 0 16px 34px -20px rgba(107,63,212,.6); }
+    .mood-btn[aria-pressed="true"] .em { transform: scale(1.2) rotate(-8deg); }
+    .demo-phone { width: 300px; margin: 0 auto; aspect-ratio: 398/856; position: relative; }
+    .demo-phone .phone { height: 100%; }
+    .demo-phone .screen { position: relative; }
+    .demo-phone .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04); transition: opacity .5s, transform .7s var(--ease); }
+    .demo-phone .screen img.on { opacity: 1; transform: none; }
+    .demo-out h4 { font-family: var(--serif); font-weight: normal; font-size: 34px; color: var(--project); line-height: 1.1; margin: 10px 0 12px; }
+    .demo-out p { color: var(--muted); font-size: 15.5px; }
+    .demo-out .swap { transition: opacity .35s, transform .45s var(--ease); }
+    .demo-out .swap.out { opacity: 0; transform: translateY(10px); }
+    .strip { display: flex; gap: 8px; margin-top: 22px; }
+    .strip button { width: 44px; aspect-ratio: 398/856; border-radius: 8px; overflow: hidden; opacity: .45; outline: 2px solid transparent; outline-offset: 2px; transition: opacity .3s, outline-color .3s, transform .3s; cursor: pointer; padding: 0; }
+    .strip button img { width: 100%; height: 100%; object-fit: cover; }
+    .strip button:hover { opacity: .8; transform: translateY(-3px); }
+    .strip button.on { opacity: 1; outline-color: var(--project); }
+    .demo-hint { position: absolute; left: 56px; bottom: 22px; font-size: 12px; color: var(--subtle); }
+
+    /* playground */
+    .play { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; }
+    .toy { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: flex; flex-direction: column; min-height: 440px; }
+    .toy h4 { font-family: var(--serif); font-weight: normal; font-size: 22px; margin: 6px 0 4px; }
+    .toy > p { font-size: 14px; color: var(--muted); }
+    .toy-stage { flex: 1; display: grid; place-items: center; padding: 28px 0; min-height: 230px; overflow: hidden; }
+    .toy-btn { align-self: flex-start; padding: 10px 20px; border-radius: 999px; background: var(--project); color: #fff; font-size: 13px; letter-spacing: .04em; cursor: pointer; }
+    .ring { width: 180px; height: 180px; position: relative; }
+    .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring circle { fill: none; stroke-width: 10; }
+    .ring .track { stroke: var(--project-soft); }
+    .ring .val { stroke: url(#mmGrad); stroke-linecap: round; stroke-dasharray: 534; stroke-dashoffset: 0; }
+    .ring-label { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-family: var(--serif); font-size: 38px; line-height: 1; }
+    .ring-label small { display: block; font-family: var(--sans); font-size: 11px; letter-spacing: .16em; color: var(--subtle); margin-top: 6px; text-transform: uppercase; }
+    .breath { width: 104px; height: 104px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #B49CFF, #6B3FD4 55%, #F2A3C7); display: grid; place-items: center; color: #fff; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; box-shadow: 0 0 0 0 rgba(107,63,212,.25); transition: transform 4s ease-in-out, box-shadow 4s ease-in-out; }
+    .breath.inhale { transform: scale(1.35); box-shadow: 0 0 0 18px rgba(107,63,212,.08); }
+    .todo-list { list-style: none; width: 100%; }
+    .todo-list li { margin-bottom: 8px; }
+    .todo-list label { display: flex; gap: 12px; align-items: center; padding: 11px 14px; border-radius: 12px; background: var(--paper); font-size: 14px; cursor: pointer; transition: background .3s; }
+    .todo-list input { appearance: none; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line); flex-shrink: 0; display: grid; place-items: center; transition: background .3s, border-color .3s; cursor: pointer; }
+    .todo-list input:checked { background: #2EAD6A; border-color: #2EAD6A; }
+    .todo-list input:checked::after { content: '✓'; color: #fff; font-size: 12px; }
+    .todo-list input:checked + span { color: var(--subtle); text-decoration: line-through; }
+    .progress { height: 6px; border-radius: 6px; background: var(--paper-2); width: 100%; margin-top: 14px; overflow: hidden; }
+    .progress span { display: block; height: 100%; width: 0; background: var(--project); transition: width .6s var(--ease); }
+    .cheer { font-size: 13px; color: var(--project); min-height: 20px; margin-top: 10px; transition: opacity .3s; }
+    .confetti { position: fixed; pointer-events: none; z-index: 450; font-size: 18px; }
+
+    /* way-out ticker */
+    .ticker { display: block; height: 1.5em; overflow: hidden; margin-top: 4px; white-space: nowrap; }
+    .ticker span { display: block; transition: transform .6s var(--ease); color: var(--project); }
+
+    @media (max-width: 1000px) {
+      .demo { grid-template-columns: 1fr; padding: 40px 24px 60px; gap: 32px; }
+      .demo-moods { flex-direction: row; flex-wrap: wrap; }
+      .demo-moods p.eyebrow { width: 100%; }
+      .demo-hint { left: 24px; }
+      .play { grid-template-columns: 1fr; }
+      .orbs { display: none; }
+    }
+  </style>
 </head>
-<body style="--project:#6B3FD4; --project-soft:#ECE6F8;">
+<body>
 <a class="skip-link" href="#main">Skip to content</a>
 
 <nav class="topnav" aria-label="Site">
@@ -16,29 +99,48 @@
     <li><a href="index.html#work">Work</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="index.html#contact">Contact</a></li>
-    <li><a href="resume.pdf" class="nav-resume">Resume</a></li>
+    <li><a href="resume.pdf" class="nav-resume" data-magnetic>Resume</a></li>
   </ul>
 </nav>
 
-<header class="cs-hero">
+<header class="hero">
+  <div class="hero-blob" data-parallax="0.12" aria-hidden="true"></div>
+  <div class="orbs" aria-hidden="true">
+    <div class="orb-wrap" data-depth="40" style="right:9%;top:150px"><div class="orb" style="--s:92px;--t:8s">😌</div></div>
+    <div class="orb-wrap" data-depth="70" style="right:24%;top:300px"><div class="orb" style="--s:64px;--t:6.5s;--delay:-2s">😫</div></div>
+    <div class="orb-wrap" data-depth="25" style="right:5%;top:430px"><div class="orb" style="--s:74px;--t:7.5s;--delay:-4s">🤩</div></div>
+    <div class="orb-wrap" data-depth="55" style="right:17%;top:560px"><div class="orb" style="--s:56px;--t:9s;--delay:-1s">😓</div></div>
+  </div>
   <div class="wrap">
-    <a class="cs-back" href="index.html#work">← All work</a>
-    <p class="cs-tag">AI Product Design · Lean UX · iOS · 2025 · In progress</p>
-    <h1 class="cs-title">Most apps ignore how you feel. <em>This one starts there.</em></h1>
-    <p class="cs-lede">MoodMode is a productivity app for ADHD brains. Before it asks what you need to do, it asks how you're doing — and then shapes the next step to fit.</p>
-    <dl class="cs-meta">
-      <div><dt>Role</dt><dd><span class="todo">Product designer — confirm role/team</span></dd></div>
-      <div><dt>Approach</dt><dd>Lean UX, 4 phases</dd></div>
-      <div><dt>Platform</dt><dd>iOS, mobile-first</dd></div>
-      <div><dt>Status</dt><dd>Building with a real OpenAI integration</dd></div>
-    </dl>
-    <figure class="cs-cover">
-      <img src="assets/moodmode/hero.jpg" alt="Three iPhones showing MoodMode: the mood check-in in two colour themes and the 'For when your brain says Not Now' welcome screen.">
+    <div class="hero-top" data-reveal="fade">
+      <a class="back" href="index.html#work">← All work</a>
+      <span class="eyebrow">2025 · In progress</span>
+    </div>
+    <p class="eyebrow c" data-reveal style="margin-bottom:22px">MoodMode · Emotion-adaptive productivity</p>
+    <h1 data-split>Most apps ignore how you feel. <em>This one starts there.</em></h1>
+    <div class="hero-lede">
+      <p data-reveal style="--d:.3s">An iOS app for ADHD brains that asks how you're doing <mark class="sweep">before</mark> it asks what you need to do — then shapes the next step to fit the day you're actually having.</p>
+      <dl class="facts" data-reveal style="--d:.45s">
+        <div><dt>Focus</dt><dd>AI product design</dd></div>
+        <div><dt>Process</dt><dd>Lean UX · 4 phases</dd></div>
+        <div><dt>Platform</dt><dd>iOS, mobile-first</dd></div>
+        <div><dt>Status</dt><dd>Building with OpenAI</dd></div>
+      </dl>
+    </div>
+    <figure class="hero-media" data-reveal="clip" data-cursor="MoodMode">
+      <img src="assets/moodmode/hero.jpg" alt="Three iPhones showing MoodMode: the mood check-in in two colour themes and the 'For when your brain says Not Now' welcome screen." data-parallax="-0.05">
     </figure>
+
+    <section class="tldr" aria-label="Summary">
+      <div data-reveal><h2>Problem</h2><p>To-do apps show the same list on good days and bad ones. For ADHD brains, <strong>starting</strong> is the hard part.</p></div>
+      <div data-reveal style="--d:.1s"><h2>Bet</h2><p>If the first step matches someone's mood and energy, they'll <strong>start sooner</strong>.</p></div>
+      <div data-reveal style="--d:.2s"><h2>Design</h2><p>A two-question check-in that routes into <strong>three modes</strong>: Focus Sprint, Start Small, Reset &amp; Refocus.</p></div>
+      <div data-reveal style="--d:.3s"><h2>Now</h2><p>Prototype complete. Building the AI step-breakdown with a <strong>real OpenAI</strong> integration.</p></div>
+    </section>
   </div>
 </header>
 
-<nav class="chapter-nav" aria-label="Case study chapters">
+<nav class="chapter-nav" aria-label="Chapters">
   <ol>
     <li><a href="#problem"><span>01</span>The problem</a></li>
     <li><a href="#thinking"><span>02</span>The thinking</a></li>
@@ -48,169 +150,249 @@
 
 <main id="main">
 
-  <!-- ───────── 01 ───────── -->
+  <!-- ═════════ 01 ═════════ -->
   <section class="chapter" id="problem">
     <div class="wrap">
-      <div class="chapter-intro reveal">
-        <p class="chapter-num">Chapter 01</p>
-        <h2 class="chapter-title">Start with the right problem.</h2>
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">01</div>
+        <div>
+          <p class="eyebrow c">Chapter one</p>
+          <h2 class="chapter-title" data-split>Start with the <em>right problem.</em></h2>
+        </div>
       </div>
 
-      <div class="block reveal">
-        <p class="block-label">The gap</p>
-        <h3>Every to-do app assumes you're ready to work.</h3>
-        <p>Productivity tools hand you the same list whether you woke up energised or running on empty. For people with ADHD, the hardest part usually isn't knowing what to do — it's <strong>starting</strong>. A long list on a low-energy day doesn't motivate. It overwhelms.</p>
-        <p><span class="todo">Add what your research showed: who you spoke to, how many, and one quote that captures the "not now" feeling.</span></p>
+      <div class="block block-head">
+        <p class="eyebrow">The gap</p>
+        <div data-reveal>
+          <h3>Every to-do app assumes you're ready to work.</h3>
+          <p>Productivity tools hand you the same list whether you woke up energised or running on empty. They're built for planning — but for many people with ADHD, the plan isn't the problem. <mark class="sweep">Starting is.</mark></p>
+          <p>On a low-energy day, a long list doesn't motivate. It confirms that you're behind. So the app gets closed, and the task waits another day.</p>
+        </div>
       </div>
 
-      <blockquote class="pull reveal">For when your brain says ‘Not Now’.</blockquote>
+      <blockquote class="pull" data-reveal>For when your brain says ‘Not Now’.<cite>— the line that became MoodMode's front door</cite></blockquote>
 
-      <div class="block reveal">
-        <p class="block-label">Lean UX hypothesis</p>
-        <h3>If the first step matches how someone feels, they'll start sooner.</h3>
-        <p>Instead of designing a better list, I framed the product around a single bet: check in on mood and energy first, then offer one path that fits that state — a focused sprint, a tiny first step, or a short reset.</p>
+      <div class="block block-head">
+        <p class="eyebrow">Lean UX assumptions</p>
+        <div>
+          <h3 data-reveal>Instead of a better list, I set out to test three assumptions.</h3>
+          <div class="cards c3">
+            <article class="card" data-reveal data-tilt><span class="num">A1</span><h4>Starting is harder than planning</h4><p>The moment of beginning is where people stall — so that's where the design should spend its effort.</p></article>
+            <article class="card" data-reveal style="--d:.1s" data-tilt><span class="num">A2</span><h4>The right first step depends on the day</h4><p>A motivated morning and a drained afternoon need different kinds of help, not the same list.</p></article>
+            <article class="card" data-reveal style="--d:.2s" data-tilt><span class="num">A3</span><h4>Pressure backfires</h4><p>If saying “not now” feels like failing, people leave. Every suggestion needs a guilt-free way out.</p></article>
+          </div>
+        </div>
       </div>
+      <!-- TODO(Pratiksha): add research evidence — who you spoke to, how many, and one real quote. -->
     </div>
   </section>
 
-  <!-- ───────── 02 ───────── -->
+  <!-- ═════════ 02 ═════════ -->
   <section class="chapter" id="thinking">
     <div class="wrap">
-      <div class="chapter-intro reveal">
-        <p class="chapter-num">Chapter 02</p>
-        <h2 class="chapter-title">Make the thinking visible.</h2>
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">02</div>
+        <div>
+          <p class="eyebrow c">Chapter two</p>
+          <h2 class="chapter-title" data-split>Make the <em>thinking visible.</em></h2>
+        </div>
       </div>
 
-      <div class="block reveal">
-        <p class="block-label">The check-in</p>
-        <h3>Two questions. A few seconds.</h3>
-        <p>The app opens with a mood picker and an energy slider — nothing else. Recently used moods sit one tap away, so checking in never feels like another task. That one answer decides everything that comes next.</p>
+      <div class="block block-head">
+        <p class="eyebrow">The check-in</p>
+        <div data-reveal>
+          <h3>Two questions. A few seconds. Then the app changes shape.</h3>
+          <p>MoodMode opens with an emoji mood picker and an energy slider — nothing else. Recently used moods sit one tap away, so checking in never feels like another task. That answer decides which of three modes you land in.</p>
+        </div>
       </div>
 
-      <div class="block reveal">
-        <p class="block-label">Three moods, three paths</p>
-        <h3>The same app behaves differently depending on how you arrive.</h3>
-        <div class="modes">
-          <div class="mode">
-            <div class="mode-feel" aria-hidden="true">🤩</div>
-            <p class="mode-when">Feeling motivated</p>
-            <h4>Focus Sprint</h4>
-            <p>Name one task, mute notifications, and work in a single 25-minute block.</p>
+      <!-- interactive demo -->
+      <div class="block">
+        <div class="demo" data-reveal="scale" id="demo">
+          <div class="demo-moods" role="group" aria-label="Pick a mood">
+            <p class="eyebrow c">Try it — how are you feeling?</p>
+            <button class="mood-btn" data-mood="motivated" aria-pressed="true" data-cursor="Pick"><span class="em" aria-hidden="true">🤩</span><span><b>Motivated</b><small>Energy's up, let's go</small></span></button>
+            <button class="mood-btn" data-mood="drained" aria-pressed="false" data-cursor="Pick"><span class="em" aria-hidden="true">😓</span><span><b>Drained</b><small>Running on empty</small></span></button>
+            <button class="mood-btn" data-mood="anxious" aria-pressed="false" data-cursor="Pick"><span class="em" aria-hidden="true">😫</span><span><b>Anxious</b><small>Too much, too fast</small></span></button>
           </div>
-          <div class="mode">
-            <div class="mode-feel" aria-hidden="true">😓</div>
-            <p class="mode-when">Feeling drained</p>
-            <h4>Start Small</h4>
-            <p>Brain-dump the task and let AI break it into steps small enough to begin.</p>
+          <div class="demo-phone">
+            <div class="phone"><div class="screen" id="demoScreen" aria-live="polite"></div></div>
           </div>
-          <div class="mode">
-            <div class="mode-feel" aria-hidden="true">😫</div>
-            <p class="mode-when">Feeling anxious</p>
-            <h4>Reset &amp; Refocus</h4>
-            <p>Take five minutes to reset first, then come back and choose how to continue.</p>
+          <div class="demo-out">
+            <div class="swap" id="demoText">
+              <p class="eyebrow" id="demoWhen">Feeling motivated</p>
+              <h4 id="demoMode">Focus Sprint</h4>
+              <p id="demoDesc"></p>
+            </div>
+            <div class="strip" id="demoStrip" aria-label="Screens in this flow"></div>
+          </div>
+          <p class="demo-hint">Tap a mood, then step through the flow →</p>
+        </div>
+      </div>
+
+      <!-- scrollytelling -->
+      <div class="block block-head">
+        <p class="eyebrow">Anatomy of a hard day</p>
+        <div data-reveal>
+          <h3>Follow one drained session, screen by screen.</h3>
+          <p>Start Small is where the AI does the most work, so it's where the design had to be most careful.</p>
+        </div>
+      </div>
+      <div class="story">
+        <div class="story-stage" aria-hidden="true">
+          <div class="story-frames">
+            <div class="phone"><img src="assets/moodmode/screens/drained-2.jpg" alt=""></div>
+            <div class="phone"><img src="assets/moodmode/screens/drained-3.jpg" alt=""></div>
+            <div class="phone"><img src="assets/moodmode/screens/drained-4.jpg" alt=""></div>
+            <div class="phone"><img src="assets/moodmode/screens/drained-5.jpg" alt=""></div>
+            <div class="phone"><img src="assets/moodmode/screens/drained-6.jpg" alt=""></div>
+          </div>
+        </div>
+        <div class="story-steps">
+          <div class="story-step" data-frame="0">
+            <p class="eyebrow c">Step 1 · Check in</p>
+            <h4>“Drained” with low energy.</h4>
+            <p>The user picks a mood and drags the energy slider down. No typing, no decisions about tasks yet.</p>
+            <img class="inline-shot phone" src="assets/moodmode/screens/drained-2.jpg" alt="Mood check-in with Drained selected and energy set low.">
+          </div>
+          <div class="story-step" data-frame="1">
+            <p class="eyebrow c">Step 2 · Meet them there</p>
+            <h4>“No worries, let's take it slowly.”</h4>
+            <p>The app names the feeling and offers one path — <strong>Start Small</strong> — with a quiet “Prefer something else?” underneath. The tone is permission, not pressure.</p>
+            <img class="inline-shot phone" src="assets/moodmode/screens/drained-3.jpg" alt="'Looks like you are drained today' card with a Start Small button.">
+          </div>
+          <div class="story-step" data-frame="2">
+            <p class="eyebrow c">Step 3 · Brain dump</p>
+            <h4>Get it out of your head first.</h4>
+            <p>Three loose fields: what the task is, a short description the AI turns into steps, and a free space for whatever else is on your mind — “without worrying about structure and form”. Users can also write their own steps.</p>
+            <img class="inline-shot phone" src="assets/moodmode/screens/drained-4.jpg" alt="Brain Dump screen with task, description and 'what's on your mind' fields.">
+          </div>
+          <div class="story-step" data-frame="3">
+            <p class="eyebrow c">Step 4 · Tiny steps</p>
+            <h4>“You don't have to finish it all, just start small.”</h4>
+            <p>The task becomes a checklist of small, concrete actions — “Open resume document”, “Change the project title”. Edit, add and reorder sit in a floating bar so the list stays the user's.</p>
+            <img class="inline-shot phone" src="assets/moodmode/screens/drained-5.jpg" alt="Today's To-Dos with four of six small steps checked off.">
+          </div>
+          <div class="story-step" data-frame="4">
+            <p class="eyebrow c">Step 5 · Count the win</p>
+            <h4>Progress, not perfection.</h4>
+            <p>Four of six steps done is celebrated as a win: “You have already made progress today.” The next option is a break, not more work.</p>
+            <img class="inline-shot phone" src="assets/moodmode/screens/drained-6.jpg" alt="'Nice work! You have already made progress today' celebration.">
           </div>
         </div>
       </div>
 
-      <div class="block reveal">
-        <p class="block-label">Path 1 · Motivated</p>
-        <h3>Protect the momentum.</h3>
-        <p>When energy is high, the risk is distraction, not reluctance. The flow asks for one task, offers to turn off notifications for the next 25 minutes, and then shows only the timer. It ends with a celebration and an offer of a break, not another task.</p>
-        <figure class="fig">
-          <div class="fig-frame soft"><img src="assets/moodmode/flow-motivated.png" alt="Focus Sprint flow: welcome, mood check-in set to Excited, 'Looks like you are motivated today' with a Focus Sprint button, a task and notification prompt, a 25-minute timer, and a 'Great work' screen."></div>
-          <figcaption>Focus Sprint: check-in → one task → 25 minutes → celebrate.</figcaption>
-        </figure>
-      </div>
-
-      <div class="block reveal">
-        <p class="block-label">Path 2 · Drained</p>
-        <h3>Shrink the first step until it's easy to take.</h3>
-        <p>On a low day, the app says “No worries, let's take it slowly.” A brain dump captures the task and anything else on your mind, and AI turns a short description into steps. The list reminds you: <strong>“You don't have to finish it all, just start small.”</strong> Completing even part of it counts as progress.</p>
-        <figure class="fig">
-          <div class="fig-frame soft"><img src="assets/moodmode/flow-drained.png" alt="Start Small flow: mood check-in set to Drained, a Start Small prompt, a Brain Dump form, a Today's To-Dos list with four of six steps checked, and a 'Nice work, you have already made progress today' screen."></div>
-          <figcaption>Start Small: brain dump → AI-generated steps → progress, not perfection.</figcaption>
-        </figure>
-      </div>
-
-      <div class="block reveal">
-        <p class="block-label">Path 3 · Anxious</p>
-        <h3>Sometimes the next step isn't work.</h3>
-        <p>Pushing an anxious user into a task usually backfires. This path offers short activities instead: a 10-minute walk, a brain dump, five minutes of music, or a guided breathing exercise. Afterwards the app asks whether you're ready, and lets you pick Start Small or Focus Sprint — or admit you're still not ready.</p>
-        <figure class="fig">
-          <div class="fig-frame soft"><img src="assets/moodmode/flow-anxious.png" alt="Reset and Refocus flow: mood check-in set to Anxious, a Reset and Refocus prompt, a list of calming activities, a 5-minute breathing timer, and a Welcome Back screen offering Start Small or Focus Sprint."></div>
-          <figcaption>Reset &amp; Refocus: calm down first, then choose a path.</figcaption>
-        </figure>
-      </div>
-
-      <div class="block reveal">
-        <p class="block-label">Principles that held it together</p>
-        <h3>Three rules every screen follows.</h3>
-        <div class="trio">
-          <div class="trio-card">
-            <div class="trio-num">01</div>
-            <h4>Ask before you assign</h4>
-            <p>Mood and energy come first. The app never shows work before it knows what you can handle.</p>
+      <!-- playground -->
+      <div class="block block-head" style="margin-top:80px">
+        <p class="eyebrow">Feel the modes</p>
+        <div>
+          <h3 data-reveal>Each mode is built around one moment. Try them.</h3>
+          <div class="play">
+            <div class="toy" data-reveal>
+              <p class="eyebrow c">Focus Sprint</p>
+              <h4>One task. One timer.</h4>
+              <p>Notifications off, everything else hidden. (Demo runs 25 seconds instead of minutes.)</p>
+              <div class="toy-stage">
+                <div class="ring">
+                  <svg viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="mmGrad" x1="0" x2="1"><stop offset="0" stop-color="#6B3FD4"/><stop offset="1" stop-color="#F08BB8"/></linearGradient></defs><circle class="track" cx="100" cy="100" r="85"/><circle class="val" id="ringVal" cx="100" cy="100" r="85"/></svg>
+                  <div class="ring-label"><div><span id="ringNum">25</span><small>minutes</small></div></div>
+                </div>
+              </div>
+              <button class="toy-btn" id="ringBtn" data-cursor="Start">Start task</button>
+            </div>
+            <div class="toy" data-reveal style="--d:.1s">
+              <p class="eyebrow c">Reset &amp; Refocus</p>
+              <h4>Breathe before you begin.</h4>
+              <p>Short resets like a walk, music or breathing come before any work is suggested.</p>
+              <div class="toy-stage"><div class="breath" id="breath">Ready</div></div>
+              <button class="toy-btn" id="breathBtn" data-cursor="Breathe">Start breathing</button>
+            </div>
+            <div class="toy" data-reveal style="--d:.2s">
+              <p class="eyebrow c">Start Small</p>
+              <h4>Tick one. That counts.</h4>
+              <p>The list celebrates progress at every step, not just at the end.</p>
+              <div class="toy-stage" style="place-items:start stretch">
+                <div>
+                  <ul class="todo-list" id="todo">
+                    <li><label><input type="checkbox"><span>Open resume document</span></label></li>
+                    <li><label><input type="checkbox"><span>Edit personal info section</span></label></li>
+                    <li><label><input type="checkbox"><span>Change the project title</span></label></li>
+                    <li><label><input type="checkbox"><span>Add the new description</span></label></li>
+                  </ul>
+                  <div class="progress"><span id="todoBar"></span></div>
+                  <p class="cheer" id="cheer" aria-live="polite"></p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="trio-card">
-            <div class="trio-num">02</div>
-            <h4>Always offer a way out</h4>
-            <p>“Prefer something else?”, “Changed your mind?”, “Want a break?”, “Still not ready?” — every suggestion can be declined without guilt.</p>
-          </div>
-          <div class="trio-card">
-            <div class="trio-num">03</div>
-            <h4>Celebrate starting, not finishing</h4>
-            <p>Rewards arrive after 25 focused minutes or a few small steps, not only when the list is empty.</p>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Principles</p>
+        <div>
+          <h3 data-reveal>Three rules every screen follows.</h3>
+          <div class="cards c3">
+            <article class="card" data-reveal data-tilt><span class="num">01</span><h4>Ask before you assign</h4><p>Mood and energy come first. The app never shows work before it knows what you can handle.</p></article>
+            <article class="card" data-reveal style="--d:.1s" data-tilt><span class="num">02</span><h4>Always offer a way out</h4><p>Every suggestion has an exit: <span class="ticker" aria-label="Prefer something else, Changed your mind, Want a break, Still not ready"><span id="wayOut">“Prefer something else?”</span></span></p></article>
+            <article class="card" data-reveal style="--d:.2s" data-tilt><span class="num">03</span><h4>Celebrate starting, not finishing</h4><p>Rewards arrive after 25 focused minutes or a few small steps — never only when the list is empty.</p></article>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ───────── 03 ───────── -->
-  <section class="chapter" id="outcome">
+  <!-- ═════════ 03 ═════════ -->
+  <section class="band" id="outcome">
     <div class="wrap">
-      <div class="chapter-intro reveal">
-        <p class="chapter-num">Chapter 03</p>
-        <h2 class="chapter-title">What changed. What comes next.</h2>
-      </div>
-
-      <div class="block reveal">
-        <p class="block-label">So far</p>
-        <div class="stats">
-          <div class="stat"><p class="stat-val">3</p><p class="stat-lbl">Mood-matched modes, each with its own flow</p></div>
-          <div class="stat"><p class="stat-val">4</p><p class="stat-lbl">Lean UX phases from hypothesis to prototype</p></div>
-          <div class="stat"><p class="stat-val">40%</p><p class="stat-lbl">Faster task start — <span class="todo">add how this was measured (who, how many, compared with what)</span></p></div>
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true" style="-webkit-text-stroke-color:#B9A2FF">03</div>
+        <div>
+          <p class="eyebrow">Chapter three</p>
+          <h2 class="chapter-title" data-split>What changed. <em style="color:#B9A2FF">What comes next.</em></h2>
         </div>
       </div>
 
-      <div class="block reveal">
-        <p class="block-label">Next</p>
-        <h3>From prototype to a working app.</h3>
-        <p>I'm now building MoodMode with a real OpenAI integration so the Start Small steps are generated live from what people write. <span class="todo">Add your next milestones, e.g. testing with ADHD users or the measures you'll track.</span></p>
+      <div class="stats" style="--cols:3">
+        <div class="stat"><p class="stat-val" data-count="3">3</p><p class="stat-lbl">Mood-matched modes, each with its own end-to-end flow</p></div>
+        <div class="stat"><p class="stat-val" data-count="4">4</p><p class="stat-lbl">Lean UX phases from assumptions to prototype</p></div>
+        <div class="stat"><p class="stat-val" data-count="40" data-suffix="%">40%</p><p class="stat-lbl">Faster task start in prototype testing</p></div>
+      </div>
+      <!-- TODO(Pratiksha): add how the 40% was measured (who, how many, compared with what). -->
+
+      <div class="block block-head" style="margin-top:110px">
+        <p class="eyebrow">Next</p>
+        <div data-reveal>
+          <h3>From prototype to a working app.</h3>
+          <p>I'm building MoodMode with a real OpenAI integration, so Start Small turns whatever people type into steps live — the riskiest assumption to get right, and the one most worth testing with real users.</p>
+        </div>
       </div>
 
-      <blockquote class="pull reveal">Designing for low energy meant taking decisions away, not adding features.</blockquote>
+      <blockquote class="pull" data-reveal style="margin-bottom:0">Designing for low energy meant taking decisions away, not adding features.</blockquote>
     </div>
   </section>
 
   <section class="more" aria-labelledby="more-title">
     <div class="wrap">
-      <h2 id="more-title">Explore more work.</h2>
+      <div class="more-head">
+        <h2 id="more-title" data-split>Explore more work.</h2>
+        <a class="back" href="index.html#work" data-magnetic>All projects →</a>
+      </div>
       <div class="more-grid">
-        <a class="more-card" href="case-study-robot.html">
-          <div class="more-img"><img src="robot-%20project.png" alt="" loading="lazy"></div>
-          <p class="more-tag">UX Research · Interaction Design</p>
-          <p class="more-title">Robot delivery existed. The experience didn't.</p>
+        <a class="more-card" href="case-study-apple.html" data-reveal data-cursor="View">
+          <div class="more-img"><img src="apple-project.png" alt="" loading="lazy"></div>
+          <p class="more-tag">Accessibility · iOS</p>
+          <p class="more-title">Found the gaps. Apple fixed them next.</p>
         </a>
-        <a class="more-card" href="case-study-stc.html">
+        <a class="more-card" href="case-study-stc.html" data-reveal style="--d:.1s" data-cursor="View">
           <div class="more-img"><img src="stc%20hub_2.png" alt="" loading="lazy"></div>
           <p class="more-tag">Usability Testing · Enterprise UX</p>
           <p class="more-title">The portal worked. So why did nobody trust it?</p>
         </a>
-        <a class="more-card" href="case-study-apple.html">
-          <div class="more-img"><img src="apple-project.png" alt="" loading="lazy"></div>
-          <p class="more-tag">Accessibility · iOS</p>
-          <p class="more-title">Found the gaps. Apple fixed them next.</p>
+        <a class="more-card" href="case-study-wealth.html" data-reveal style="--d:.2s" data-cursor="View">
+          <div class="more-img"><img src="assets/wealth/cover.jpg" alt="" loading="lazy" style="object-position:left top"></div>
+          <p class="more-tag">Product Design · Fintech</p>
+          <p class="more-title">Users could see the data. They just didn't believe it.</p>
         </a>
       </div>
     </div>
@@ -220,9 +402,129 @@
 <footer class="cs-footer">
   <span>© 2026 Pratiksha Kulam</span>
   <span>Designed with a side of coffee, code &amp; AI</span>
-  <a href="index.html">Back to home</a>
+  <a href="index.html">Back to home ↑</a>
 </footer>
 
+<script src="motion.js"></script>
 <script src="case-study.js"></script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* hero orbs follow the pointer at different depths */
+  if (!reduce && matchMedia('(pointer: fine)').matches) {
+    const orbs = document.querySelectorAll('.orb-wrap');
+    addEventListener('pointermove', (e) => {
+      const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
+      orbs.forEach((o) => { const d = +o.dataset.depth; o.style.transform = `translate(${x * d}px, ${y * d}px)`; });
+    }, { passive: true });
+  }
+
+  /* mood demo */
+  const modes = {
+    motivated: { when: 'Feeling motivated', mode: 'Focus Sprint', desc: 'Energy is high, so the risk is distraction. Name one task, mute notifications for 25 minutes, and see only the timer.', steps: ['Welcome', 'Check in', 'Suggestion', 'Name the task', '25-min sprint', 'Celebrate'] },
+    drained:   { when: 'Feeling drained',   mode: 'Start Small',  desc: 'Energy is low, so the first step has to be tiny. Brain-dump the task and let AI break it into steps small enough to begin.', steps: ['Welcome', 'Check in', 'Suggestion', 'Brain dump', 'Tiny steps', 'Progress'] },
+    anxious:   { when: 'Feeling anxious',   mode: 'Reset & Refocus', desc: 'Pushing straight into work backfires. Take a short reset — a walk, music or breathing — then choose how to continue.', steps: ['Welcome', 'Check in', 'Suggestion', 'Pick a reset', 'Breathe', 'Ready?'] }
+  };
+  const screen = document.getElementById('demoScreen'), strip = document.getElementById('demoStrip');
+  const text = document.getElementById('demoText');
+  const imgs = {};
+  Object.keys(modes).forEach((m) => {
+    imgs[m] = [1, 2, 3, 4, 5, 6].map((i) => {
+      const im = new Image(); im.src = `assets/moodmode/screens/${m}-${i}.jpg`; im.alt = `${modes[m].mode}: ${modes[m].steps[i - 1]} screen`; im.loading = 'lazy';
+      screen.appendChild(im); return im;
+    });
+  });
+  let current = 'motivated', idx = 2, auto;
+  const showScreen = (i) => {
+    idx = i;
+    Object.values(imgs).flat().forEach((im) => im.classList.remove('on'));
+    imgs[current][i].classList.add('on');
+    [...strip.children].forEach((b, j) => b.classList.toggle('on', j === i));
+  };
+  const setMood = (m, user) => {
+    current = m;
+    document.querySelectorAll('.mood-btn').forEach((b) => b.setAttribute('aria-pressed', b.dataset.mood === m));
+    text.classList.add('out');
+    setTimeout(() => {
+      document.getElementById('demoWhen').textContent = modes[m].when;
+      document.getElementById('demoMode').textContent = modes[m].mode;
+      document.getElementById('demoDesc').textContent = modes[m].desc;
+      text.classList.remove('out');
+    }, reduce ? 0 : 220);
+    strip.innerHTML = '';
+    imgs[m].forEach((im, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.cursor = 'View';
+      b.setAttribute('aria-label', `Show ${modes[m].steps[i]} screen`);
+      b.innerHTML = `<img src="${im.src}" alt="">`;
+      b.addEventListener('click', () => { clearInterval(auto); showScreen(i); });
+      strip.appendChild(b);
+    });
+    showScreen(2);
+    if (user) clearInterval(auto);
+  };
+  document.querySelectorAll('.mood-btn').forEach((b) => b.addEventListener('click', () => setMood(b.dataset.mood, true)));
+  setMood('motivated');
+  /* gentle auto-advance until the visitor interacts */
+  const demo = document.getElementById('demo');
+  if (!reduce) demo.addEventListener('m:in', () => {
+    auto = setInterval(() => { showScreen((idx + 1) % 6); }, 1800);
+  }, { once: true });
+  demo.addEventListener('pointerenter', () => clearInterval(auto));
+
+  /* focus ring */
+  const ringVal = document.getElementById('ringVal'), ringNum = document.getElementById('ringNum'), ringBtn = document.getElementById('ringBtn');
+  const C = 2 * Math.PI * 85; ringVal.style.strokeDasharray = C;
+  let ringT;
+  ringBtn.addEventListener('click', () => {
+    cancelAnimationFrame(ringT);
+    const t0 = performance.now(), dur = 25000;
+    ringBtn.textContent = 'Restart';
+    const tick = (t) => {
+      const p = Math.min(1, (t - t0) / dur);
+      ringVal.style.strokeDashoffset = (C * p).toFixed(1);
+      ringNum.textContent = Math.ceil(25 * (1 - p));
+      if (p < 1) ringT = requestAnimationFrame(tick); else { ringNum.textContent = '🎉'; ringBtn.textContent = 'Great work — again?'; }
+    };
+    ringT = requestAnimationFrame(tick);
+  });
+
+  /* breathing */
+  const breath = document.getElementById('breath'), breathBtn = document.getElementById('breathBtn');
+  let bInt;
+  breathBtn.addEventListener('click', () => {
+    if (bInt) { clearInterval(bInt); bInt = null; breath.classList.remove('inhale'); breath.textContent = 'Ready'; breathBtn.textContent = 'Start breathing'; return; }
+    breathBtn.textContent = 'Stop';
+    const cycle = () => { const inn = !breath.classList.contains('inhale'); breath.classList.toggle('inhale', inn); breath.textContent = inn ? 'Breathe in' : 'Breathe out'; };
+    cycle(); bInt = setInterval(cycle, 4000);
+  });
+
+  /* start-small checklist */
+  const boxes = [...document.querySelectorAll('#todo input')], bar = document.getElementById('todoBar'), cheer = document.getElementById('cheer');
+  const lines = ['Nice — you started.', 'Two down. Momentum!', 'Look at you go.', 'All done. Take that break. 🎉'];
+  boxes.forEach((b) => b.addEventListener('change', (e) => {
+    const n = boxes.filter((x) => x.checked).length;
+    bar.style.width = (n / boxes.length * 100) + '%';
+    cheer.textContent = n ? lines[n - 1] : '';
+    if (b.checked && !reduce) {
+      const r = b.getBoundingClientRect();
+      ['✨', '🎉', '💜', '⭐'].forEach((c, i) => {
+        const s = document.createElement('span'); s.className = 'confetti'; s.textContent = c;
+        s.style.left = r.left + 'px'; s.style.top = r.top + 'px'; document.body.appendChild(s);
+        const a = (i / 4) * Math.PI * 2 + Math.random();
+        s.animate([{ transform: 'translate(0,0) scale(.6)', opacity: 1 }, { transform: `translate(${Math.cos(a) * 60}px, ${Math.sin(a) * 60 - 30}px) scale(1.1)`, opacity: 0 }], { duration: 900, easing: 'cubic-bezier(.2,.7,.1,1)' }).onfinish = () => s.remove();
+      });
+    }
+  }));
+
+  /* way-out ticker */
+  const phrases = ['“Prefer something else?”', '“Changed your mind?”', '“Want a break?”', '“Still not ready?”'];
+  const wo = document.getElementById('wayOut'); let pi = 0;
+  if (!reduce) setInterval(() => {
+    wo.style.transform = 'translateY(-110%)';
+    setTimeout(() => { pi = (pi + 1) % phrases.length; wo.style.transition = 'none'; wo.textContent = phrases[pi]; wo.style.transform = 'translateY(110%)'; wo.offsetHeight; wo.style.transition = ''; wo.style.transform = ''; }, 500);
+  }, 2600);
+})();
+</script>
 </body>
 </html>

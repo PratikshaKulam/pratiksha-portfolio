@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pratiksha Kulam — Portfolio</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="motion.css">
 </head>
 <body>
   <nav class="site-nav site-nav--home" id="siteNav">
@@ -17,7 +18,7 @@
           <a class="nav-home-link" href="about.html">About</a>
           <a class="nav-home-link" href="#contact">Contact</a>
         </div>
-        <a class="nav-home-resume" href="resume.pdf">Resume ↗</a>
+        <a data-magnetic class="nav-home-resume" href="resume.pdf">Resume ↗</a>
       </div>
     </div>
   </nav>
@@ -46,8 +47,8 @@
             <span class="home-hero__pill"><span class="home-hero__pill-icon" aria-hidden="true">✦</span>AI Curious</span>
           </div>
           <div class="home-hero__ctas">
-            <a class="home-hero__btn home-hero__btn--primary" href="#work">View My Work ↓</a>
-            <a class="home-hero__btn home-hero__btn--secondary" href="resume.pdf">Download Resume ↗</a>
+            <a data-magnetic class="home-hero__btn home-hero__btn--primary" href="#work">View My Work ↓</a>
+            <a data-magnetic class="home-hero__btn home-hero__btn--secondary" href="resume.pdf">Download Resume ↗</a>
           </div>
         </div>
         <div class="home-hero__divider" aria-hidden="true"></div>
@@ -93,7 +94,25 @@
       <h2 class="work-section-heading reveal-heading"><em>Selected Work.</em></h2>
       <div class="work-list">
 
-        <a class="project-card reveal-card" href="case-study-robot.html">
+        <a class="project-card reveal-card" data-cursor="View" href="case-study-wealth.html">
+          <div class="project-content">
+            <p class="project-context">Product Design · Fintech · Enterprise</p>
+            <p class="project-subtitle">Wealth Operations Workbench — Sole Product Designer</p>
+            <h3 class="project-punchline">
+              <span>Users could see the data.</span>
+              <span class="project-punchline-italic">They just didn't believe it.</span>
+            </h3>
+            <div class="project-stats-row">
+              <div class="project-stat"><p class="project-stat-value">10k+</p><p class="project-stat-label">Transactions / day</p></div>
+              <div class="project-stat"><p class="project-stat-value">5</p><p class="project-stat-label">Views unified</p></div>
+              <div class="project-stat"><p class="project-stat-value">6</p><p class="project-stat-label">Research sessions</p></div>
+            </div>
+            <span class="project-cta">View case study →</span>
+          </div>
+          <div class="project-media" style="background:#ECE8F7;"><img src="assets/wealth/cover.jpg" alt="Wealth Operations Workbench dashboard: needs-attention count, exceptions by hour and exception types" style="width:100%;height:100%;object-fit:cover;object-position:left top;"></div>
+        </a>
+
+        <a class="project-card reveal-card" data-cursor="View" href="case-study-robot.html">
           <div class="project-media" style="background:#E8E4DC;"><img src="robot- project.png" alt="Robot Delivery Redesign" style="width:100%;height:100%;object-fit:cover;"></div>
           <div class="project-content">
             <p class="project-context">2026 · UX Research · Interaction Design</p>
@@ -113,7 +132,7 @@
           </div>
         </a>
 
-        <a class="project-card reveal-card" href="case-study-moodmode.html">
+        <a class="project-card reveal-card" data-cursor="View" href="case-study-moodmode.html">
   <div class="project-content">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
       <p class="project-context" style="margin:0;">2025 · AI Design · Lean UX · Mobile</p>
@@ -142,7 +161,7 @@
   <div class="project-media" style="background:#E4E8E4;"><img src="moodmode_project2.png" alt="MoodMode App" style="width:100%;height:100%;object-fit:cover;"></div>
 </a>
 
-        <a class="project-card reveal-card" href="case-study-stc.html">
+        <a class="project-card reveal-card" data-cursor="View" href="case-study-stc.html">
           <div class="project-media" style="background:#E4E4E8;"><img src="stc hub_2.png" alt="STC Hub Portal" style="width:100%;height:100%;object-fit:cover;"></div>
           <div class="project-content">
             <p class="project-context">2024 · Usability Testing · Enterprise UX</p>
@@ -166,7 +185,7 @@
           </div>
         </a>
 
-        <a class="project-card reveal-card" href="case-study-apple.html">
+        <a class="project-card reveal-card" data-cursor="View" href="case-study-apple.html">
           <div class="project-content">
             <p class="project-context">2025 · UX Research · Accessibility · iOS</p>
             <p class="project-subtitle">Apple Reminders Accessibility Redesign</p>
@@ -560,5 +579,6 @@
       observer.observe(el);
     });
   </script>
+<script src="motion.js"></script>
 </body>
 </html>

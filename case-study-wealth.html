@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wealth Operations Workbench — Case Study · Pratiksha Kulam</title>
+  <meta name="description" content="Rebuilding trust in a financial operations dashboard: resolving conflicting backend statuses into one actionable queue.">
+  <link rel="stylesheet" href="case-study.css">
+  <link rel="stylesheet" href="motion.css">
+  <style>
+    body { --project: #4B2FA0; --project-soft: #ECE8F7; --project-deep: #1B1540; --red: #B4443A; --red-soft: #F7E3E0; --amber: #A87A1E; --amber-soft: #F8EED7; --green: #2F7A4F; --green-soft: #E2F1E7; --grey-soft: #EDEBE7; --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+
+    /* ── app window chrome ── */
+    .win { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 40px 80px -40px rgba(27,21,64,.35); font-family: var(--sans); }
+    .win-bar { display: flex; align-items: center; gap: 12px; padding: 11px 16px; background: #F7F5F1; border-bottom: 1px solid var(--line); }
+    .win-bar i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .win-bar .url { flex: 1; background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 4px 12px; font-size: 12px; color: var(--subtle); }
+    .win-body { padding: 22px; }
+
+    /* hero dashboard */
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .kpi { background: #F7F5F1; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+    .kpi small { display: block; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--subtle); font-weight: 600; }
+    .kpi b { display: block; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
+    .kpi span { font-size: 12.5px; color: var(--muted); }
+    .kpi.alert { background: var(--red-soft); border-color: #EBC5BF; }
+    .kpi.alert small, .kpi.alert b, .kpi.alert span { color: var(--red); }
+    .kpi .up { color: var(--green); }
+    .dash-row { display: grid; grid-template-columns: 1.7fr 1fr; gap: 12px; margin-top: 12px; }
+    .chartbox { background: #F7F5F1; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+    .chartbox small { font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--subtle); font-weight: 600; }
+    .hours { display: flex; align-items: flex-end; gap: 10px; height: 120px; margin-top: 12px; }
+    .hours div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+    .hours .b { width: 100%; height: calc(var(--h) * 100%); background: var(--project); border-radius: 4px 4px 0 0; }
+    .hours .b.peak { background: var(--red); }
+    .hours em { font-style: normal; font-size: 11px; color: var(--subtle); }
+    .donut-wrap { display: flex; gap: 18px; align-items: center; margin-top: 12px; }
+    .donut { width: 104px; height: 104px; flex-shrink: 0; transform: rotate(-90deg); }
+    .donut circle { fill: none; stroke-width: 16; transition: stroke-dasharray 1.4s var(--ease); }
+    .donut-legend { list-style: none; font-size: 12.5px; color: var(--muted); }
+    .donut-legend li { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+    .donut-legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+
+    /* conflict visual */
+    .conflict { display: grid; grid-template-columns: 1fr 140px 1fr; align-items: center; gap: 0; margin-top: 44px; }
+    .sys { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; font-family: var(--mono); font-size: 13.5px; }
+    .sys h5 { font-family: var(--sans); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--project); margin-bottom: 12px; font-weight: 600; }
+    .sys div { padding: 3px 0; color: var(--muted); }
+    .sys .ok { color: var(--green); font-weight: 600; }
+    .sys .bad { color: var(--red); font-weight: 600; }
+    .sys small { display: block; font-family: var(--sans); font-size: 11.5px; color: var(--subtle); margin-top: 10px; }
+    .clash { position: relative; height: 2px; background: repeating-linear-gradient(90deg, var(--red) 0 6px, transparent 6px 12px); }
+    .clash span { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--red); color: #fff; font-size: 10.5px; letter-spacing: .16em; font-weight: 700; padding: 6px 10px; border-radius: 999px; }
+    .clash span::after { content: ''; position: absolute; inset: -6px; border-radius: 999px; border: 2px solid var(--red); opacity: 0; animation: clashPulse 1.8s ease-out infinite; }
+    @keyframes clashPulse { from { opacity: .7; transform: scale(.9); } to { opacity: 0; transform: scale(1.4); } }
+
+    /* rule playground */
+    .rule { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 14px; margin-top: 40px; align-items: stretch; }
+    .rule-in, .rule-out { border-radius: 16px; padding: 24px; }
+    .rule-in { background: var(--surface); border: 1px solid var(--line); }
+    .rule-in h5 { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--subtle); margin-bottom: 14px; font-weight: 600; }
+    .seg { display: flex; flex-direction: column; gap: 6px; }
+    .seg button { text-align: left; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); font-family: var(--mono); font-size: 13px; cursor: pointer; transition: background .25s, border-color .25s, color .25s; background: #fff; }
+    .seg button[aria-pressed="true"] { background: var(--project); color: #fff; border-color: var(--project); }
+    .rule-out { background: var(--project-deep); color: #fff; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+    .rule-out .eyebrow { color: rgba(255,255,255,.5); margin-bottom: 14px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+    .p-attn { background: var(--red-soft); color: var(--red); }
+    .p-rev { background: var(--amber-soft); color: var(--amber); }
+    .p-pend { background: var(--grey-soft); color: #5F5A52; }
+    .p-done { background: var(--green-soft); color: var(--green); }
+    .p-wait { background: #E9E6F5; color: var(--project); }
+    .rule-out .pill { font-size: 16px; padding: 8px 16px; align-self: flex-start; transition: transform .4s var(--ease); }
+    .rule-out .pill.bump { animation: bump .5s var(--ease); }
+    @keyframes bump { 40% { transform: scale(1.12); } }
+    .rule-out p.why { color: rgba(255,255,255,.75); margin-top: 16px; font-size: 15px; }
+    .rule-out p.rule-note { color: rgba(255,255,255,.45); margin-top: 10px; font-size: 12.5px; }
+
+    /* SWOT */
+    .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 40px; }
+    .quad { border-radius: 16px; padding: 22px; transition: opacity .35s, transform .45s var(--ease); cursor: pointer; }
+    .swot.focus .quad { opacity: .35; }
+    .swot.focus .quad.on { opacity: 1; transform: scale(1.015); }
+    .quad h5 { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; margin-bottom: 14px; display: flex; justify-content: space-between; }
+    .notes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .note { border-radius: 4px; padding: 12px 13px; font-size: 13px; line-height: 1.45; box-shadow: 0 6px 14px -10px rgba(0,0,0,.35); transform: rotate(var(--r, 0deg)); transition: transform .35s var(--ease); }
+    .note b { display: block; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; opacity: .7; }
+    .quad:hover .note { transform: rotate(0) translateY(-2px); }
+    .q-s { background: #EEF6EE; } .q-s h5 { color: #2F7A4F; } .q-s .note { background: #CFEACF; }
+    .q-w { background: #FBEDEF; } .q-w h5 { color: #B4443A; } .q-w .note { background: #F6CDD3; }
+    .q-o { background: #ECF2FA; } .q-o h5 { color: #2D5F9E; } .q-o .note { background: #CFE0F4; }
+    .q-t { background: #FBF1E4; } .q-t h5 { color: #A0601A; } .q-t .note { background: #F8D9B2; }
+
+    /* benchmark */
+    .bench { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 40px; font-size: 13.5px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    .bench th, .bench td { padding: 14px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    .bench thead th { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--subtle); font-weight: 600; background: #F7F5F1; }
+    .bench tbody th { font-weight: 600; color: var(--ink); width: 22%; }
+    .bench td { color: var(--muted); }
+    .bench tr:last-child > * { border-bottom: 0; }
+    .bench .ours { background: var(--project-soft); color: var(--project-deep); }
+    .bench thead .ours { background: var(--project); color: #fff; }
+    .bench .m { display: inline-block; width: 18px; font-weight: 700; }
+    .bench .y { color: var(--green); } .bench .n { color: var(--red); } .bench .h { color: var(--amber); }
+    .bench tbody tr { transition: background .2s; }
+    .bench tbody tr:hover td:not(.ours), .bench tbody tr:hover th { background: #FBFAF7; }
+    .bench-wrap { overflow-x: auto; }
+
+    /* IA tree */
+    .tree { margin-top: 44px; display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .node { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; font-size: 13.5px; text-align: center; position: relative; }
+    .node small { display: block; font-size: 11px; color: var(--subtle); }
+    .node.root { background: var(--project-deep); color: #fff; border-color: transparent; font-weight: 600; padding: 12px 26px; }
+    .node.key { border: 2px solid var(--project); background: var(--project-soft); color: var(--project-deep); font-weight: 600; }
+    .node.key small { color: var(--project); }
+    .tier { display: flex; gap: 14px; justify-content: center; position: relative; padding-top: 28px; flex-wrap: wrap; }
+    .tier::before { content: ''; position: absolute; top: 0; left: 50%; height: 28px; width: 2px; background: var(--line); }
+    .tier.span::after { content: ''; position: absolute; top: 14px; left: 8%; right: 8%; height: 2px; background: var(--line); }
+    .tree .grow { transform-origin: 50% 0; }
+    .tree.in .tier .node { animation: nodeIn .6s var(--ease) both; animation-delay: calc(var(--i) * 90ms + .2s); }
+    @keyframes nodeIn { from { opacity: 0; transform: translateY(12px); } }
+    .tree .detail { width: min(560px, 100%); border-style: dashed; color: var(--muted); }
+
+    /* decisions */
+    .dpanel { margin-top: 36px; }
+    .dpanel[hidden] { display: none; }
+    .opts { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 14px; }
+    .opt { border-radius: 14px; padding: 22px; border: 1px solid var(--line); background: var(--surface); animation: optIn .55s var(--ease) both; animation-delay: calc(var(--i) * 90ms); }
+    @keyframes optIn { from { opacity: 0; transform: translateY(14px); } }
+    .opt .tag { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; display: inline-flex; gap: 6px; align-items: center; }
+    .opt.rej .tag { color: var(--red); } .opt.rej { background: #FCF8F7; }
+    .opt.rej p strong { text-decoration: line-through; text-decoration-color: rgba(180,68,58,.5); }
+    .opt.try .tag { color: var(--amber); }
+    .opt.ten .tag { color: var(--subtle); }
+    .opt.cho { border: 2px solid var(--project); background: var(--project-soft); }
+    .opt.cho .tag { color: var(--project); }
+    .block .opt p { font-size: 14.5px; color: var(--muted); line-height: 1.6; }
+    .block .opt p strong { color: var(--ink); }
+    .tradeoff { margin-top: 14px; background: var(--project-deep); color: #fff; border-radius: 14px; padding: 26px 28px; animation: optIn .55s var(--ease) both; animation-delay: .3s; }
+    .tradeoff .eyebrow { color: rgba(255,255,255,.5); margin-bottom: 10px; }
+    .tradeoff h5 { font-family: var(--serif); font-weight: normal; font-size: 22px; margin-bottom: 10px; }
+    .block .tradeoff p { color: rgba(255,255,255,.72); font-size: 15px; max-width: none; }
+
+    /* workbench demo */
+    .wb-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+    .banner { border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+    .banner.bad { background: var(--red-soft); color: var(--red); }
+    .banner.good { background: var(--green-soft); color: var(--green); }
+    .wb-head { font-size: 14px; margin-bottom: 12px; }
+    .wb-head b { font-weight: 700; } .wb-head span { color: var(--subtle); }
+    table.grid { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.grid th { text-align: left; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--subtle); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+    table.grid td { padding: 11px 10px; border-bottom: 1px solid #F0ECE5; vertical-align: middle; }
+    table.grid td.id { font-family: var(--mono); color: var(--muted); }
+    table.grid tr.flag td { background: #FCF4F2; }
+    .cell-ok { color: var(--green); font-weight: 600; } .cell-err { color: var(--red); font-weight: 600; } .cell-pend { color: var(--amber); font-weight: 600; } .cell-blank { color: #C9C3B8; }
+    .qtabs { display: flex; gap: 22px; border-bottom: 1px solid var(--line); margin-bottom: 12px; font-size: 14px; }
+    .qtabs span { padding: 8px 0 10px; color: var(--subtle); }
+    .qtabs span.on { color: var(--ink); font-weight: 600; box-shadow: inset 0 -2px 0 var(--project); }
+    .qtabs .count { background: var(--red); color: #fff; border-radius: 999px; padding: 1px 7px; font-size: 11px; margin-left: 4px; }
+    .qchips { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+    .qchips button { padding: 5px 12px; border-radius: 8px; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px solid transparent; background: var(--grey-soft); color: #5F5A52; transition: all .2s; }
+    .qchips button.sla { background: var(--red-soft); color: var(--red); }
+    .qchips button[aria-pressed="true"] { border-color: currentColor; }
+    table.grid tr.row { cursor: pointer; transition: background .2s, opacity .3s; }
+    table.grid tr.row:hover td { background: #F8F6FC; }
+    table.grid tr.row.dim { opacity: .25; }
+    .act { color: var(--project); font-weight: 600; white-space: nowrap; }
+    .wb-view { position: relative; min-height: 360px; }
+    .wb-view > div { transition: opacity .4s, transform .5s var(--ease); }
+    .wb-view > div[hidden] { display: block !important; position: absolute; inset: 0; opacity: 0; transform: translateY(10px); pointer-events: none; }
+    .block p.wb-caption, .wb-caption { font-size: 13px; max-width: none; color: var(--subtle); font-style: italic; margin-top: 14px; }
+    .drawer { position: absolute; top: 0; right: 0; bottom: 0; width: min(360px, 90%); background: #fff; border-left: 1px solid var(--line); box-shadow: -30px 0 60px -30px rgba(27,21,64,.35); padding: 22px; transform: translateX(105%); transition: transform .5s var(--ease); z-index: 3; font-size: 13.5px; }
+    .drawer.open { transform: none; }
+    .drawer h6 { font-family: var(--mono); font-size: 15px; margin-bottom: 4px; }
+    .drawer .src { background: #F7F5F1; border-radius: 10px; padding: 12px 14px; margin-top: 12px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+    .drawer .src b { display: block; font-family: var(--sans); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--project); margin-bottom: 4px; }
+    .drawer .close { position: absolute; top: 14px; right: 14px; font-size: 18px; cursor: pointer; color: var(--subtle); }
+    .drawer .go { margin-top: 18px; display: inline-block; background: var(--project); color: #fff; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px; }
+    .wb-shell { position: relative; overflow: hidden; }
+
+    /* edge cases */
+    .edge { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 40px; }
+    .ecard { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+    .ecard .eyebrow { margin-bottom: 8px; }
+    .ecard h5 { font-family: var(--serif); font-weight: normal; font-size: 20px; margin-bottom: 8px; }
+    .block .ecard p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .ecard .demo-pill { margin-top: 14px; }
+
+    .ds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 40px; }
+    .ds .card .num { margin-bottom: 18px; }
+    .tokens { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+    .tokens .pill { font-size: 11px; padding: 3px 9px; }
+
+    .constraint { margin-top: 18px; display: flex; gap: 16px; align-items: flex-start; background: var(--surface); border: 1px dashed var(--project); border-radius: 14px; padding: 22px 24px; }
+    .constraint .ic { font-size: 22px; }
+    .block .constraint p { font-size: 15px; max-width: none; }
+
+    /* impact */
+    .impact { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(255,255,255,.2); margin-top: 40px; }
+    .impact div { padding: 34px 28px 30px 0; border-bottom: 1px solid rgba(255,255,255,.12); }
+    .impact div + div { padding-left: 28px; border-left: 1px solid rgba(255,255,255,.12); }
+    .impact b { display: block; font-family: var(--serif); font-weight: normal; font-size: clamp(48px, 5.4vw, 80px); line-height: 1; color: #fff; letter-spacing: -0.03em; }
+    .impact b i { font-style: normal; color: #A996F2; }
+    .band .impact p { margin-top: 14px; font-size: 14.5px; color: rgba(255,255,255,.6); }
+    .carry { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 30px; }
+    .carry div { background: var(--project-soft); border-radius: 14px; padding: 22px; }
+    .carry h5 { font-family: var(--serif); font-weight: normal; font-size: 19px; margin-bottom: 6px; color: var(--project-deep); }
+    .block .carry p { font-size: 14px; color: var(--muted); }
+
+    @media (max-width: 1000px) {
+      .kpis { grid-template-columns: 1fr 1fr; }
+      .dash-row, .rule, .swot, .edge, .ds, .carry, .impact { grid-template-columns: 1fr; }
+      .impact div + div { padding-left: 0; border-left: 0; }
+      .conflict { grid-template-columns: 1fr; gap: 26px; }
+      .clash { height: 40px; width: 2px; margin: 0 auto; background: repeating-linear-gradient(180deg, var(--red) 0 6px, transparent 6px 12px); }
+      .opts { grid-template-columns: 1fr; }
+      .tier.span::after { display: none; }
+      .wb-body { overflow-x: auto; }
+      table.grid { min-width: 620px; }
+    }
+    @media (max-width: 640px) { .notes { grid-template-columns: 1fr; } .win-body { padding: 14px; } }
+    @media (prefers-reduced-motion: reduce) {
+      .clash span::after, .opt, .tradeoff, .tree.in .tier .node { animation: none; }
+      .drawer, .wb-view > div, .donut circle { transition: none; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="topnav" aria-label="Site">
+  <a class="nav-logo" href="index.html" aria-label="Home">प्र</a>
+  <ul class="nav-links">
+    <li><a href="index.html#work">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="resume.pdf" class="nav-resume" data-magnetic>Resume</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top" data-reveal="fade">
+      <a class="back" href="index.html#work">← All work</a>
+      <span class="eyebrow">Fintech · Internal tool</span>
+    </div>
+    <p class="eyebrow c" data-reveal style="margin-bottom:22px">Wealth Operations Workbench · Product design</p>
+    <h1 data-split>Users could see the data. <em>They just didn't believe it.</em></h1>
+    <div class="hero-lede">
+      <p data-reveal style="--d:.3s">An internal platform where wealth-management and operations teams track and process financial transactions. Two backend systems disagreed on screen — so people stopped trusting the product and <mark class="sweep">started working around it.</mark></p>
+      <dl class="facts" data-reveal style="--d:.45s">
+        <div><dt>My role</dt><dd>Product Designer — sole designer</dd></div>
+        <div><dt>Team</dt><dd>PM · EM · 5 Eng · 2 QA · BA</dd></div>
+        <div><dt>Users</dt><dd>Ops analysts &amp; compliance</dd></div>
+        <div><dt>Scale</dt><dd>~10k+ transactions / day</dd></div>
+      </dl>
+    </div>
+
+    <figure class="hero-media" data-reveal="clip" style="background:transparent;overflow:visible">
+      <div class="win" id="heroDash" data-inview>
+        <div class="win-bar"><i style="background:#E0675B"></i><i style="background:#E2B74E"></i><i style="background:#6FBF73"></i><span class="url">workbench / transactions</span></div>
+        <div class="win-body">
+          <div class="banner good">✓ One resolved status · exceptions in a prioritised queue · urgency surfaced first</div>
+          <div class="wb-head"><b>Transactions</b> <span>Updated 2 min ago · 2,847 records today</span></div>
+          <div class="kpis">
+            <div class="kpi alert"><small>Needs attention</small><b data-count="12">12</b><span>3 breaching SLA</span></div>
+            <div class="kpi"><small>Pending settlement</small><b data-count="284">284</b><span>on track</span></div>
+            <div class="kpi"><small>Settled today</small><b data-count="2539" data-sep="1">2,539</b><span class="up">↑ 4% vs yesterday</span></div>
+            <div class="kpi"><small>Avg resolution</small><b data-count="1.4" data-decimals="1" data-suffix="h">1.4h</b><span class="up">↓ from 3.2h</span></div>
+          </div>
+          <div class="dash-row">
+            <div class="chartbox"><small>Exceptions by hour — today</small>
+              <div class="hours">
+                <div><span class="b m-bar-y" style="--h:.3"></span><em>08</em></div>
+                <div><span class="b m-bar-y" style="--h:.6;--d:.06s"></span><em>09</em></div>
+                <div><span class="b peak m-bar-y" style="--h:1;--d:.12s"></span><em>10</em></div>
+                <div><span class="b m-bar-y" style="--h:.52;--d:.18s"></span><em>11</em></div>
+                <div><span class="b m-bar-y" style="--h:.4;--d:.24s"></span><em>12</em></div>
+                <div><span class="b m-bar-y" style="--h:.26;--d:.3s"></span><em>13</em></div>
+                <div><span class="b m-bar-y" style="--h:.46;--d:.36s"></span><em>14</em></div>
+                <div><span class="b m-bar-y" style="--h:.18;--d:.42s"></span><em>15</em></div>
+              </div>
+            </div>
+            <div class="chartbox"><small>Exception types</small>
+              <div class="donut-wrap">
+                <svg class="donut" viewBox="0 0 100 100" aria-hidden="true">
+                  <circle cx="50" cy="50" r="38" stroke="#EDEBE7"/>
+                  <circle class="seg-c" cx="50" cy="50" r="38" stroke="#4B2FA0" data-v="7" data-o="0"/>
+                  <circle class="seg-c" cx="50" cy="50" r="38" stroke="#B4443A" data-v="3" data-o="7"/>
+                  <circle class="seg-c" cx="50" cy="50" r="38" stroke="#A87A1E" data-v="2" data-o="10"/>
+                </svg>
+                <ul class="donut-legend"><li><i style="background:#B4443A"></i>SLA breach · 3</li><li><i style="background:#A87A1E"></i>Date sequence · 2</li><li><i style="background:#4B2FA0"></i>Validation · 7</li></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </figure>
+    <p class="disclaimer">Recreated from the shipped design. Client details anonymised; figures illustrative of a typical day.</p>
+
+    <section class="tldr" aria-label="Summary">
+      <div data-reveal><h2>Problem</h2><p>The same trade showed as <strong>“Completed”</strong> in one place and <strong>“Error”</strong> in another. Analysts double-checked by hand and kept shadow spreadsheets.</p></div>
+      <div data-reveal style="--d:.1s"><h2>Reframe</h2><p>Not a visual problem: <strong>what should the product say when its own sources conflict?</strong></p></div>
+      <div data-reveal style="--d:.2s"><h2>Design</h2><p>One resolved status per trade, a <strong>prioritised exception queue</strong>, and every edge case specified.</p></div>
+      <div data-reveal style="--d:.3s"><h2>Outcome</h2><p>Faster triage, fewer misses — and ops <strong>dropped their spreadsheet</strong>.</p></div>
+    </section>
+  </div>
+</header>
+
+<nav class="chapter-nav" aria-label="Chapters">
+  <ol>
+    <li><a href="#problem"><span>01</span>The problem</a></li>
+    <li><a href="#research"><span>02</span>Research</a></li>
+    <li><a href="#decisions"><span>03</span>Decisions</a></li>
+    <li><a href="#execution"><span>04</span>Execution</a></li>
+    <li><a href="#outcome"><span>05</span>Impact</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+
+  <!-- ═════════ 01 ═════════ -->
+  <section class="chapter" id="problem">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">01</div>
+        <div>
+          <p class="eyebrow c">The problem &amp; context</p>
+          <h2 class="chapter-title" data-split>One trade. <em>Two truths.</em></h2>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Every morning</p>
+        <div data-reveal>
+          <h3>“What needs my attention today?”</h3>
+          <p>Operations analysts opened this dashboard to answer one question: which pending, settled or failed trades need them. Each row was <strong>real money moving between institutions</strong>, so getting it wrong had downstream settlement consequences.</p>
+          <p>The data came from two backend systems on different schedules — a core transaction system updated overnight in batches, and a validation layer updated through the day. That gap created a corrosive failure:</p>
+        </div>
+      </div>
+
+      <div class="block" style="margin-top:-60px">
+        <div class="conflict" data-reveal="scale">
+          <div class="sys"><h5>Core transaction system</h5><div>settlement_status: <span class="ok">Completed</span></div><div>trade_date: 03/14</div><small>Updated overnight, batch</small></div>
+          <div class="clash" aria-hidden="true"><span>CONFLICT</span></div>
+          <div class="sys"><h5>Validation layer</h5><div>validation_flag: <span class="bad">Error</span></div><div>resolution_status: Open</div><small>Updated incrementally, intraday</small></div>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">What it cost</p>
+        <div>
+          <div class="cards c3" style="margin-top:0">
+            <article class="card" data-reveal data-tilt><span class="num">User cost</span><h4>Manual double-checking</h4><p>Analysts stopped trusting the queue and verified trades by hand, slowing the whole morning down.</p></article>
+            <article class="card" data-reveal style="--d:.1s" data-tilt><span class="num">Workaround</span><h4>Shadow spreadsheets</h4><p>Teams tracked exceptions in their own Excel files, outside the product entirely.</p></article>
+            <article class="card" data-reveal style="--d:.2s" data-tilt><span class="num">Business cost</span><h4>Delayed resolution</h4><p>Issues surfaced late, pushing against downstream settlement timelines.</p></article>
+          </div>
+        </div>
+      </div>
+
+      <blockquote class="pull" data-reveal>They couldn't tell which trades needed attention — so they couldn't start their day.<cite>— the signal that something was wrong was never technical; it was an ops lead's message</cite></blockquote>
+
+      <div class="block block-head">
+        <p class="eyebrow">My role</p>
+        <div data-reveal>
+          <h3>Sole designer, owning the transaction workflow end to end.</h3>
+          <p>From problem framing and user sessions with ops and compliance, through workflow mapping, IA, wireframes, prototypes and usability testing, to design-system ownership, edge-case definition and engineering walkthroughs. I was also the person ops leads messaged directly when something didn't match how they actually worked.</p>
+          <ul class="ticks">
+            <li><strong style="color:var(--ink)">Product Manager</strong> — business requirements, prioritisation, release scope</li>
+            <li><strong style="color:var(--ink)">Business Analyst</strong> — data definitions, field-level logic, validation rules</li>
+            <li><strong style="color:var(--ink)">Engineering (EM + 5)</strong> — feasibility, data constraints, implementation</li>
+            <li><strong style="color:var(--ink)">QA (2)</strong> — state and edge-case verification against designed behaviour</li>
+            <li><strong style="color:var(--ink)">Ops &amp; compliance</strong> — workflow observation, testing, ongoing feedback</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 02 ═════════ -->
+  <section class="chapter" id="research" style="padding-top:60px">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">02</div>
+        <div>
+          <p class="eyebrow c">Research &amp; inputs</p>
+          <h2 class="chapter-title" data-split>I stopped assuming it was <em>a UI problem.</em></h2>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Qualitative · 6 sessions</p>
+        <div>
+          <h3 data-reveal>Sat with analysts through their morning, then synthesised it in FigJam.</h3>
+          <p data-reveal>My first instinct was a front-end sync or refresh issue. That was wrong — and finding out changed the whole direction. I clustered everything into a SWOT to decide where design could actually move the needle. <strong>Tap a quadrant to focus it.</strong></p>
+          <div class="swot" id="swot">
+            <div class="quad q-s" data-reveal tabindex="0" role="button" aria-label="Strengths"><h5>Strengths <span>4</span></h5><div class="notes">
+              <div class="note" style="--r:-1.5deg"><b>Data</b>Everything users need already exists in the system</div>
+              <div class="note" style="--r:1deg"><b>Expertise</b>Users know finance deeply — they're confused by the UI, not the domain</div>
+              <div class="note" style="--r:1.2deg"><b>Access</b>Ops leads message me the moment something feels wrong</div>
+              <div class="note" style="--r:-1deg"><b>Single entry</b>The dashboard is already where their day starts</div></div></div>
+            <div class="quad q-w" data-reveal style="--d:.08s" tabindex="0" role="button" aria-label="Weaknesses"><h5>Weaknesses <span>4</span></h5><div class="notes">
+              <div class="note" style="--r:1deg"><b>Trust</b>Two systems disagree on screen — users stop believing any of it</div>
+              <div class="note" style="--r:-1.4deg"><b>Triage</b>No prioritisation — everything looks equally urgent</div>
+              <div class="note" style="--r:-.8deg"><b>Invisible</b>Records with no status appear in no view at all</div>
+              <div class="note" style="--r:1.3deg"><b>Scanning</b>Exceptions buried in hundreds of rows, found manually</div></div></div>
+            <div class="quad q-o" data-reveal style="--d:.16s" tabindex="0" role="button" aria-label="Opportunities"><h5>Opportunities <span>4</span></h5><div class="notes">
+              <div class="note" style="--r:-1deg"><b>Reconcile</b>Resolve conflicts in the product, not in the user's head</div>
+              <div class="note" style="--r:1.4deg"><b>Surface</b>A dedicated queue could replace the Excel workaround</div>
+              <div class="note" style="--r:.9deg"><b>Urgency</b>SLA data exists and isn't used to prioritise</div>
+              <div class="note" style="--r:-1.2deg"><b>System</b>Patterns here could standardise all five views</div></div></div>
+            <div class="quad q-t" data-reveal style="--d:.24s" tabindex="0" role="button" aria-label="Threats"><h5>Threats <span>4</span></h5><div class="notes">
+              <div class="note" style="--r:1.2deg"><b>Resistance</b>Tenured users equate density with control</div>
+              <div class="note" style="--r:-1deg"><b>Backend</b>Grouping logic may not be supported by current data</div>
+              <div class="note" style="--r:-1.3deg"><b>Fragmenting</b>A second queue risks becoming another place to check</div>
+              <div class="note" style="--r:1deg"><b>False alarms</b>Over-flagging could erode trust the way silence did</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Benchmarking</p>
+        <div>
+          <h3 data-reveal>How comparable tools handle conflict and triage.</h3>
+          <div class="bench-wrap" data-reveal>
+            <table class="bench">
+              <thead><tr><th>Capability</th><th>Internal legacy tool</th><th>Enterprise ops platform A</th><th>Exception-mgmt tool B</th><th class="ours">Our direction</th></tr></thead>
+              <tbody>
+                <tr><th>Conflicting statuses reconciled</th><td><span class="m n">✕</span>Raw fields side by side</td><td><span class="m h">◐</span>Last-write-wins, not rule-based</td><td><span class="m y">✓</span>Severity-based precedence</td><td class="ours"><span class="m y">✓</span>Rule-based, validation takes precedence</td></tr>
+                <tr><th>Dedicated exception queue</th><td><span class="m n">✕</span>Inline highlighting only</td><td><span class="m y">✓</span>Separate module</td><td><span class="m y">✓</span>Core of the product</td><td class="ours"><span class="m y">✓</span>Queue + count visible from main view</td></tr>
+                <tr><th>Urgency / SLA prioritisation</th><td><span class="m n">✕</span>Manual sorting</td><td><span class="m h">◐</span>Sortable, not surfaced</td><td><span class="m y">✓</span>Auto-escalation</td><td class="ours"><span class="m y">✓</span>Breaches surface to top automatically</td></tr>
+                <tr><th>Reason stated, not inferred</th><td><span class="m n">✕</span>Error codes only</td><td><span class="m n">✕</span>Codes with tooltip</td><td><span class="m h">◐</span>Category label</td><td class="ours"><span class="m y">✓</span>Plain-language cause per row</td></tr>
+                <tr><th>Null / missing state handled</th><td><span class="m n">✕</span>Record vanishes from views</td><td><span class="m h">◐</span>Appears in “all” only</td><td><span class="m h">◐</span>Unassigned bucket</td><td class="ours"><span class="m y">✓</span>Explicit “pending update” bucket</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p data-reveal style="margin-top:24px">A dedicated queue was a proven convention — low risk. But <mark class="sweep">reconciling conflicting statuses into one stated reason was something nobody did well.</mark> That's where the opportunity was, and where the precedence rule had to be exactly right.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="reframe">
+    <div class="wrap">
+      <p class="eyebrow" style="margin-bottom:22px">The reframe</p>
+      <h2 class="chapter-title" id="reframe" data-split style="max-width:1000px">This was never a visual problem. <em style="color:#A996F2">What should the product say when its own sources conflict?</em></h2>
+      <p data-reveal style="margin-top:28px;max-width:680px;font-size:17px">The interface was faithfully showing raw data from two systems that disagreed. The design problem was the rule — so I made it explicit.</p>
+    </div>
+  </section>
+
+  <!-- ═════════ 03 ═════════ -->
+  <section class="chapter" id="decisions">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">03</div>
+        <div>
+          <p class="eyebrow c">Key decisions &amp; trade-offs</p>
+          <h2 class="chapter-title" data-split>Three decisions, <em>each with something given up.</em></h2>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Try the rule</p>
+        <div>
+          <h3 data-reveal>The precedence rule: validation wins when the systems disagree.</h3>
+          <p data-reveal>Pick what each system reports and see the single status the product shows.</p>
+          <div class="rule" data-reveal="scale">
+            <div class="rule-in"><h5>Core system · settlement_status</h5><div class="seg" id="segS">
+              <button type="button" data-v="Completed" aria-pressed="true">Completed</button>
+              <button type="button" data-v="Pending" aria-pressed="false">Pending</button>
+              <button type="button" data-v="" aria-pressed="false">— (no status)</button></div></div>
+            <div class="rule-in"><h5>Validation layer · validation_flag</h5><div class="seg" id="segV">
+              <button type="button" data-v="Error" aria-pressed="true">Error</button>
+              <button type="button" data-v="" aria-pressed="false">— (clear)</button></div></div>
+            <div class="rule-out" aria-live="polite">
+              <p class="eyebrow">What the user sees</p>
+              <span class="pill" id="ruleOut">Needs attention</span>
+              <p class="why" id="ruleWhy"></p>
+              <p class="rule-note">Raw source values stay on the record detail — nothing hidden, just no longer competing for judgement.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div style="display:flex;justify-content:center" data-reveal>
+          <div class="tabs" data-tabs="dec" role="tablist" aria-label="Decisions">
+            <button role="tab" data-key="1" aria-selected="true">1 · One actionable status</button>
+            <button role="tab" data-key="2" aria-selected="false">2 · A dedicated queue</button>
+            <button role="tab" data-key="3" aria-selected="false">3 · Progressive disclosure</button>
+          </div>
+        </div>
+
+        <div class="dpanel" data-panel="dec:1">
+          <div class="opts" style="--n:3">
+            <div class="opt rej" style="--i:0"><span class="tag">✕ Considered &amp; rejected</span><p><strong>Show both raw values</strong> and let users interpret. Most transparent — but it pushed reconciliation onto the user, exactly what caused the distrust.</p></div>
+            <div class="opt try" style="--i:1"><span class="tag">◐ Tried &amp; insufficient</span><p><strong>Increase data refresh frequency.</strong> My first attempt. It narrowed the window but never closed it — the systems update on fundamentally different cycles.</p></div>
+            <div class="opt cho" style="--i:2"><span class="tag">✓ Chosen</span><p><strong>Derive one combined status at the UI layer</strong>, prioritising the validation flag over settlement status whenever they disagree.</p></div>
+          </div>
+          <div class="tradeoff"><p class="eyebrow">The trade-off I accepted</p><h5>A trade seconds from resolving could briefly surface as “needs attention.”</h5><p>In settlement, showing a problem that turns out fine is recoverable; hiding a real problem is not. I accepted the false-positive cost deliberately and kept the underlying values on the record detail.</p></div>
+        </div>
+        <div class="dpanel" data-panel="dec:2" hidden>
+          <div class="opts" style="--n:2">
+            <div class="opt rej" style="--i:0"><span class="tag">✕ Considered &amp; rejected</span><p><strong>Highlight exception rows in place.</strong> Lower effort, one source of truth — but users were still scanning hundreds of rows to find them.</p></div>
+            <div class="opt cho" style="--i:1"><span class="tag">✓ Chosen</span><p><strong>A separate, prioritised exception queue</strong>, grouped by error type and open/closed state, with urgency surfaced first.</p></div>
+          </div>
+          <div class="tradeoff"><p class="eyebrow">The trade-off I accepted</p><h5>A second place to look risks fragmenting the workflow.</h5><p>I mitigated it by making the exception count visible from the main view and keeping one record detail shared between both — users never reconcile two versions of the same trade.</p></div>
+        </div>
+        <div class="dpanel" data-panel="dec:3" hidden>
+          <div class="opts" style="--n:3">
+            <div class="opt ten" style="--i:0"><span class="tag">⇆ Tension</span><p><strong>Ops wanted every field visible.</strong> They'd built their confidence around seeing everything at once and pushed back on removing anything.</p></div>
+            <div class="opt ten" style="--i:1"><span class="tag">⇆ Tension</span><p><strong>Product wanted a clean, minimal view.</strong> New joiners were visibly overwhelmed by the existing density.</p></div>
+            <div class="opt cho" style="--i:2"><span class="tag">✓ Chosen</span><p><strong>Lead with the fields that drive the decision</strong> — status, urgency, ownership — and keep secondary detail one interaction away, not removed.</p></div>
+          </div>
+          <div class="tradeoff"><p class="eyebrow">The trade-off I accepted</p><h5>Some long-tenured users still preferred the old density.</h5><p>I sat with each group separately to find which fields they genuinely used versus which they felt safer seeing. Most adapted after a few iterations — and nothing was actually taken away.</p></div>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Information architecture</p>
+        <div>
+          <h3 data-reveal>Restructured around intent, not around the database.</h3>
+          <p data-reveal>“Needs attention” became the default landing view instead of a filter buried in an “all transactions” table — and every exception type resolves back to one shared record detail, so there's never a second version of the truth.</p>
+          <div class="tree" data-inview role="img" aria-label="Information architecture: Operations Workbench branches into Needs attention (primary entry), Pending, Completed, SLA tracking and Pending update. Needs attention groups validation error, SLA breach and date sequence, all leading to one shared record detail.">
+            <div class="node root">Operations Workbench</div>
+            <div class="tier span">
+              <div class="node key" style="--i:0">Needs attention<small>primary entry point</small></div>
+              <div class="node" style="--i:1">Pending</div>
+              <div class="node" style="--i:2">Completed</div>
+              <div class="node" style="--i:3">SLA tracking</div>
+              <div class="node" style="--i:4">Pending update<small>null-status records</small></div>
+            </div>
+            <div class="tier span" style="width:min(620px,100%)">
+              <div class="node" style="--i:5">Validation error</div>
+              <div class="node" style="--i:6">SLA breach</div>
+              <div class="node" style="--i:7">Date sequence</div>
+            </div>
+            <div class="tier"><div class="node detail" style="--i:8">Record detail — raw source values, history, resolve action</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 04 ═════════ -->
+  <section class="chapter" id="execution" style="padding-top:60px">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">04</div>
+        <div>
+          <p class="eyebrow c">Execution &amp; artifacts</p>
+          <h2 class="chapter-title" data-split>From “here is all the data” to <em>“here is what needs you, and why.”</em></h2>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="wb-top" data-reveal>
+          <p class="eyebrow" style="margin:0">Toggle the view · click a row in “After” to open its record</p>
+          <div class="tabs" data-tabs="wb" role="tablist" aria-label="Before or after">
+            <button role="tab" data-key="before" aria-selected="false">Before</button>
+            <button role="tab" data-key="after" aria-selected="true">After</button>
+          </div>
+        </div>
+        <div class="win wb-shell" data-reveal="scale">
+          <div class="win-bar"><i style="background:#E0675B"></i><i style="background:#E2B74E"></i><i style="background:#6FBF73"></i><span class="url">workbench / transactions</span></div>
+          <div class="win-body">
+            <div class="wb-view">
+              <div data-panel="wb:before" hidden>
+                <div class="banner bad">⚠ One flat table · raw conflicting statuses · exceptions buried in the list</div>
+                <div class="wb-head"><b>All Transactions</b> <span>2,847 records</span></div>
+                <table class="grid">
+                  <thead><tr><th>Trade ID</th><th>Date</th><th>Asset class</th><th>Settlement status</th><th>Validation flag</th><th>Resolution</th></tr></thead>
+                  <tbody>
+                    <tr class="flag"><td class="id">TRD-88412</td><td>03/14</td><td>Equity</td><td class="cell-ok">Completed</td><td class="cell-err">Error</td><td>Open</td></tr>
+                    <tr><td class="id">TRD-88413</td><td>03/14</td><td>Fixed Income</td><td class="cell-ok">Completed</td><td class="cell-blank">—</td><td class="cell-blank">—</td></tr>
+                    <tr><td class="id">TRD-88414</td><td>03/14</td><td>Equity</td><td class="cell-pend">Pending</td><td class="cell-blank">—</td><td class="cell-blank">—</td></tr>
+                    <tr class="flag"><td class="id">TRD-88415</td><td>03/13</td><td>FX</td><td class="cell-ok">Completed</td><td class="cell-err">Error</td><td>Open</td></tr>
+                    <tr><td class="id">TRD-88416</td><td>03/14</td><td>Equity</td><td class="cell-blank">—</td><td class="cell-blank">—</td><td class="cell-blank">—</td></tr>
+                    <tr><td class="id">TRD-88417</td><td>03/12</td><td>Fixed Income</td><td class="cell-ok">Completed</td><td class="cell-blank">—</td><td class="cell-blank">—</td></tr>
+                  </tbody>
+                </table>
+                <p class="wb-caption">Two status columns that can disagree · no prioritisation · a blank status means the record disappears from filtered views.</p>
+              </div>
+              <div data-panel="wb:after">
+                <div class="qtabs"><span class="on">Needs attention<span class="count">12</span></span><span>Pending</span><span>Completed</span><span>SLA tracking</span><span>Pending update</span></div>
+                <div class="qchips" id="qchips">
+                  <button type="button" class="sla" data-t="sla" aria-pressed="false" data-cursor="Filter">SLA breach · 3</button>
+                  <button type="button" data-t="val" aria-pressed="false" data-cursor="Filter">Validation error · 7</button>
+                  <button type="button" data-t="date" aria-pressed="false" data-cursor="Filter">Date sequence · 2</button>
+                </div>
+                <table class="grid" id="queue">
+                  <thead><tr><th>Trade ID</th><th>Status</th><th>Why</th><th>Age</th><th></th></tr></thead>
+                  <tbody>
+                    <tr class="row" data-t="sla val" data-k="88415" tabindex="0" data-cursor="Open"><td class="id">TRD-88415</td><td><span class="pill p-attn">Needs attention</span><br><small style="color:var(--red);font-weight:600">SLA breach</small></td><td>Validation error — open, settlement reported complete</td><td>2d</td><td class="act">Resolve →</td></tr>
+                    <tr class="row" data-t="val" data-k="88412" tabindex="0" data-cursor="Open"><td class="id">TRD-88412</td><td><span class="pill p-attn">Needs attention</span></td><td>Validation error — open</td><td>4h</td><td class="act">Resolve →</td></tr>
+                    <tr class="row" data-t="date" data-k="88419" tabindex="0" data-cursor="Open"><td class="id">TRD-88419</td><td><span class="pill p-rev">Review</span></td><td>Settlement date precedes trade date</td><td>4h</td><td class="act">Review →</td></tr>
+                    <tr class="row" data-t="" data-k="88416" tabindex="0" data-cursor="Open"><td class="id">TRD-88416</td><td><span class="pill p-wait">Pending update</span></td><td>No status received from source system</td><td>1h</td><td class="act">View →</td></tr>
+                  </tbody>
+                </table>
+                <p class="wb-caption">One resolved status per row · the reason is stated, not inferred · raw source values remain on the record detail.</p>
+              </div>
+            </div>
+          </div>
+          <aside class="drawer" id="drawer" aria-label="Record detail" aria-hidden="true">
+            <button class="close" type="button" id="drawerClose" aria-label="Close record">✕</button>
+            <p class="eyebrow">Record detail</p>
+            <h6 id="dId">TRD-88415</h6>
+            <span class="pill p-attn" id="dPill">Needs attention</span>
+            <p style="margin-top:10px;color:var(--muted)" id="dWhy"></p>
+            <div class="src"><b>Core transaction system</b><span id="dS"></span></div>
+            <div class="src"><b>Validation layer</b><span id="dV"></span></div>
+            <span class="go" id="dGo">Resolve →</span>
+          </aside>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">States &amp; edge cases</p>
+        <div>
+          <h3 data-reveal>A single unhandled state means a missed trade — so I specified every one.</h3>
+          <div class="edge">
+            <div class="ecard" data-reveal data-tilt="5"><p class="eyebrow c">Edge case</p><h5>Conflicting statuses</h5><p>Resolves to the actionable state; both raw values shown on the detail record.</p><div class="demo-pill"><span class="pill p-attn">Needs attention</span></div></div>
+            <div class="ecard" data-reveal style="--d:.06s" data-tilt="5"><p class="eyebrow c">Edge case</p><h5>Missing status</h5><p>Grouped into an explicit “Pending update” bucket so no record is invisible.</p><div class="demo-pill"><span class="pill p-wait">Pending update</span></div></div>
+            <div class="ecard" data-reveal style="--d:.12s" data-tilt="5"><p class="eyebrow c">Edge case</p><h5>Illogical date sequence</h5><p>Settlement before trade date is flagged and routed out of the clean queue.</p><div class="demo-pill"><span class="pill p-rev">Review</span></div></div>
+            <div class="ecard" data-reveal style="--d:.18s" data-tilt="5"><p class="eyebrow c">Edge case</p><h5>SLA breach</h5><p>Escalates to the top of the queue with explicit urgency treatment.</p><div class="demo-pill"><span class="pill p-attn">⚑ SLA breach</span></div></div>
+            <div class="ecard" data-reveal style="--d:.24s" data-tilt="5"><p class="eyebrow c">Edge case</p><h5>Empty queue</h5><p>Confirms “nothing needs attention” rather than an ambiguous blank state.</p><div class="demo-pill"><span class="pill p-done">✓ Nothing needs you</span></div></div>
+            <div class="ecard" data-reveal style="--d:.3s" data-tilt="5"><p class="eyebrow c">Edge case</p><h5>Stale / loading data</h5><p>Surfaces last-updated time so users know whether they're seeing current information.</p><div class="demo-pill"><span class="pill p-pend">Updated 2 min ago</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Design system</p>
+        <div>
+          <h3 data-reveal>Built as components, because they had to hold across five views.</h3>
+          <div class="ds">
+            <article class="card" data-reveal><span class="num">Status tokens</span><div class="tokens"><span class="pill p-attn">Attention</span><span class="pill p-rev">Review</span><span class="pill p-wait">Pending</span><span class="pill p-done">Done</span></div><p>Semantic, not decorative — one meaning per token, used identically everywhere.</p></article>
+            <article class="card" data-reveal style="--d:.08s"><span class="num">Data table</span><p>Shared column logic, sorting, density and row-state behaviour across all five views.</p></article>
+            <article class="card" data-reveal style="--d:.16s"><span class="num">State patterns</span><p>Default, loading, empty, error and stale — defined once and reused.</p></article>
+            <article class="card" data-reveal style="--d:.24s"><span class="num">Guidance</span><p>A contextual help pattern added after testing showed users knew <em>what</em> was wrong but not <em>what to do</em>.</p></article>
+          </div>
+          <div class="constraint" data-reveal><span class="ic" aria-hidden="true">🔧</span><p><strong>A constraint I designed around:</strong> the grouping I wanted wasn't supported by the backend at the time. Rather than block the release, I worked with engineering on a UI-layer approach that delivered the value immediately while the proper data-side change was planned.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 05 ═════════ -->
+  <section class="band" id="outcome">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true" style="-webkit-text-stroke-color:#A996F2">05</div>
+        <div>
+          <p class="eyebrow">Impact &amp; outcomes</p>
+          <h2 class="chapter-title" data-split>How I knew it <em style="color:#A996F2">actually worked.</em></h2>
+        </div>
+      </div>
+      <p data-reveal style="max-width:660px;font-size:17px">Measured two ways: task performance in testing, and whether the behaviour that signalled distrust actually stopped.</p>
+      <div class="impact">
+        <div data-reveal><b>Faster<i>.</i></b><p>Time to identify and act on an exception dropped between testing rounds.</p></div>
+        <div data-reveal style="--d:.1s"><b>Fewer<i>.</i></b><p>Errors and missed items in the second usability round, after the guidance redesign.</p></div>
+        <div data-reveal style="--d:.2s"><b>Lower<i>.</i></b><p>Duplicate-handling and “missing trade” complaints from ops.</p></div>
+      </div>
+      <blockquote class="pull" data-reveal style="margin:110px 0 30px">I don't need to keep my own spreadsheet anymore.<cite>— Operations lead, after release</cite></blockquote>
+      <p data-reveal style="max-width:680px;font-size:17px">That was the outcome I cared about most. Task time is useful, but people only abandon a workaround they've invested in when they genuinely trust the system to do the job instead.</p>
+    </div>
+  </section>
+
+  <section class="chapter" style="padding-top:130px">
+    <div class="wrap">
+      <div class="block block-head">
+        <p class="eyebrow">Reflection</p>
+        <div data-reveal>
+          <h3>I brought the ops team in too late.</h3>
+          <p>I did the research and workflow mapping with them, then went away and came back with something close to final. That turned a collaborative decision into a reaction — and it's why the pushback on density was sharper than it needed to be.</p>
+          <p>Next time I'd co-design density and hierarchy with long-tenured users, in the room, at low fidelity. Not because they'd design it better, but because <mark class="sweep">people defend a decision they helped shape and resist one that arrives finished.</mark></p>
+          <p>And my first instinct — that this was a refresh problem — cost real time. I'm now much faster at asking: <em>is the data actually wrong, or is the product just repeating a disagreement it should be resolving?</em></p>
+          <div class="carry">
+            <div><h5>Ask what the product should say</h5><p>before assuming the fix lives in the interface.</p></div>
+            <div><h5>Co-design the contentious call</h5><p>not just the research that precedes it.</p></div>
+            <div><h5>Watch for the workaround</h5><p>it tells you what the product failed to do.</p></div>
+          </div>
+          <p class="disclaimer" style="margin-top:36px">Case study presented with client details anonymised.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="more" aria-labelledby="more-title" style="padding-top:40px">
+    <div class="wrap">
+      <div class="more-head">
+        <h2 id="more-title" data-split>Explore more work.</h2>
+        <a class="back" href="index.html#work" data-magnetic>All projects →</a>
+      </div>
+      <div class="more-grid">
+        <a class="more-card" href="case-study-stc.html" data-reveal data-cursor="View">
+          <div class="more-img"><img src="stc%20hub_2.png" alt="" loading="lazy"></div>
+          <p class="more-tag">Usability Testing · Enterprise UX</p>
+          <p class="more-title">The portal worked. So why did nobody trust it?</p>
+        </a>
+        <a class="more-card" href="case-study-robot.html" data-reveal style="--d:.1s" data-cursor="View">
+          <div class="more-img"><img src="robot-%20project.png" alt="" loading="lazy"></div>
+          <p class="more-tag">UX Research · Interaction Design</p>
+          <p class="more-title">Robot delivery existed. The experience didn't.</p>
+        </a>
+        <a class="more-card" href="case-study-moodmode.html" data-reveal style="--d:.2s" data-cursor="View">
+          <div class="more-img"><img src="moodmode_project2.png" alt="" loading="lazy"></div>
+          <p class="more-tag">AI Product Design · iOS</p>
+          <p class="more-title">Most apps ignore how you feel. This one starts there.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="cs-footer">
+  <span>© 2026 Pratiksha Kulam</span>
+  <span>Designed with a side of coffee, code &amp; AI</span>
+  <a href="index.html">Back to home ↑</a>
+</footer>
+
+<script src="motion.js"></script>
+<script src="case-study.js"></script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* donut */
+  const C = 2 * Math.PI * 38, total = 12;
+  const segs = [...document.querySelectorAll('.donut .seg-c')];
+  const draw = (on) => segs.forEach((s) => {
+    const len = C * s.dataset.v / total, off = C * s.dataset.o / total;
+    s.style.strokeDasharray = on ? `${len - 1.5} ${C}` : `0 ${C}`;
+    s.style.strokeDashoffset = -off;
+  });
+  draw(reduce);
+  const hero = document.getElementById('heroDash');
+  if (!reduce) { if (hero.classList.contains('in')) draw(true); else hero.addEventListener('m:in', () => setTimeout(() => draw(true), 300), { once: true }); }
+
+  /* precedence rule */
+  const segS = document.getElementById('segS'), segV = document.getElementById('segV');
+  const out = document.getElementById('ruleOut'), why = document.getElementById('ruleWhy');
+  const resolve = (s, v) => {
+    if (v === 'Error') return ['Needs attention', 'p-attn', s === 'Completed' ? 'Validation error — open, settlement reported complete. Validation takes precedence.' : 'Validation error — open. Validation takes precedence.'];
+    if (s === 'Completed') return ['Completed', 'p-done', 'Both systems agree there is nothing to act on.'];
+    if (s === 'Pending') return ['Pending', 'p-pend', 'Settlement in progress, no validation issues.'];
+    return ['Pending update', 'p-wait', 'No status received from the source system — grouped explicitly so the record never disappears.'];
+  };
+  const val = (seg) => seg.querySelector('[aria-pressed="true"]').dataset.v;
+  const update = () => {
+    const [label, cls, reason] = resolve(val(segS), val(segV));
+    out.textContent = label; out.className = 'pill ' + cls; why.textContent = reason;
+    if (!reduce) { void out.offsetWidth; out.classList.add('bump'); }
+  };
+  [segS, segV].forEach((seg) => seg.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    seg.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b)); update();
+  }));
+  update();
+
+  /* SWOT focus */
+  const swot = document.getElementById('swot');
+  swot.querySelectorAll('.quad').forEach((q) => {
+    const toggle = () => {
+      const on = !q.classList.contains('on');
+      swot.querySelectorAll('.quad').forEach((x) => x.classList.remove('on'));
+      q.classList.toggle('on', on); swot.classList.toggle('focus', on);
+    };
+    q.addEventListener('click', toggle);
+    q.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+  });
+
+  /* queue filters */
+  const chips = document.getElementById('qchips'), rows = [...document.querySelectorAll('#queue tr.row')];
+  chips.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    const on = b.getAttribute('aria-pressed') !== 'true';
+    chips.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b && on));
+    rows.forEach((r) => r.classList.toggle('dim', on && !r.dataset.t.split(' ').includes(b.dataset.t)));
+  });
+
+  /* record drawer */
+  const REC = {
+    88415: ['Needs attention', 'p-attn', 'Validation error — open, settlement reported complete. SLA breached (2d).', 'settlement_status: Completed<br>trade_date: 03/13', 'validation_flag: Error<br>resolution_status: Open', 'Resolve →'],
+    88412: ['Needs attention', 'p-attn', 'Validation error — open.', 'settlement_status: Completed<br>trade_date: 03/14', 'validation_flag: Error<br>resolution_status: Open', 'Resolve →'],
+    88419: ['Review', 'p-rev', 'Settlement date precedes trade date — routed out of the clean queue.', 'settlement_date &lt; trade_date', 'validation_flag: —', 'Review →'],
+    88416: ['Pending update', 'p-wait', 'No status received from source system.', 'settlement_status: —', 'validation_flag: —', 'View →']
+  };
+  const drawer = document.getElementById('drawer');
+  const open = (k) => {
+    const [p, c, w, s, v, go] = REC[k];
+    document.getElementById('dId').textContent = 'TRD-' + k;
+    const pill = document.getElementById('dPill'); pill.textContent = p; pill.className = 'pill ' + c;
+    document.getElementById('dWhy').textContent = w;
+    document.getElementById('dS').innerHTML = s; document.getElementById('dV').innerHTML = v;
+    document.getElementById('dGo').textContent = go;
+    drawer.classList.add('open'); drawer.setAttribute('aria-hidden', 'false');
+  };
+  const close = () => { drawer.classList.remove('open'); drawer.setAttribute('aria-hidden', 'true'); };
+  rows.forEach((r) => {
+    r.addEventListener('click', () => open(r.dataset.k));
+    r.addEventListener('keydown', (e) => { if (e.key === 'Enter') open(r.dataset.k); });
+  });
+  document.getElementById('drawerClose').addEventListener('click', close);
+  document.querySelector('[data-tabs="wb"]').addEventListener('tabchange', close);
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+})();
+</script>
+</body>
+</html>

@@ -1,821 +1,660 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>STC Hub Case Study — Pratiksha Kulam</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STC Hub — Case Study · Pratiksha Kulam</title>
+  <meta name="description" content="Usability study of STC Hub, Saudi Telecom's internal HR portal: 100% task completion, −40 NPS, and 15+ prioritised fixes.">
+  <link rel="stylesheet" href="case-study.css">
+  <link rel="stylesheet" href="motion.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #F6F1E9; --white: #FFFFFF; --black: #1C1915;
-      --gray-light: #EFE8DD; --gray-mid: #E3DACB;
-      --gray-text: #5E564B; --gray-border: #E3DACB;
-      --purple: #5B2D8E; --purple-light: #F3EEFB;
-      --purple-mid: #E8DDF5; --purple-dark: #3D1F61;
-      --font-heading: 'Georgia', 'Times New Roman', serif;
-      --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-    html { scroll-behavior: smooth; }
-    body { font-family: var(--font-body); background: var(--bg); color: var(--black); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    body { --project: #6A2FB0; --project-soft: #EEE6F8; --project-deep: #22103D; --good: #2E8B57; --bad: #C8423B; --warn: #D98A1C; }
 
-    /* ── TOPNAV ── */
-    nav.topnav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 68px;
-      background: rgba(246,241,233,0.95); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--gray-mid);
-    }
-    .nav-logo { font-family: var(--font-heading); font-size: 36px; font-weight: 700; color: var(--black); text-decoration: none; letter-spacing: -0.5px; line-height: 1; }
-    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
-    .nav-links a { font-size: 14px; color: var(--black); text-decoration: none; letter-spacing: 0.02em; opacity: 0.7; transition: opacity 0.2s; }
-    .nav-links a:hover { opacity: 1; }
-    .nav-resume { font-size: 13px !important; opacity: 1 !important; border: 1px solid var(--black); padding: 7px 18px; border-radius: 2px; }
+    /* hero contradiction */
+    .versus { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; margin-top: 72px; border-radius: 18px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); }
+    .vs-side { padding: 48px 48px 44px; }
+    .vs-side .eyebrow { margin-bottom: 14px; }
+    .vs-num { font-family: var(--serif); font-size: clamp(80px, 11vw, 168px); line-height: .85; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
+    .vs-side p.vs-cap { margin-top: 18px; font-size: 15px; color: var(--muted); max-width: 320px; }
+    .vs-side p.vs-cap strong { color: var(--ink); }
+    .vs-mid { display: grid; place-items: center; padding: 0 10px; background: var(--project-soft); font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--project); writing-mode: vertical-rl; letter-spacing: .3em; }
+    .vs-good { color: var(--good); }
+    .vs-bad { color: var(--bad); }
 
-    /* ── HERO ── */
-    .hero { padding-top: 81px; display: flex; flex-direction: column; background: var(--white); }
+    /* heuristics chart */
+    .hbars { margin-top: 36px; }
+    .hbar { display: grid; grid-template-columns: 240px 1fr 40px; gap: 16px; align-items: center; padding: 7px 0; cursor: default; }
+    .hbar span { font-size: 14px; color: var(--muted); transition: color .2s; }
+    .hbar .track { height: 12px; border-radius: 6px; background: var(--paper-2); overflow: hidden; }
+    .hbar .fill { height: 100%; border-radius: 6px; background: var(--project); opacity: .55; transition-property: transform, opacity; }
+    .hbar b { font-family: var(--serif); font-weight: normal; font-size: 20px; text-align: right; color: var(--project); }
+    .hbar:hover span { color: var(--ink); }
+    .hbar:hover .fill, .hbar.top .fill { opacity: 1; }
+    .two-up { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 44px; }
+    .metric { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 36px 34px; }
+    .metric .big { font-family: var(--serif); font-size: clamp(64px, 7vw, 104px); line-height: .9; color: var(--project); letter-spacing: -0.04em; }
+    .block .metric p { margin-top: 14px; font-size: 15px; color: var(--muted); }
 
-    .hero-body { display: grid; grid-template-columns: 58% 42%; min-height: calc(100vh - 81px - 49px); }
+    /* dashboard panels */
+    .dash { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 30px 28px; display: flex; flex-direction: column; }
+    .panel h4 { font-family: var(--serif); font-weight: normal; font-size: 21px; margin: 6px 0 4px; }
+    .block .panel > p:not(.eyebrow) { font-size: 13.5px; color: var(--muted); }
+    .panel .viz { flex: 1; display: grid; place-items: center; padding: 24px 0 8px; min-height: 210px; }
+    .gauge { width: 100%; max-width: 260px; overflow: visible; }
+    .gauge .arc-bg { fill: none; stroke: var(--paper-2); stroke-width: 18; stroke-linecap: round; }
+    .gauge .arc { fill: none; stroke: var(--project); stroke-width: 18; stroke-linecap: round; transition: stroke-dasharray 1.6s var(--ease); }
+    .gauge .thr { stroke: var(--ink); stroke-width: 2.5; }
+    .gauge text { font-family: var(--sans); font-size: 10px; fill: var(--subtle); }
+    .gauge .val { font-family: var(--serif); font-size: 42px; fill: var(--ink); }
+    .nps { width: 100%; }
+    .nps .bar { display: flex; height: 44px; border-radius: 10px; overflow: hidden; }
+    .nps .bar div { transform-origin: 0 50%; transform: scaleX(0); transition: transform 1.1s var(--ease); display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 600; }
+    .nps.in .bar div { transform: none; }
+    .nps .legend { display: flex; justify-content: space-between; margin-top: 12px; font-size: 12px; color: var(--muted); }
+    .nps .score { font-family: var(--serif); font-size: 58px; color: var(--bad); text-align: center; line-height: 1; margin-bottom: 20px; }
+    .asq { width: 100%; display: flex; gap: 18px; align-items: flex-end; height: 190px; padding-top: 10px; }
+    .asq .col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; gap: 8px; }
+    .asq .colbar { width: 100%; max-width: 54px; border-radius: 8px 8px 3px 3px; height: calc(var(--h) * 100%); }
+    .asq b { font-family: var(--serif); font-weight: normal; font-size: 22px; }
+    .asq small { font-size: 11px; color: var(--subtle); text-align: center; line-height: 1.3; }
 
-    .hero-left {
-      background: var(--purple-dark);
-      padding: 60px 72px 52px 80px;
-      display: flex; flex-direction: column; justify-content: space-between;
-      position: relative; overflow: hidden;
-    }
-    .hero-left::before {
-      content: ''; position: absolute; bottom: -80px; right: -80px;
-      width: 300px; height: 300px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.05); pointer-events: none;
-    }
-    .hero-left::after {
-      content: ''; position: absolute; bottom: -130px; right: -130px;
-      width: 460px; height: 460px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.03); pointer-events: none;
-    }
-    /* 1. tag — lighter weight, less prominent */
-    .hero-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.52); margin-bottom: 20px; position: relative; z-index: 1; font-weight: 400; }
-    /* 2. kicker — bigger, brighter so it reads clearly */
-    .hero-kicker { font-family: var(--font-heading); font-size: 18px; font-style: italic; color: rgba(255,255,255,0.62); margin-bottom: 14px; position: relative; z-index: 1; }
-    /* 3. new headline style — statement not a question */
-    .hero-title { font-family: var(--font-heading); font-size: clamp(28px, 3vw, 44px); line-height: 1.18; letter-spacing: -0.4px; color: var(--white); font-weight: normal; max-width: 540px; position: relative; z-index: 1; margin-bottom: 0; }
-    .hero-title em { font-style: italic; color: #C9A7F0; }
-    /* 4. no gap between headline and meta — margin-top:0 on bottom */
-    .hero-bottom { position: relative; z-index: 1; margin-top: 32px; }
-    /* 5. meta redesigned — horizontal stat chips instead of bullet rows */
-    .hero-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
-    .hero-meta-chip {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 4px;
-      padding: 12px 16px;
-    }
-    .hero-meta-chip-label { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
-    .hero-meta-chip-val { font-size: 13px; color: rgba(255,255,255,0.72); line-height: 1.4; }
-    /* 6. pills unchanged */
-    .hero-pills { display: flex; flex-wrap: wrap; gap: 7px; }
-    .hero-pill { font-size: 11px; color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 4px 13px; border-radius: 100px; }
-    .hero-pill b { color: rgba(255,255,255,0.2); font-weight: 400; margin-right: 4px; }
+    /* timing chart */
+    .timing { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 36px 36px 30px; margin-top: 18px; }
+    .timing-top { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 40px; }
+    .timing-top h4 { font-family: var(--serif); font-weight: normal; font-size: 22px; }
+    .tchart { position: relative; }
+    .trow { display: grid; grid-template-columns: 70px 1fr 56px; gap: 14px; align-items: center; height: 46px; }
+    .trow span { font-size: 13px; color: var(--muted); }
+    .trow .lane { position: relative; height: 100%; display: flex; align-items: center; }
+    .trow .tb { height: 22px; border-radius: 0 6px 6px 0; background: var(--project); width: 0; transition: width .9s var(--ease), background .4s; }
+    .trow .tb.over { background: var(--bad); }
+    .trow b { font-family: var(--serif); font-weight: normal; font-size: 17px; text-align: right; font-variant-numeric: tabular-nums; }
+    .tline { position: absolute; top: -8px; bottom: -8px; width: 0; border-left: 2px dashed var(--ink); transition: left .9s var(--ease); pointer-events: none; }
+    .tline.limit { border-left-color: var(--bad); border-left-style: dotted; }
+    .tline em { position: absolute; top: -24px; left: 6px; white-space: nowrap; font-style: normal; font-size: 11px; color: var(--ink); letter-spacing: .04em; }
+    .tline.limit em { color: var(--bad); }
+    .block p.tnote { font-size: 12.5px; color: var(--subtle); margin-top: 22px; max-width: none; }
 
-    /* 7. right panel — white blocks so they read as distinct cards */
-    .hero-right { background: var(--purple-light); border-left: 1px solid var(--purple-mid); display: flex; flex-direction: column; }
-    .c-block { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; background: var(--white); }
-    .c-block:first-child { border-bottom: 3px solid var(--purple-light); }
-    .c-eyebrow { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--purple); opacity: 0.7; margin-bottom: 10px; }
-    .c-num { font-family: var(--font-heading); font-size: 68px; line-height: 1; margin-bottom: 10px; }
-    .c-num.green { color: #1B5E20; }
-    .c-num.red   { color: #8B0000; }
-    .c-desc { font-size: 14px; color: var(--black); line-height: 1.5; font-weight: 600; margin-bottom: 4px; }
-    .c-sub  { font-size: 12px; color: var(--gray-text); line-height: 1.4; }
-    /* 8. bridge — big, dark, impossible to miss */
-    .c-bridge {
-      text-align: center;
-      padding: 16px 0;
-      font-family: var(--font-heading);
-      font-size: 22px;
-      color: var(--purple);
-      font-style: italic;
-      font-weight: normal;
-      background: var(--purple-light);
-      border-top: 1px solid var(--purple-mid);
-      border-bottom: 1px solid var(--purple-mid);
-      letter-spacing: 0.04em;
-    }
+    /* participants + tasks */
+    .people { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 36px; }
+    .person { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 18px; }
+    .person .av { width: 44px; height: 44px; border-radius: 50%; background: var(--project-soft); color: var(--project); display: grid; place-items: center; font-family: var(--serif); font-size: 18px; margin-bottom: 16px; }
+    .person b { display: block; font-weight: 600; font-size: 14px; line-height: 1.35; }
+    .person small { font-size: 12px; color: var(--subtle); }
+    .tasks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 18px; }
+    .task { background: var(--project-deep); color: #fff; border-radius: 16px; padding: 30px 28px; position: relative; overflow: hidden; }
+    .task .k { font-family: var(--serif); font-size: 64px; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.35); position: absolute; right: 20px; top: 14px; }
+    .task h5 { font-family: var(--serif); font-weight: normal; font-size: 22px; margin: 40px 0 8px; max-width: 220px; }
+    .block .task p { font-size: 13.5px; color: rgba(255,255,255,.6); }
+    .task .ideal { display: flex; gap: 18px; margin-top: 22px; font-size: 12px; color: rgba(255,255,255,.55); }
+    .task .ideal strong { display: block; font-family: var(--serif); font-weight: normal; font-size: 24px; color: #fff; }
 
-    /* ── SECTION NAV — inside hero, sticky throughout ── */
-    .section-nav {
-      background: var(--white);
-      border-top: 1px solid var(--gray-mid);
-      border-bottom: 1px solid var(--gray-mid);
-      position: sticky;
-      top: 81px;
-      z-index: 90;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .section-nav::-webkit-scrollbar { display: none; }
-    /* 9. inner wrapper fills full width so items spread evenly */
-    .sn-inner {
-      display: flex;
-      width: 100%;
-    }
-    .sn-item { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 12px; border-right: 1px solid var(--gray-mid); text-decoration: none; transition: background 0.15s; white-space: nowrap; }
-    .sn-item:last-child { border-right: none; }
-    .sn-item:hover { background: var(--purple-light); }
-    .sn-item.active { background: var(--purple-light); box-shadow: inset 0 -2px 0 var(--purple); }
-    .sn-num { font-size: 10px; letter-spacing: 0.13em; color: var(--purple); opacity: 0.5; text-transform: uppercase; }
-    .sn-label { font-size: 12px; color: var(--black); }
+    /* findings */
+    .fpanel { display: grid; grid-template-columns: 1fr 1.3fr; gap: 56px; margin-top: 40px; align-items: start; }
+    .fpanel[hidden] { display: none; }
+    .fpanel .lead h4 { font-family: var(--serif); font-weight: normal; font-size: 34px; line-height: 1.12; margin-bottom: 14px; }
+    .block .fpanel .lead p { color: var(--muted); font-size: 16px; }
+    .fpanel .lead .big { font-family: var(--serif); font-size: 88px; line-height: 1; color: var(--project-soft); -webkit-text-stroke: 1px var(--project); margin-bottom: 18px; }
+    .issues { list-style: none; }
+    .issues li { padding: 20px 0; border-top: 1px solid var(--line); animation: issueIn .6s var(--ease) both; animation-delay: calc(var(--i) * 80ms); }
+    .issues li:last-child { border-bottom: 1px solid var(--line); }
+    .block .issues .iss { font-size: 15.5px; color: var(--ink); }
+    .block .issues .rec { font-size: 14px; color: var(--project); margin-top: 6px; display: flex; gap: 8px; }
+    .issues .rec::before { content: '→'; }
+    @keyframes issueIn { from { opacity: 0; transform: translateY(14px); } }
 
-    /* ── SECTION BASE ── */
-    section { width: 100%; }
-    .section-inner { max-width: 1200px; margin: 0 auto; padding: 100px 48px; }
-    .overview-section .section-inner { padding-top: 56px; }
-    .section-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 20px; }
-    .section-label.purple { color: var(--purple); opacity: 0.8; }
-    .section-heading { font-family: var(--font-heading); font-size: clamp(26px, 2.8vw, 38px); line-height: 1.15; letter-spacing: -0.5px; color: var(--black); margin-bottom: 20px; }
-    .section-sub { font-size: 15px; color: var(--gray-text); line-height: 1.7; max-width: 620px; margin-bottom: 52px; }
+    .sev { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .sev i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .s4 { background: #B3261E; } .s3 { background: #E0731A; } .s2 { background: #E8B21F; } .s1 { background: #3E8E5A; }
+    .legend-row { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 18px; }
 
-    /* ── OVERVIEW ── */
-    .overview-section { background: var(--white); }
-    .overview-lead { font-family: var(--font-heading); font-size: clamp(21px, 2.3vw, 31px); line-height: 1.4; color: var(--black); max-width: 880px; margin-bottom: 16px; font-weight: normal; }
-    .overview-lead em { font-style: italic; color: var(--purple); }
-    .overview-byline { font-size: 14px; color: var(--gray-text); line-height: 1.75; max-width: 680px; margin-bottom: 52px; padding-left: 18px; border-left: 2px solid var(--purple-mid); }
-    .overview-strip { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--gray-border); border-radius: 4px; overflow: hidden; margin-bottom: 40px; }
-    .ov-cell { padding: 36px 32px; border-right: 1px solid var(--gray-border); }
-    .ov-cell:last-child { border-right: none; }
-    .ov-eye { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--purple); opacity: 0.7; margin-bottom: 12px; }
-    .ov-head { font-family: var(--font-heading); font-size: 17px; color: var(--black); margin-bottom: 10px; line-height: 1.3; }
-    .ov-body { font-size: 13px; color: var(--gray-text); line-height: 1.7; }
-    .overview-img { width: 100%; border-radius: 4px; border: 1px solid var(--purple-mid); overflow: hidden; background: var(--purple-light); }
-    .overview-img img { width: 100%; display: block; }
-    .overview-img-ph { padding: 52px; text-align: center; font-size: 12px; color: var(--purple); opacity: 0.5; font-style: italic; }
+    /* recommendations */
+    .rec-tools { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 40px; }
+    .sort { font-size: 13px; color: var(--muted); display: flex; gap: 10px; align-items: center; }
+    .sort button { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); cursor: pointer; background: var(--surface); font-size: 13px; }
+    .sort button[aria-pressed="true"] { border-color: var(--project); color: var(--project); }
+    .recs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px; }
+    .rcard { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+    .rcard.hide { display: none; }
+    .rcard.enter { animation: recIn .55s var(--ease) both; }
+    @keyframes recIn { from { opacity: 0; transform: translateY(18px) scale(.98); } }
+    .rcard .shot { aspect-ratio: 16 / 9; background: var(--project-soft); overflow: hidden; display: grid; place-items: center; }
+    .rcard .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top left; transition: transform 1s var(--ease); }
+    .rcard:hover .shot img { transform: scale(1.06); }
+    .rcard .shot span { font-size: 12px; color: var(--project); font-style: italic; padding: 0 20px; text-align: center; }
+    .rcard .body { padding: 22px 22px 24px; }
+    .rcard .meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; }
+    .rcard .cat { font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--project-soft); color: var(--project); }
+    .rcard .where { font-size: 12px; color: var(--subtle); margin-bottom: 6px; }
+    .rcard h5 { font-family: var(--serif); font-weight: normal; font-size: 19px; line-height: 1.3; margin-bottom: 8px; }
+    .rcard p { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
 
-    /* ── PRELIM ── */
-    .prelim-section { background: var(--gray-light); }
-    .prelim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
-    .heuristic-table { background: var(--white); border-radius: 4px; border: 1px solid var(--gray-border); overflow: hidden; }
-    .heuristic-table-head { background: var(--purple); padding: 16px 24px; display: grid; grid-template-columns: 1fr 60px; }
-    .heuristic-table-head span { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.7); }
-    .heuristic-row { padding: 14px 24px; display: grid; grid-template-columns: 1fr 60px; border-bottom: 1px solid var(--gray-light); align-items: center; }
-    .heuristic-row:last-child { border-bottom: none; }
-    .heuristic-row.highlight { background: var(--purple-light); }
-    .heuristic-name { font-size: 13px; color: var(--black); line-height: 1.4; }
-    .heuristic-count { font-family: var(--font-heading); font-size: 20px; color: var(--purple); text-align: right; }
-    .heuristic-count.big { font-size: 28px; color: var(--purple-dark); }
-    .heuristic-bar { height: 3px; background: var(--purple-mid); border-radius: 2px; margin-top: 4px; }
-    .heuristic-bar-fill { height: 100%; background: var(--purple); border-radius: 2px; }
-    .prelim-total { display: flex; align-items: center; gap: 18px; background: var(--purple); border-radius: 4px; padding: 20px 24px; margin-top: 14px; }
-    .prelim-total-num { font-family: var(--font-heading); font-size: 48px; color: var(--white); line-height: 1; flex-shrink: 0; }
-    .prelim-total-text { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; }
-    .walkthrough-card { background: var(--white); border: 1px solid var(--gray-border); border-radius: 4px; padding: 32px 28px; margin-bottom: 20px; }
-    .walkthrough-stat { font-family: var(--font-heading); font-size: 56px; color: var(--purple); line-height: 1; margin-bottom: 8px; }
-    .walkthrough-q { font-size: 12px; color: var(--gray-text); line-height: 1.5; padding: 10px 14px; background: var(--gray-light); border-radius: 4px; border-left: 2px solid var(--purple-mid); margin-bottom: 8px; }
+    .band .ticks li { color: rgba(255,255,255,.75); border-color: rgba(255,255,255,.12); }
 
-    /* ── CONTRADICTION ── */
-    .contradiction-section { background: var(--purple-dark); }
-    .big-numbers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-bottom: 48px; }
-    .big-number-cell { background: rgba(255,255,255,0.04); padding: 48px 32px; text-align: center; }
-    .big-number-val { font-family: var(--font-heading); font-size: clamp(34px, 3.8vw, 58px); line-height: 1; margin-bottom: 10px; }
-    .big-number-val.positive { color: #81C784; } .big-number-val.negative { color: #EF9A9A; } .big-number-val.warning { color: #FFD54F; }
-    .big-number-label { font-size: 12px; color: rgba(255,255,255,0.38); line-height: 1.4; }
-    .tension-block { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px; }
-    .tension-quote { font-family: var(--font-heading); font-size: clamp(19px, 2vw, 26px); color: var(--white); font-style: italic; line-height: 1.5; margin-bottom: 24px; max-width: 780px; }
-    .tension-explanation { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.8; max-width: 680px; }
-
-    /* ── RESEARCH — timeline ── */
-    .research-section { background: var(--white); }
-    .r-timeline { display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--gray-border); border-radius: 4px; overflow: hidden; margin-bottom: 60px; }
-    .rt-step { padding: 28px 22px; border-right: 1px solid var(--gray-border); position: relative; }
-    .rt-step:last-child { border-right: none; }
-    .rt-num { font-family: var(--font-heading); font-size: 32px; color: var(--purple-mid); line-height: 1; margin-bottom: 12px; }
-    .rt-icon { font-size: 18px; margin-bottom: 8px; display: block; }
-    .rt-title { font-family: var(--font-heading); font-size: 14px; color: var(--black); margin-bottom: 6px; line-height: 1.3; }
-    .rt-body { font-size: 12px; color: var(--gray-text); line-height: 1.6; }
-    .rt-arrow { position: absolute; right: -9px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; background: var(--white); border: 1px solid var(--gray-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; color: var(--gray-text); z-index: 2; }
-    .rt-step:last-child .rt-arrow { display: none; }
-    .r-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-    .p-chips { display: flex; flex-direction: column; gap: 10px; }
-    .p-chip { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: var(--gray-light); border-radius: 4px; }
-    .p-av { width: 38px; height: 38px; border-radius: 50%; background: var(--purple-mid); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 14px; color: var(--purple); flex-shrink: 0; }
-    .p-id { font-size: 10px; color: var(--purple); opacity: 0.7; margin-bottom: 2px; letter-spacing: 0.06em; }
-    .p-role { font-size: 13px; color: var(--black); font-weight: 500; }
-    .t-rows { display: flex; flex-direction: column; gap: 14px; }
-    .t-row { border: 1px solid var(--gray-border); border-radius: 4px; padding: 22px 26px; display: grid; grid-template-columns: 50px 1fr 70px; gap: 16px; align-items: center; }
-    .t-row-num { font-family: var(--font-heading); font-size: 36px; color: var(--purple-mid); line-height: 1; }
-    .t-row-name { font-size: 14px; font-weight: 600; color: var(--black); margin-bottom: 3px; }
-    .t-row-desc { font-size: 12px; color: var(--gray-text); line-height: 1.5; }
-    .t-row-ideal { text-align: right; }
-    .t-ideal-val { font-family: var(--font-heading); font-size: 17px; color: var(--purple); line-height: 1; }
-    .t-ideal-lbl { font-size: 10px; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.08em; }
-
-    /* ── NUMBERS ── */
-    .numbers-section { background: var(--gray-light); }
-    .numbers-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 48px; }
-    .score-card { background: var(--white); border: 1px solid var(--gray-border); border-radius: 4px; padding: 36px 32px; text-align: center; }
-    .score-val { font-family: var(--font-heading); font-size: 64px; line-height: 1; margin-bottom: 8px; }
-    .score-val.purple { color: var(--purple); } .score-val.red { color: #C62828; }
-    .score-name { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 12px; }
-    .score-verdict { font-size: 13px; color: var(--black); line-height: 1.5; font-weight: 500; }
-    .score-sub { font-size: 12px; color: var(--gray-text); margin-top: 4px; line-height: 1.4; }
-    .asq-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .asq-card { background: var(--white); border: 1px solid var(--gray-border); border-radius: 4px; padding: 24px 20px; text-align: center; }
-    .asq-task { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 12px; }
-    .asq-score { font-family: var(--font-heading); font-size: 40px; line-height: 1; margin-bottom: 8px; }
-    .asq-score.good { color: #2E7D32; } .asq-score.bad { color: #C62828; } .asq-score.mid { color: #E65100; }
-    .asq-verdict { font-size: 12px; color: var(--gray-text); line-height: 1.4; }
-    .timing-table { width: 100%; border-collapse: collapse; background: var(--white); border: 1px solid var(--gray-border); border-radius: 4px; overflow: hidden; margin-top: 32px; }
-    .timing-table th { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-text); text-align: left; padding: 14px 20px; border-bottom: 1px solid var(--gray-mid); background: var(--gray-light); }
-    .timing-table td { font-size: 13px; color: var(--black); padding: 16px 20px; border-bottom: 1px solid var(--gray-light); }
-    .timing-table tr:last-child td { border-bottom: none; }
-    .timing-table td.over { color: #C62828; } .timing-table td.way-over { color: #C62828; font-weight: 600; }
-
-    /* ── FINDINGS ── */
-    .findings-section { background: var(--white); }
-    .findings-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 64px; align-items: start; }
-    .findings-body { font-size: 15px; color: var(--gray-text); line-height: 1.8; }
-    .severity-legend { background: var(--gray-light); border-radius: 4px; padding: 28px; }
-    .severity-legend-title { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 16px; }
-    .severity-items { display: flex; flex-direction: column; gap: 10px; }
-    .severity-item { display: flex; align-items: center; gap: 12px; }
-    .severity-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .sev-4 { background: #C62828; } .sev-3 { background: #E65100; } .sev-2 { background: #F9A825; } .sev-1 { background: #2E7D32; }
-    .severity-item-text { font-size: 12px; color: var(--black); } .severity-item-label { font-size: 11px; color: var(--gray-text); }
-    .finding-categories { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-    .finding-cat { border: 1px solid var(--gray-border); border-radius: 4px; overflow: hidden; }
-    .finding-cat-head { padding: 24px 28px; background: var(--purple-light); border-bottom: 1px solid var(--purple-mid); display: flex; align-items: flex-start; gap: 16px; }
-    .finding-cat-num { font-family: var(--font-heading); font-size: 32px; color: var(--purple); line-height: 1; flex-shrink: 0; opacity: 0.5; }
-    .finding-cat-title { font-family: var(--font-heading); font-size: 18px; color: var(--purple-dark); margin-bottom: 6px; }
-    .finding-cat-sub { font-size: 12px; color: var(--gray-text); line-height: 1.5; }
-    .finding-issues { padding: 20px 28px; display: flex; flex-direction: column; gap: 14px; }
-    .finding-issue { display: flex; align-items: flex-start; gap: 12px; }
-    .finding-issue-sev { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
-    .finding-issue-text { font-size: 13px; color: var(--black); line-height: 1.5; }
-    .finding-issue-rec { font-size: 11px; color: var(--gray-text); margin-top: 2px; line-height: 1.4; }
-
-    /* ── RECOMMENDATIONS ── */
-    .recs-section { background: var(--gray-light); }
-    .recs-count { font-family: var(--font-heading); font-size: 80px; color: var(--purple); opacity: 0.13; line-height: 1; margin-bottom: -20px; }
-    .recs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
-    .rec-card { background: var(--white); border: 1px solid var(--gray-border); border-radius: 4px; padding: 28px 24px; }
-    .rec-tag { display: inline-block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 14px; }
-    .rec-tag.workflow { background: #EDE7F6; color: #4527A0; } .rec-tag.access { background: #E8F5E9; color: #1B5E20; }
-    .rec-tag.auto { background: #FFF3E0; color: #E65100; } .rec-tag.knowledge { background: #E3F2FD; color: #0D47A1; }
-    .rec-screen { width: 100%; height: 160px; background: var(--gray-light); border-radius: 4px; border: 1px solid var(--gray-mid); margin-bottom: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .rec-screen img { width: 100%; height: 100%; object-fit: cover; }
-    .rec-screen-placeholder { font-size: 11px; color: var(--gray-text); font-style: italic; text-align: center; padding: 0 16px; }
-    .rec-severity { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
-    .rec-sev-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .rec-sev-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-text); }
-    .rec-issue { font-size: 11px; color: var(--gray-text); margin-bottom: 6px; }
-    .rec-title { font-family: var(--font-heading); font-size: 16px; color: var(--black); margin-bottom: 8px; line-height: 1.3; }
-    .rec-body { font-size: 12px; color: var(--gray-text); line-height: 1.6; }
-
-    /* ── REFLECTION ── */
-    .reflection-section { background: var(--white); }
-    .reflection-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 80px; align-items: center; }
-    .reflection-quote { font-family: var(--font-heading); font-size: clamp(20px, 2.2vw, 28px); font-style: italic; color: var(--black); line-height: 1.45; margin-bottom: 24px; }
-    .reflection-body { font-size: 14px; color: var(--gray-text); line-height: 1.8; margin-bottom: 12px; }
-    .next-project { background: var(--purple-light); border: 1px solid var(--purple-mid); border-radius: 4px; padding: 40px; text-align: center; }
-    .next-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--purple); opacity: 0.7; margin-bottom: 16px; }
-    .next-title { font-family: var(--font-heading); font-size: 20px; color: var(--black); line-height: 1.3; margin-bottom: 24px; }
-    .next-arrow { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--purple); text-decoration: none; border-bottom: 1px solid var(--purple); padding-bottom: 2px; font-weight: 500; transition: gap 0.2s; }
-    .next-arrow:hover { gap: 16px; }
-
-    /* ── FOOTER ── */
-    footer { background: var(--black); color: rgba(255,255,255,0.4); padding: 32px 48px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; }
-    footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
-    footer a:hover { color: rgba(255,255,255,0.7); }
-
-    /* ── FADE IN ── */
-    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .fade-in.visible { opacity: 1; transform: none; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 1024px) {
-      nav.topnav { padding: 18px 32px; }
-      .hero-body { grid-template-columns: 1fr; }
-      .hero-left { padding: 48px 40px 40px; min-height: 60vh; }
-      .hero-right { flex-direction: row; }
-      .c-block:first-child { border-bottom: none; border-right: 1px solid var(--purple-mid); }
-      .section-inner { padding: 80px 32px; }
-      .overview-strip { grid-template-columns: 1fr; }
-      .ov-cell { border-right: none; border-bottom: 1px solid var(--gray-border); }
-      .ov-cell:last-child { border-bottom: none; }
-      .prelim-grid { grid-template-columns: 1fr; }
-      .r-timeline { grid-template-columns: 1fr 1fr; }
-      .r-bottom { grid-template-columns: 1fr; gap: 40px; }
-      .big-numbers { grid-template-columns: 1fr 1fr; }
-      .numbers-grid { grid-template-columns: 1fr 1fr; }
-      .findings-intro { grid-template-columns: 1fr; gap: 40px; }
-      .finding-categories { grid-template-columns: 1fr; }
-      .recs-grid { grid-template-columns: 1fr 1fr; }
-      .asq-grid { grid-template-columns: 1fr; }
-      .reflection-grid { grid-template-columns: 1fr; gap: 48px; }
-      .t-row { grid-template-columns: 40px 1fr; }
-      .t-row-ideal { display: none; }
+    @media (max-width: 1000px) {
+      .versus { grid-template-columns: 1fr; }
+      .vs-mid { writing-mode: horizontal-tb; padding: 12px; }
+      .two-up, .dash, .tasks, .fpanel { grid-template-columns: 1fr; }
+      .people { grid-template-columns: 1fr 1fr; }
+      .recs { grid-template-columns: 1fr 1fr; }
+      .hbar { grid-template-columns: 150px 1fr 32px; }
     }
     @media (max-width: 640px) {
-      nav.topnav { padding: 16px 20px; }
-      .nav-links { gap: 18px; }
-      .hero-left { padding: 40px 24px 36px; }
-      .hero-right { flex-direction: column; }
-      .c-block:first-child { border-right: none; border-bottom: 1px solid var(--purple-mid); }
-      .section-inner { padding: 64px 24px; }
-      .r-timeline { grid-template-columns: 1fr; }
-      .big-numbers { grid-template-columns: 1fr 1fr; }
-      .numbers-grid { grid-template-columns: 1fr; }
-      .recs-grid { grid-template-columns: 1fr; }
+      .recs, .people { grid-template-columns: 1fr; }
+      .vs-side { padding: 32px 24px; }
+      .hbar { grid-template-columns: 1fr 32px; } .hbar .track { grid-column: 1 / -1; grid-row: 2; }
+      .timing { padding: 24px 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .issues li, .rcard.enter { animation: none; }
+      .nps .bar div { transform: none; transition: none; }
+      .gauge .arc, .trow .tb, .tline { transition: none; }
     }
   </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<!-- TOPNAV -->
-<nav class="topnav">
-  <a class="nav-logo" href="index.html">प्र</a>
+<nav class="topnav" aria-label="Site">
+  <a class="nav-logo" href="index.html" aria-label="Home">प्र</a>
   <ul class="nav-links">
     <li><a href="index.html#work">Work</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="index.html#contact">Contact</a></li>
-    <li><a href="resume.pdf" class="nav-resume">Resume</a></li>
+    <li><a href="resume.pdf" class="nav-resume" data-magnetic>Resume</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-body">
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top" data-reveal="fade">
+      <a class="back" href="index.html#work">← All work</a>
+      <span class="eyebrow">2024 · DePaul HCI 460</span>
+    </div>
+    <p class="eyebrow c" data-reveal style="margin-bottom:22px">STC Hub · Enterprise usability study</p>
+    <h1 data-split>The portal worked. Every time. <em>So why did nobody trust it?</em></h1>
+    <div class="hero-lede">
+      <p data-reveal style="--d:.3s">End-to-end usability testing of STC Hub, the internal HR portal at Saudi Telecom — one of the largest telecoms in the Middle East &amp; Africa. Every employee completed every task. <mark class="sweep">Most of them would warn others away.</mark></p>
+      <dl class="facts" data-reveal style="--d:.45s">
+        <div><dt>Role</dt><dd>UX Researcher</dd></div>
+        <div><dt>Team</dt><dd>2 researchers</dd></div>
+        <div><dt>Methods</dt><dd>Think-aloud · SUS · NPS · ASQ</dd></div>
+        <div><dt>Timeline</dt><dd>6 weeks · 5 sessions on Zoom</dd></div>
+      </dl>
+    </div>
 
-    <!-- LEFT dark -->
-    <div class="hero-left">
-      <div>
-        <p class="hero-tag">Usability Testing · Enterprise UX · Mixed Methods · 2024</p>
-        <p class="hero-kicker">The portal worked. Every single time.</p>
-        <h1 class="hero-title">So why did <em>nobody trust it?</em></h1>
+    <div class="versus" data-reveal="scale">
+      <div class="vs-side">
+        <p class="eyebrow">Task completion rate</p>
+        <div class="vs-num vs-good" data-count="100" data-suffix="%" data-duration="1800">100%</div>
+        <p class="vs-cap"><strong>Every task completed.</strong> Zero failures across 5 users and 3 tasks on a live portal.</p>
       </div>
-      <div class="hero-bottom">
-        <div class="hero-meta">
-          <div class="hero-meta-chip">
-            <p class="hero-meta-chip-label">What</p>
-            <p class="hero-meta-chip-val">End-to-end usability testing on STC Hub</p>
-          </div>
-          <div class="hero-meta-chip">
-            <p class="hero-meta-chip-label">Where</p>
-            <p class="hero-meta-chip-val">Saudi Telecom's internal HR portal - One of the largest telecoms in the Middle East &amp; Africa</p>
-          </div>
-          <div class="hero-meta-chip">
-            <p class="hero-meta-chip-label">How</p>
-            <p class="hero-meta-chip-val">5 real employees · 3 high-stakes tasks · live system · Zoom</p>
-          </div>
-          <div class="hero-meta-chip">
-            <p class="hero-meta-chip-label">The contradiction</p>
-            <p class="hero-meta-chip-val">100% completion rate · −40 NPS · the gap was the entire story</p>
-          </div>
-        </div>
-        <div class="hero-pills">
-          <span class="hero-pill"><b>Role</b>UX Researcher</span>
-          <span class="hero-pill"><b>Team</b>2 researchers</span>
-          <span class="hero-pill"><b>Methods</b>Think-Aloud · SUS · NPS · ASQ</span>
-          <span class="hero-pill"><b>Sessions</b>5 participants · Zoom</span>
-          <span class="hero-pill"><b>Timeline</b>6 weeks</span>
-        </div>
+      <div class="vs-mid" aria-hidden="true">but</div>
+      <div class="vs-side">
+        <p class="eyebrow">Net Promoter Score</p>
+        <div class="vs-num vs-bad" data-count="-40" data-duration="2200">−40</div>
+        <p class="vs-cap"><strong>60% would actively warn others away.</strong> 20% passives · 20% promoters · 60% detractors.</p>
       </div>
     </div>
 
-    <!-- RIGHT contradiction panel -->
-    <div class="hero-right">
-      <div class="c-block">
-        <p class="c-eyebrow">Task Completion Rate</p>
-        <p class="c-num green">100%</p>
-        <p class="c-desc">Every task completed — but completion isn't the whole story.</p>
-        <p class="c-sub">Zero failures across 5 users and 3 tasks on a live portal.</p>
-      </div>
-      <p class="c-bridge">but</p>
-      <div class="c-block">
-        <p class="c-eyebrow">Net Promoter Score</p>
-        <p class="c-num red">−40</p>
-        <p class="c-desc">60% of users would actively warn others away.</p>
-        <p class="c-sub">20% passives · 20% promoters · 60% detractors.</p>
-      </div>
-    </div>
-
+    <section class="tldr" aria-label="Summary">
+      <div data-reveal><h2>Context</h2><p>An HR portal used by <strong>every employee, every day</strong> — vacation, KPIs, internal recruitment.</p></div>
+      <div data-reveal style="--d:.1s"><h2>Approach</h2><p>Heuristic evaluation + cognitive walkthrough, then <strong>5 think-aloud sessions</strong> with real employees.</p></div>
+      <div data-reveal style="--d:.2s"><h2>Insight</h2><p>The system worked; the experience didn't. <strong>Completion hid the cost.</strong></p></div>
+      <div data-reveal style="--d:.3s"><h2>Output</h2><p><strong>15+ prioritised recommendations</strong> across four root-cause categories.</p></div>
+    </section>
   </div>
+</header>
 
-  <!-- SECTION NAV — inside hero, sticky on scroll -->
-  <nav class="section-nav">
-    <div class="sn-inner">
-      <a href="#overview"        class="sn-item"><span class="sn-num">01</span><span class="sn-label">Overview</span></a>
-      <a href="#prelim"          class="sn-item"><span class="sn-num">02</span><span class="sn-label">Preliminary Research</span></a>
-      <a href="#contradiction"   class="sn-item"><span class="sn-num">03</span><span class="sn-label">The Numbers</span></a>
-      <a href="#research"        class="sn-item"><span class="sn-num">04</span><span class="sn-label">Research Setup</span></a>
-      <a href="#findings"        class="sn-item"><span class="sn-num">05</span><span class="sn-label">Findings</span></a>
-      <a href="#recommendations" class="sn-item"><span class="sn-num">06</span><span class="sn-label">Recommendations</span></a>
-      <a href="#reflection"      class="sn-item"><span class="sn-num">07</span><span class="sn-label">Reflection</span></a>
-    </div>
-  </nav>
+<nav class="chapter-nav" aria-label="Chapters">
+  <ol>
+    <li><a href="#problem"><span>01</span>The problem</a></li>
+    <li><a href="#thinking"><span>02</span>The research</a></li>
+    <li><a href="#findings"><span>03</span>Findings</a></li>
+    <li><a href="#outcome"><span>04</span>What changed</a></li>
+  </ol>
+</nav>
 
-</section>
+<main id="main">
 
-<!-- OVERVIEW -->
-<section class="overview-section" id="overview">
-  <div class="section-inner fade-in">
-    <p class="section-label purple">The Context</p>
-    <h2 class="overview-lead">STC Hub — built by departments, <em>not designers.</em></h2>
-    <p class="overview-byline">Every service was built for internal operations — not for the employee using it. We ran end-to-end usability testing to find out exactly where it broke down.</p>
-
-    <div class="overview-strip">
-      <div class="ov-cell">
-        <p class="ov-eye">The company</p>
-        <h3 class="ov-head">Saudi Telecom Company</h3>
-        <p class="ov-body">One of the largest telecoms in the Middle East & Africa. STC Hub is used by every employee, every day.</p>
-      </div>
-      <div class="ov-cell">
-        <p class="ov-eye">The portal</p>
-        <h3 class="ov-head">Internal HR portal</h3>
-        <p class="ov-body">Vacation requests, KPI submissions, internal recruitment — high-stakes tasks with no room for confusion.</p>
-      </div>
-      <div class="ov-cell">
-        <p class="ov-eye">The problem</p>
-        <h3 class="ov-head">56 violations before testing even started</h3>
-        <p class="ov-body">Heuristic eval + cognitive walkthrough flagged a 25.6% failure rate. The sessions confirmed every prediction.</p>
-      </div>
-    </div>
-
-    <!-- quick facts row -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px;">
-      <div style="background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:4px;padding:18px 20px;">
-        <p style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--purple);opacity:0.7;margin-bottom:6px;">Sessions</p>
-        <p style="font-size:15px;font-weight:600;color:var(--black);">5 users · 1hr each</p>
-      </div>
-      <div style="background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:4px;padding:18px 20px;">
-        <p style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--purple);opacity:0.7;margin-bottom:6px;">Tasks tested</p>
-        <p style="font-size:15px;font-weight:600;color:var(--black);">3 HR workflows</p>
-      </div>
-      <div style="background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:4px;padding:18px 20px;">
-        <p style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--purple);opacity:0.7;margin-bottom:6px;">Method</p>
-        <p style="font-size:15px;font-weight:600;color:var(--black);">Think-aloud · live portal</p>
-      </div>
-      <div style="background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:4px;padding:18px 20px;">
-        <p style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--purple);opacity:0.7;margin-bottom:6px;">Outcome</p>
-        <p style="font-size:15px;font-weight:600;color:var(--black);">15+ prioritized fixes</p>
-      </div>
-    </div>
-
-    <div class="overview-img">
-      <img src="assets/stc/stc_dashboard.png" alt="STC Hub portal dashboard" onerror="this.parentElement.innerHTML='<div class=\'overview-img-ph\'>stc_dashboard.png — STC Hub portal homepage screenshot</div>'" />
-    </div>
-  </div>
-</section>
-
-<!-- ── PRELIMINARY RESEARCH ── -->
-<section class="prelim-section" id="prelim">
-  <div class="section-inner fade-in">
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-bottom:40px;">
-
-      <!-- LEFT: heading + two stat pills + short para -->
-      <div>
-        <p class="section-label purple">Before Testing</p>
-        <h2 class="section-heading">We already knew something was wrong.</h2>
-        <p style="font-size:13px;color:var(--gray-text);line-height:1.65;margin-top:10px;">Two evaluations ran before users sat down. Both pointed to the same gap — a system built without the user in mind.</p>
-        <div style="display:flex;gap:12px;margin-top:24px;">
-          <div style="flex:1;background:var(--purple-dark);border-radius:4px;padding:20px 22px;">
-            <div style="font-family:var(--font-heading);font-size:36px;color:#fff;line-height:1;margin-bottom:4px;">56</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.4;">heuristic violations across Nielsen's 10 principles</div>
-          </div>
-          <div style="flex:1;background:var(--purple-dark);border-radius:4px;padding:20px 22px;">
-            <div style="font-family:var(--font-heading);font-size:36px;color:#fff;line-height:1;margin-bottom:4px;">25.6%</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.55);line-height:1.4;">cognitive walkthrough failure rate before any user touched it</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT: what we did -->
-      <div style="padding-top:6px;">
-        <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--gray-border);">
-          <div style="width:32px;height:32px;border-radius:50%;background:var(--purple-light);border:1px solid var(--purple-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:var(--purple);">①</div>
-          <div>
-            <p style="font-size:13px;font-weight:600;color:var(--black);margin-bottom:3px;">Heuristic Evaluation</p>
-            <p style="font-size:12px;color:var(--gray-text);line-height:1.5;">Assessed the interface against Nielsen's 10 usability principles. Found violations across all 10 — most severely in Aesthetic &amp; Minimalist Design.</p>
-          </div>
-        </div>
-        <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--gray-border);">
-          <div style="width:32px;height:32px;border-radius:50%;background:var(--purple-light);border:1px solid var(--purple-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:var(--purple);">②</div>
-          <div>
-            <p style="font-size:13px;font-weight:600;color:var(--black);margin-bottom:3px;">Cognitive Walkthrough</p>
-            <p style="font-size:12px;color:var(--gray-text);line-height:1.5;">Applied Lewis &amp; Rieman's 4 evaluation questions to each task flow. 1 in 4 steps was predicted to fail before a real user ever sat down.</p>
-          </div>
-        </div>
-        <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 0;">
-          <div style="width:32px;height:32px;border-radius:50%;background:var(--purple-light);border:1px solid var(--purple-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:var(--purple);">③</div>
-          <div>
-            <p style="font-size:13px;font-weight:600;color:var(--black);margin-bottom:3px;">3 Tasks Selected</p>
-            <p style="font-size:12px;color:var(--gray-text);line-height:1.5;">Vacation request, KPI submission, internal recruitment — prioritized based on frequency, stakes, and walkthrough failure rate.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- full heuristic table — compact 2-col grid -->
-    <p style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gray-text);margin-bottom:14px;">Violation breakdown — all 10 heuristics</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--gray-border);border:1px solid var(--gray-border);border-radius:4px;overflow:hidden;margin-bottom:16px;">
-      <div style="background:var(--purple);padding:12px 16px;grid-column:span 2;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.6);">Nielsen's 10 Heuristics</span>
-        <span style="font-family:var(--font-heading);font-size:22px;color:#fff;">56 <span style="font-size:11px;color:rgba(255,255,255,0.45);font-family:var(--font-body);">total violations</span></span>
-      </div>
-      <div style="background:var(--purple-light);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;font-weight:600;color:var(--purple-dark);">Aesthetic &amp; Minimalist Design</span>
-        <span style="font-family:var(--font-heading);font-size:24px;color:var(--purple-dark);">17</span>
-      </div>
-      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:var(--black);">Error Prevention</span>
-        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">8</span>
-      </div>
-      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:var(--black);">Visibility of System Status</span>
-        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">5</span>
-      </div>
-      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:var(--black);">Recognition rather than Recall</span>
-        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">5</span>
-      </div>
-      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:var(--black);">User Control and Freedom</span>
-        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">4</span>
-      </div>
-      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:var(--black);">Help and Documentation</span>
-        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">4</span>
-      </div>
-      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:var(--black);">Flexibility and Efficiency of Use</span>
-        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">3</span>
-      </div>
-      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:var(--black);">Match — System &amp; Real World</span>
-        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">2</span>
-      </div>
-      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:var(--black);">Consistency and Standards</span>
-        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">2</span>
-      </div>
-      <div style="background:#fff;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:12px;color:var(--black);">Help Users Recover from Errors</span>
-        <span style="font-family:var(--font-heading);font-size:18px;color:var(--purple);">1</span>
-      </div>
-    </div>
-
-    <!-- tasks as cards -->
-    <div style="display:flex;gap:12px;">
-      <div style="flex:1;background:#fff;border:1px solid var(--gray-border);border-radius:4px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px;">
-        <div style="width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+  <!-- ═════════ 01 ═════════ -->
+  <section class="chapter" id="problem">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">01</div>
         <div>
-          <p style="font-size:12px;font-weight:600;color:var(--black);line-height:1.4;">Submit Vacation Request</p>
-          <p style="font-size:11px;color:var(--gray-text);margin-top:2px;">Ideal: 1 min · 19 clicks</p>
+          <p class="eyebrow c">Chapter one</p>
+          <h2 class="chapter-title" data-split>Built by departments, <em>not designers.</em></h2>
         </div>
       </div>
-      <div style="flex:1;background:#fff;border:1px solid var(--gray-border);border-radius:4px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px;">
-        <div style="width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+
+      <div class="block block-head">
+        <p class="eyebrow">The context</p>
+        <div data-reveal>
+          <h3>A portal everyone uses, designed for no one in particular.</h3>
+          <p>Every service in STC Hub was built for internal operations — not for the employee using it. Vacation requests, KPI submissions and internal recruitment are <strong>high-stakes tasks with no room for confusion</strong>, yet each one followed its department's logic instead of the user's.</p>
+        </div>
+      </div>
+
+      <figure class="fig" data-reveal="clip" style="margin-bottom:120px">
+        <div class="frame"><img src="assets/stc/stc_dashboard.png" alt="STC Hub portal homepage with greeting, news carousel and app shortcuts." loading="lazy"></div>
+        <figcaption>STC Hub home — the starting point for every task we tested.</figcaption>
+      </figure>
+
+      <div class="block block-head">
+        <p class="eyebrow">Before testing</p>
         <div>
-          <p style="font-size:12px;font-weight:600;color:var(--black);line-height:1.4;">Add KPIs for the Year</p>
-          <p style="font-size:11px;color:var(--gray-text);margin-top:2px;">Ideal: 4 min · 23 clicks</p>
+          <h3 data-reveal>We already knew something was wrong.</h3>
+          <p data-reveal>Two expert evaluations ran before a single user sat down. Both pointed at the same gap.</p>
+          <div class="two-up">
+            <div class="metric" data-reveal><div class="big" data-count="56">56</div><p>Heuristic violations across all 10 of Nielsen's principles — most severely in Aesthetic &amp; Minimalist Design.</p></div>
+            <div class="metric" data-reveal style="--d:.1s"><div class="big" data-count="25.6" data-decimals="1" data-suffix="%">25.6%</div><p>Predicted failure rate from a cognitive walkthrough (Lewis &amp; Rieman's 4 questions) — 1 in 4 steps expected to fail.</p></div>
+          </div>
         </div>
       </div>
-      <div style="flex:1;background:#fff;border:1px solid var(--gray-border);border-radius:4px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px;">
-        <div style="width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Violation breakdown</p>
         <div>
-          <p style="font-size:12px;font-weight:600;color:var(--black);line-height:1.4;">Submit Internal Recruitment</p>
-          <p style="font-size:11px;color:var(--gray-text);margin-top:2px;">Ideal: 3 min · 35 clicks</p>
+          <h3 data-reveal>Where the 56 violations clustered.</h3>
+          <div class="hbars" id="hbars" role="list" aria-label="Heuristic violations by principle"></div>
+          <figure class="fig" data-reveal="clip">
+            <div class="frame"><img src="assets/stc/heuristic-eval.jpg" alt="Preliminary research slide: heuristic evaluation table with violation counts per principle, and cognitive walkthrough questions with identified tasks and a 25.64% failure rate." loading="lazy"></div>
+            <figcaption>Our preliminary research summary, used to choose the three tasks to test.</figcaption>
+          </figure>
         </div>
       </div>
     </div>
+  </section>
 
-  </div>
-</section>
+  <!-- core finding band -->
+  <section class="band" aria-labelledby="core">
+    <div class="wrap">
+      <p class="eyebrow" style="margin-bottom:22px">The core finding</p>
+      <h2 class="chapter-title" id="core" data-split style="max-width:980px">The system worked. The experience didn't. <em style="color:#C9A7F0">Those are not the same thing.</em></h2>
+      <div class="stats" style="--cols:4;margin-top:72px">
+        <div class="stat"><p class="stat-val" data-count="100" data-suffix="%" style="color:#9BE3B5">100%</p><p class="stat-lbl">Task completion across all 5 participants and 3 tasks</p></div>
+        <div class="stat"><p class="stat-val" data-count="-40" style="color:#FFA19A">−40</p><p class="stat-lbl">Net Promoter Score — 60% detractors</p></div>
+        <div class="stat"><p class="stat-val" data-count="65" style="color:#FFD68A">65</p><p class="stat-lbl">SUS — just below the 68 “acceptable” threshold</p></div>
+        <div class="stat"><p class="stat-val" data-count="5" data-decimals="1" style="color:#FFA19A">5.0</p><p class="stat-lbl">Average ASQ on Task 2 (1 = satisfied, 7 = not)</p></div>
+      </div>
+      <blockquote class="pull" data-reveal style="margin:110px 0 0">Users could technically do their jobs — but every interaction cost them time, trust, and confidence.</blockquote>
+    </div>
+  </section>
 
-<!-- CONTRADICTION -->
-<section class="contradiction-section" id="contradiction">
-  <div class="section-inner fade-in">
-    <p class="section-label" style="color:rgba(255,255,255,0.45);">The Core Finding</p>
-    <h2 class="section-heading" style="color:var(--white);max-width:800px;">The system worked. The experience didn't. And those are not the same thing.</h2>
-    <p class="section-sub" style="color:rgba(255,255,255,0.45);">This tension — between technical success and user dissatisfaction — was the defining insight of the entire study.</p>
-    <div class="big-numbers">
-      <div class="big-number-cell"><div class="big-number-val positive">100%</div><div class="big-number-label">Task completion rate across all 5 participants and all 3 tasks</div></div>
-      <div class="big-number-cell"><div class="big-number-val negative">−40</div><div class="big-number-label">Net Promoter Score — 60% detractors, 20% passives, 20% promoters</div></div>
-      <div class="big-number-cell"><div class="big-number-val warning">65</div><div class="big-number-label">SUS Score — just below the 68 "acceptable" industry threshold</div></div>
-      <div class="big-number-cell"><div class="big-number-val negative">5.0</div><div class="big-number-label">Average ASQ on Task 2 — not at all satisfied (scale of 1–7)</div></div>
-    </div>
-    <div class="tension-block">
-      <p class="tension-quote">"Users could technically do their jobs — but every interaction cost them time, trust, and confidence."</p>
-      <p class="tension-explanation">Task 2 (KPI) took 5.5 min on average vs ideal 4 min. Task 3 (Recruitment) averaged 3.8 min vs ideal 3. Not catastrophic — death by a thousand cuts. A system that makes employees feel incompetent doing routine tasks is a system that has already failed, even when the logs show 100% completion.</p>
-    </div>
-  </div>
-</section>
+  <!-- ═════════ 02 ═════════ -->
+  <section class="chapter" id="thinking">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">02</div>
+        <div>
+          <p class="eyebrow c">Chapter two</p>
+          <h2 class="chapter-title" data-split>5 employees. 3 tasks. <em>One think-aloud protocol.</em></h2>
+        </div>
+      </div>
 
-<!-- RESEARCH SETUP -->
-<section class="research-section" id="research">
-  <div class="section-inner fade-in">
-    <p class="section-label purple">How We Researched</p>
-    <h2 class="section-heading">5 real employees. 3 tasks. One think-aloud protocol.</h2>
-    <p class="section-sub">All participants were active STC employees from the procurement department — identified through usage data as the highest-frequency users of these specific services.</p>
-    <div class="r-timeline">
-      <div class="rt-step"><div class="rt-arrow">→</div><div class="rt-num">01</div><span class="rt-icon">🔍</span><p class="rt-title">Heuristic Evaluation</p><p class="rt-body">56 violations found across all 10 Nielsen principles — before any users were involved.</p></div>
-      <div class="rt-step"><div class="rt-arrow">→</div><div class="rt-num">02</div><span class="rt-icon">🗺️</span><p class="rt-title">Cognitive Walkthrough</p><p class="rt-body">Lewis & Rieman's 4 questions applied to each task. 25.6% failure rate identified.</p></div>
-      <div class="rt-step"><div class="rt-arrow">→</div><div class="rt-num">03</div><span class="rt-icon">🎯</span><p class="rt-title">Participant Recruitment</p><p class="rt-body">Highest-volume HR service users identified via usage data. 5 procurement employees in Saudi Arabia.</p></div>
-      <div class="rt-step"><div class="rt-arrow">→</div><div class="rt-num">04</div><span class="rt-icon">🎤</span><p class="rt-title">Think-Aloud Sessions</p><p class="rt-body">5 × 1-hour Zoom sessions. Participants verbalized every thought completing 3 live tasks.</p></div>
-      <div class="rt-step"><div class="rt-num">05</div><span class="rt-icon">📊</span><p class="rt-title">ASQ · SUS · NPS</p><p class="rt-body">Post-task ASQ after each scenario. SUS and NPS collected once all tasks were complete.</p></div>
-    </div>
-    <div class="r-bottom">
-      <div>
-        <p class="section-label" style="margin-bottom:18px;">Participants</p>
-        <div class="p-chips">
-          <div class="p-chip"><div class="p-av">A</div><div><p class="p-id">User 01 · Age 41 · Male</p><p class="p-role">Procurement Expert</p></div></div>
-          <div class="p-chip"><div class="p-av">A</div><div><p class="p-id">User 02 · Age 30 · Male</p><p class="p-role">Vendor Management</p></div></div>
-          <div class="p-chip"><div class="p-av">B</div><div><p class="p-id">User 03 · Age 35 · Female</p><p class="p-role">Procurement Support</p></div></div>
-          <div class="p-chip"><div class="p-av">S</div><div><p class="p-id">User 04 · Age 25 · Female</p><p class="p-role">Lead Procurement Analyst</p></div></div>
-          <div class="p-chip"><div class="p-av">A</div><div><p class="p-id">User 05 · Age 34 · Male</p><p class="p-role">Vendor Support</p></div></div>
+      <div class="block block-head">
+        <p class="eyebrow">Research setup</p>
+        <div>
+          <h3 data-reveal>From expert review to real people, in five steps.</h3>
+          <div class="timeline" style="--n:5">
+            <div data-reveal><div class="dot"></div><span class="k">01</span><h5>Heuristic evaluation</h5><p>56 violations across all 10 Nielsen principles.</p></div>
+            <div data-reveal style="--d:.1s"><div class="dot"></div><span class="k">02</span><h5>Cognitive walkthrough</h5><p>Lewis &amp; Rieman's 4 questions per task. 25.6% failure rate.</p></div>
+            <div data-reveal style="--d:.2s"><div class="dot"></div><span class="k">03</span><h5>Recruitment</h5><p>Highest-volume HR service users, found via usage data.</p></div>
+            <div data-reveal style="--d:.3s"><div class="dot"></div><span class="k">04</span><h5>Think-aloud</h5><p>5 × 1-hour Zoom sessions on the live portal.</p></div>
+            <div data-reveal style="--d:.4s"><div class="dot"></div><span class="k">05</span><h5>ASQ · SUS · NPS</h5><p>ASQ after each task; SUS and NPS at the end.</p></div>
+          </div>
         </div>
       </div>
-      <div>
-        <p class="section-label" style="margin-bottom:18px;">Three Tasks Tested</p>
-        <div class="t-rows">
-          <div class="t-row"><div class="t-row-num">01</div><div><p class="t-row-name">Submit Vacation Request</p><p class="t-row-desc">Submit annual leave while delegating a colleague to cover during the absence.</p></div><div class="t-row-ideal"><div class="t-ideal-val">1 min</div><div class="t-ideal-lbl">Ideal time</div></div></div>
-          <div class="t-row"><div class="t-row-num">02</div><div><p class="t-row-name">Add KPIs for the Year</p><p class="t-row-desc">Navigate to the KPI portal and add annual performance objectives as a new employee.</p></div><div class="t-row-ideal"><div class="t-ideal-val">4 min</div><div class="t-ideal-lbl">Ideal time</div></div></div>
-          <div class="t-row"><div class="t-row-num">03</div><div><p class="t-row-name">Submit Internal Recruitment</p><p class="t-row-desc">Find and apply for a managerial position in a different department.</p></div><div class="t-row-ideal"><div class="t-ideal-val">3 min</div><div class="t-ideal-lbl">Ideal time</div></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- THE NUMBERS -->
-<section class="numbers-section" id="numbers">
-  <div class="section-inner fade-in">
-    <p class="section-label purple">Quantitative Results</p>
-    <h2 class="section-heading">What the data said</h2>
-    <p class="section-sub">Three measurement instruments. One consistent signal — tolerable for familiar tasks, deeply frustrating for everything else.</p>
-    <div class="numbers-grid">
-      <div class="score-card"><div class="score-name">SUS Score</div><div class="score-val purple">65</div><div class="score-verdict">Above average — barely</div><div class="score-sub">Industry "acceptable" threshold is 68. STC Hub sits just below — usable but not comfortable.</div></div>
-      <div class="score-card"><div class="score-name">Net Promoter Score</div><div class="score-val red">−40</div><div class="score-verdict">Critical dissatisfaction</div><div class="score-sub">60% detractors · 20% passives · 20% promoters. Systemic trust erosion, not isolated friction.</div></div>
-      <div class="score-card"><div class="score-name">Task Completion</div><div class="score-val purple">100%</div><div class="score-verdict">Every task, every user</div><div class="score-sub">But 40% deviated from optimal path on Tasks 2 & 3 — completion came at a real cost.</div></div>
-    </div>
-    <p class="section-label" style="margin-bottom:20px;">ASQ by Task — 1 = Satisfied · 7 = Not Satisfied</p>
-    <div class="asq-grid">
-      <div class="asq-card"><p class="asq-task">Task 1 — Vacation Request</p><div class="asq-score good">2.1</div><p class="asq-verdict">Nearly satisfied. Frequently used, well understood.</p></div>
-      <div class="asq-card"><p class="asq-task">Task 2 — KPI Submission</p><div class="asq-score bad">5.0</div><p class="asq-verdict">Not at all satisfied. Worst task by every metric.</p></div>
-      <div class="asq-card"><p class="asq-task">Task 3 — Internal Recruitment</p><div class="asq-score mid">4.2</div><p class="asq-verdict">Not satisfied. Unclear workflow, complex form fields.</p></div>
-    </div>
-    <p class="section-label" style="margin-bottom:16px;margin-top:48px;">Completion Time vs Ideal</p>
-    <table class="timing-table">
-      <thead><tr><th>Participant</th><th>Task 1 (ideal: 1 min)</th><th>Task 2 (ideal: 4 min)</th><th>Task 3 (ideal: 3 min)</th></tr></thead>
-      <tbody>
-        <tr><td>User 1</td><td class="over">2:15</td><td class="over">5:30</td><td class="over">4:12</td></tr>
-        <tr><td>User 2</td><td class="over">2:34</td><td class="way-over">5:57</td><td class="over">4:09</td></tr>
-        <tr><td>User 3</td><td class="over">1:44</td><td class="over">4:50</td><td class="over">3:48</td></tr>
-        <tr><td>User 4</td><td class="way-over">3:10</td><td class="way-over">6:12</td><td class="way-over">4:53</td></tr>
-        <tr><td>User 5</td><td class="over">2:29</td><td class="way-over">6:22</td><td class="over">3:20</td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:11px;color:var(--gray-text);margin-top:8px;font-style:italic;">Think-aloud protocol adds verbalization time. Any completion exceeding ideal + 1:50 flagged as an efficiency failure.</p>
-  </div>
-</section>
+      <div class="block block-head">
+        <p class="eyebrow">Participants</p>
+        <div>
+          <h3 data-reveal>Active employees from procurement — the heaviest users of these services.</h3>
+          <div class="people">
+            <div class="person" data-reveal data-tilt="8"><div class="av">01</div><b>Procurement Expert</b><small>Age 41 · Male</small></div>
+            <div class="person" data-reveal style="--d:.06s" data-tilt="8"><div class="av">02</div><b>Vendor Management</b><small>Age 30 · Male</small></div>
+            <div class="person" data-reveal style="--d:.12s" data-tilt="8"><div class="av">03</div><b>Procurement Support</b><small>Age 35 · Female</small></div>
+            <div class="person" data-reveal style="--d:.18s" data-tilt="8"><div class="av">04</div><b>Lead Procurement Analyst</b><small>Age 25 · Female</small></div>
+            <div class="person" data-reveal style="--d:.24s" data-tilt="8"><div class="av">05</div><b>Vendor Support</b><small>Age 34 · Male</small></div>
+          </div>
+          <div class="tasks">
+            <div class="task" data-reveal><span class="k">1</span><h5>Submit a vacation request</h5><p>Request annual leave while delegating a colleague to cover.</p><div class="ideal"><div><strong>1 min</strong>ideal time</div><div><strong>19</strong>clicks</div></div></div>
+            <div class="task" data-reveal style="--d:.1s"><span class="k">2</span><h5>Add KPIs for the year</h5><p>Find the KPI portal and add annual objectives as a new employee.</p><div class="ideal"><div><strong>4 min</strong>ideal time</div><div><strong>23</strong>clicks</div></div></div>
+            <div class="task" data-reveal style="--d:.2s"><span class="k">3</span><h5>Apply internally</h5><p>Find and apply for a managerial role in another department.</p><div class="ideal"><div><strong>3 min</strong>ideal time</div><div><strong>35</strong>clicks</div></div></div>
+          </div>
+        </div>
+      </div>
 
-<!-- FINDINGS -->
-<section class="findings-section" id="findings">
-  <div class="section-inner fade-in">
-    <p class="section-label purple">What We Found</p>
-    <h2 class="section-heading">Four categories of failure. All pointing to the same root cause.</h2>
-    <div class="findings-intro">
-      <div class="findings-body">
-        <p>Every problem we identified across five sessions fell into one of four categories. None were random — all were symptoms of the same underlying issue: services built by departments for departments, not for the people who use them every day.</p>
-        <p style="margin-top:14px;">We used Jakob Nielsen's 0–4 severity scale to rate each issue, from cosmetic problems to usability catastrophes requiring immediate attention.</p>
-      </div>
-      <div class="severity-legend">
-        <p class="severity-legend-title">Nielsen Severity Scale</p>
-        <div class="severity-items">
-          <div class="severity-item"><div class="severity-dot sev-4"></div><div><div class="severity-item-text">Severity 4 — Usability Catastrophe</div><div class="severity-item-label">Imperative to fix before release</div></div></div>
-          <div class="severity-item"><div class="severity-dot sev-3"></div><div><div class="severity-item-text">Severity 3 — Major Issue</div><div class="severity-item-label">High priority fix</div></div></div>
-          <div class="severity-item"><div class="severity-dot sev-2"></div><div><div class="severity-item-text">Severity 2 — Minor Issue</div><div class="severity-item-label">Low priority fix</div></div></div>
-          <div class="severity-item"><div class="severity-dot sev-1"></div><div><div class="severity-item-text">Severity 1 — Cosmetic</div><div class="severity-item-label">Fix if time allows</div></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="finding-categories">
-      <div class="finding-cat">
-        <div class="finding-cat-head"><div class="finding-cat-num">01</div><div><p class="finding-cat-title">Workflow Opacity</p><p class="finding-cat-sub">No visibility into what happens after submission. No approval chain, SLA, or next steps.</p></div></div>
-        <div class="finding-issues">
-          <div class="finding-issue"><div class="finding-issue-sev sev-3"></div><div><div class="finding-issue-text">Vacation request shows no workflow — users don't know if their manager will be notified</div><div class="finding-issue-rec">→ Add expandable workflow preview before submission</div></div></div>
-          <div class="finding-issue"><div class="finding-issue-sev sev-4"></div><div><div class="finding-issue-text">Delegated employee has no approve/reject option — only notified after the fact</div><div class="finding-issue-rec">→ Add approve/reject before request reaches management</div></div></div>
-          <div class="finding-issue"><div class="finding-issue-sev sev-3"></div><div><div class="finding-issue-text">KPI workflow changes annually with no visible current-year flow</div><div class="finding-issue-rec">→ Auto-updated flow display synced to HR updates</div></div></div>
-          <div class="finding-issue"><div class="finding-issue-sev sev-4"></div><div><div class="finding-issue-text">Recruitment confidentiality policy never communicated — causes anxiety, deters use</div><div class="finding-issue-rec">→ Surface HR policy link directly in the service</div></div></div>
-        </div>
-      </div>
-      <div class="finding-cat">
-        <div class="finding-cat-head"><div class="finding-cat-num">02</div><div><p class="finding-cat-title">Navigation & Discoverability</p><p class="finding-cat-sub">40% of users went off happy path on Tasks 2 & 3. Services buried or split across platforms.</p></div></div>
-        <div class="finding-issues">
-          <div class="finding-issue"><div class="finding-issue-sev sev-2"></div><div><div class="finding-issue-text">KPI submission lives on a separate platform (Add'e) — users lose context immediately</div><div class="finding-issue-rec">→ Consolidate into a single portal interface</div></div></div>
-          <div class="finding-issue"><div class="finding-issue-sev sev-2"></div><div><div class="finding-issue-text">Internal recruitment redirects to an external site — users feel lost and disoriented</div><div class="finding-issue-rec">→ Embed or create clear wayfinding back</div></div></div>
-          <div class="finding-issue"><div class="finding-issue-sev sev-3"></div><div><div class="finding-issue-text">Users took up to 35 sec to locate the KPI service vs 25-sec ideal — no navigation aids</div><div class="finding-issue-rec">→ Search and shortcuts on the main dashboard</div></div></div>
-        </div>
-      </div>
-      <div class="finding-cat">
-        <div class="finding-cat-head"><div class="finding-cat-num">03</div><div><p class="finding-cat-title">Automation & Integration Gaps</p><p class="finding-cat-sub">The system repeatedly asked users to re-enter information it already had access to.</p></div></div>
-        <div class="finding-issues">
-          <div class="finding-issue"><div class="finding-issue-sev sev-2"></div><div><div class="finding-issue-text">After selecting vacation dates, users had to re-enter the same dates for delegation</div><div class="finding-issue-rec">→ Auto-populate delegation dates from vacation selection</div></div></div>
-          <div class="finding-issue"><div class="finding-issue-sev sev-2"></div><div><div class="finding-issue-text">KPI question sets must be re-selected for every KPI added, even when identical</div><div class="finding-issue-rec">→ Auto-carry questions with option to override</div></div></div>
-          <div class="finding-issue"><div class="finding-issue-sev sev-3"></div><div><div class="finding-issue-text">Uploading a CV doesn't populate any fields — users re-enter everything in the HR system</div><div class="finding-issue-rec">→ Parse CV and pull known data from HR database</div></div></div>
-        </div>
-      </div>
-      <div class="finding-cat">
-        <div class="finding-cat-head"><div class="finding-cat-num">04</div><div><p class="finding-cat-title">User Knowledge Gaps</p><p class="finding-cat-sub">Users knew what to do. They didn't know how the system expected them to do it.</p></div></div>
-        <div class="finding-issues">
-          <div class="finding-issue"><div class="finding-issue-sev sev-3"></div><div><div class="finding-issue-text">Tasks 2 and 3 required researcher assistance — no in-service guidance exists anywhere</div><div class="finding-issue-rec">→ Contextual service manuals embedded within each workflow</div></div></div>
-          <div class="finding-issue"><div class="finding-issue-sev sev-2"></div><div><div class="finding-issue-text">KPI fields like "target weight" and "target type" confused every participant</div><div class="finding-issue-rec">→ Inline field descriptions with examples</div></div></div>
-          <div class="finding-issue"><div class="finding-issue-sev sev-3"></div><div><div class="finding-issue-text">After submitting an internal application, users receive no feedback unless called for interview</div><div class="finding-issue-rec">→ Application status tracker with visible timeline</div></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+      <div class="block block-head">
+        <p class="eyebrow">What the data said</p>
+        <div>
+          <h3 data-reveal>Three instruments. One signal: tolerable when familiar, frustrating everywhere else.</h3>
+          <div class="dash">
+            <div class="panel" data-reveal>
+              <p class="eyebrow c">System Usability Scale</p>
+              <h4>Above average — barely</h4>
+              <p>The industry “acceptable” line is 68. STC Hub sits just under it.</p>
+              <div class="viz">
+                <svg class="gauge" id="gauge" viewBox="0 0 240 150" data-inview role="img" aria-label="SUS score 65 out of 100, below the 68 threshold">
+                  <path class="arc-bg" d="M20 130 A100 100 0 0 1 220 130"/>
+                  <path class="arc" id="gaugeArc" d="M20 130 A100 100 0 0 1 220 130"/>
+                  <line class="thr" id="thr" x1="0" y1="0" x2="0" y2="0"/>
+                  <text id="thrLbl">68</text>
+                  <text x="14" y="148">0</text><text x="212" y="148">100</text>
+                  <text class="val" x="120" y="122" text-anchor="middle" data-count="65">65</text>
+                </svg>
+              </div>
+            </div>
+            <div class="panel" data-reveal style="--d:.1s">
+              <p class="eyebrow c">Net Promoter Score</p>
+              <h4>Critical dissatisfaction</h4>
+              <p>Systemic trust erosion, not isolated friction.</p>
+              <div class="viz">
+                <div class="nps" data-inview role="img" aria-label="NPS minus 40: 60% detractors, 20% passives, 20% promoters">
+                  <div class="score" data-count="-40">−40</div>
+                  <div class="bar">
+                    <div style="flex:60;background:var(--bad)">60%</div>
+                    <div style="flex:20;background:#B9AFA2;transition-delay:.15s">20%</div>
+                    <div style="flex:20;background:var(--good);transition-delay:.3s">20%</div>
+                  </div>
+                  <div class="legend"><span>Detractors</span><span>Passives</span><span>Promoters</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="panel" data-reveal style="--d:.2s">
+              <p class="eyebrow c">After-Scenario Questionnaire</p>
+              <h4>KPIs were the worst task</h4>
+              <p>1 = satisfied · 7 = not satisfied.</p>
+              <div class="viz" style="display:block">
+                <div class="asq" role="img" aria-label="ASQ by task: vacation 2.1, KPI 5.0, recruitment 4.2">
+                  <div class="col"><b>2.1</b><div class="colbar m-bar-y" style="--h:.3;background:var(--good)"></div><small>Vacation</small></div>
+                  <div class="col"><b>5.0</b><div class="colbar m-bar-y" style="--h:.714;background:var(--bad);--d:.15s"></div><small>KPIs</small></div>
+                  <div class="col"><b>4.2</b><div class="colbar m-bar-y" style="--h:.6;background:var(--warn);--d:.3s"></div><small>Recruitment</small></div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-<!-- RECOMMENDATIONS -->
-<section class="recs-section" id="recommendations">
-  <div class="section-inner fade-in">
-    <p class="section-label purple">What We Recommended</p>
-    <div class="recs-count">15+</div>
-    <h2 class="section-heading">Prioritized recommendations across four categories</h2>
-    <p class="section-sub">Every recommendation maps directly to a finding, rated by severity. Scoped, justified, and ordered by impact.</p>
-    <div class="recs-grid">
-      <div class="rec-card"><span class="rec-tag workflow">Workflow</span><div class="rec-screen"><img src="assets/stc/stc_vacation.png" alt="Vacation" onerror="this.parentElement.innerHTML='<span class=\'rec-screen-placeholder\'>stc_vacation.png</span>'" /></div><div class="rec-severity"><div class="rec-sev-dot sev-3"></div><span class="rec-sev-label">Severity 3</span></div><p class="rec-issue">Submit Vacation · No workflow visibility</p><h3 class="rec-title">Add a workflow preview before submission</h3><p class="rec-body">Let users see the approval chain before they commit to submitting.</p></div>
-      <div class="rec-card"><span class="rec-tag workflow">Workflow</span><div class="rec-screen"><img src="assets/stc/stc_vacation_delegation.png" alt="Delegation" onerror="this.parentElement.innerHTML='<span class=\'rec-screen-placeholder\'>stc_vacation_delegation.png</span>'" /></div><div class="rec-severity"><div class="rec-sev-dot sev-4"></div><span class="rec-sev-label">Severity 4 — Critical</span></div><p class="rec-issue">Submit Vacation · Delegated employee has no agency</p><h3 class="rec-title">Give delegated employee approve/reject control</h3><p class="rec-body">They're notified only after the fact. They need agency before request reaches management.</p></div>
-      <div class="rec-card"><span class="rec-tag workflow">Workflow</span><div class="rec-screen"><img src="assets/stc/stc_kpi.png" alt="KPI" onerror="this.parentElement.innerHTML='<span class=\'rec-screen-placeholder\'>stc_kpi.png</span>'" /></div><div class="rec-severity"><div class="rec-sev-dot sev-3"></div><span class="rec-sev-label">Severity 3</span></div><p class="rec-issue">Submit KPI · Flow changes annually, no visibility</p><h3 class="rec-title">Auto-updated KPI workflow display</h3><p class="rec-body">The flow changes every year when HR updates it. Reflect the current state automatically.</p></div>
-      <div class="rec-card"><span class="rec-tag workflow">Workflow</span><div class="rec-screen"><img src="assets/stc/stc_recruitment.png" alt="Recruitment" onerror="this.parentElement.innerHTML='<span class=\'rec-screen-placeholder\'>stc_recruitment.png</span>'" /></div><div class="rec-severity"><div class="rec-sev-dot sev-4"></div><span class="rec-sev-label">Severity 4 — Critical</span></div><p class="rec-issue">Recruitment · Confidentiality not communicated</p><h3 class="rec-title">Surface HR policy directly in-service</h3><p class="rec-body">Confidentiality is required by policy but never told to users — causing anxiety and deterring applications.</p></div>
-      <div class="rec-card"><span class="rec-tag access">Navigation</span><div class="rec-screen"><img src="assets/stc/stc_kpi.png" alt="KPI platform" onerror="this.parentElement.innerHTML='<span class=\'rec-screen-placeholder\'>stc_kpi.png</span>'" /></div><div class="rec-severity"><div class="rec-sev-dot sev-2"></div><span class="rec-sev-label">Severity 2</span></div><p class="rec-issue">Submit KPI · Lives on a separate platform</p><h3 class="rec-title">Consolidate KPI into one portal</h3><p class="rec-body">KPI redirects to Add'e — a separate system. Consolidating removes context-switching confusion.</p></div>
-      <div class="rec-card"><span class="rec-tag access">Navigation</span><div class="rec-screen"><img src="assets/stc/stc_recruitment.png" alt="Recruitment" onerror="this.parentElement.innerHTML='<span class=\'rec-screen-placeholder\'>stc_recruitment.png</span>'" /></div><div class="rec-severity"><div class="rec-sev-dot sev-2"></div><span class="rec-sev-label">Severity 2</span></div><p class="rec-issue">Recruitment · Redirects to external site</p><h3 class="rec-title">Embed recruitment within the portal</h3><p class="rec-body">Employees feel lost the moment they leave the main portal. Build it in or create clear wayfinding back.</p></div>
-      <div class="rec-card"><span class="rec-tag auto">Automation</span><div class="rec-screen"><img src="assets/stc/stc_vacation.png" alt="Vacation dates" onerror="this.parentElement.innerHTML='<span class=\'rec-screen-placeholder\'>stc_vacation.png</span>'" /></div><div class="rec-severity"><div class="rec-sev-dot sev-2"></div><span class="rec-sev-label">Severity 2</span></div><p class="rec-issue">Vacation · Delegation dates must be re-entered</p><h3 class="rec-title">Auto-populate delegation from vacation dates</h3><p class="rec-body">The delegation period is almost always identical to vacation. Auto-fill with option to change.</p></div>
-      <div class="rec-card"><span class="rec-tag auto">Automation</span><div class="rec-screen" style="display:flex;align-items:center;justify-content:center;background:var(--gray-light);"><span class="rec-screen-placeholder">KPI questions — confidential, cannot be shown</span></div><div class="rec-severity"><div class="rec-sev-dot sev-2"></div><span class="rec-sev-label">Severity 2</span></div><p class="rec-issue">KPI · Question sets duplicated per entry</p><h3 class="rec-title">Auto-carry KPI question selection</h3><p class="rec-body">Select once, apply to all KPIs — with option to override per entry.</p></div>
-      <div class="rec-card"><span class="rec-tag auto">Automation</span><div class="rec-screen"><img src="assets/stc/stc_recruitment.png" alt="CV upload" onerror="this.parentElement.innerHTML='<span class=\'rec-screen-placeholder\'>stc_recruitment.png</span>'" /></div><div class="rec-severity"><div class="rec-sev-dot sev-3"></div><span class="rec-sev-label">Severity 3</span></div><p class="rec-issue">Recruitment · CV upload doesn't auto-fill</p><h3 class="rec-title">Parse CV and pull from HR system</h3><p class="rec-body">After uploading a CV, users re-enter everything. Profile data already exists in the HR database.</p></div>
-      <div class="rec-card"><span class="rec-tag knowledge">Knowledge</span><div class="rec-screen" style="display:flex;align-items:center;justify-content:center;background:var(--purple-light);"><span class="rec-screen-placeholder" style="color:var(--purple);opacity:0.6;">In-service contextual guidance</span></div><div class="rec-severity"><div class="rec-sev-dot sev-3"></div><span class="rec-sev-label">Severity 3</span></div><p class="rec-issue">All Tasks · No in-service guidance available</p><h3 class="rec-title">Build service manuals for each workflow</h3><p class="rec-body">Users needed researcher help for Tasks 2 and 3. Contextual guidance would prevent this entirely.</p></div>
-      <div class="rec-card"><span class="rec-tag knowledge">Knowledge</span><div class="rec-screen"><img src="assets/stc/stc_kpi.png" alt="KPI fields" onerror="this.parentElement.innerHTML='<span class=\'rec-screen-placeholder\'>stc_kpi.png</span>'" /></div><div class="rec-severity"><div class="rec-sev-dot sev-2"></div><span class="rec-sev-label">Severity 2</span></div><p class="rec-issue">KPI · Field labels are unclear</p><h3 class="rec-title">Add inline field descriptions and examples</h3><p class="rec-body">"Target weight" and "target type" confused every participant. Tooltips eliminate the guesswork.</p></div>
-      <div class="rec-card"><span class="rec-tag knowledge">Knowledge</span><div class="rec-screen"><img src="assets/stc/stc_recruitment.png" alt="Application status" onerror="this.parentElement.innerHTML='<span class=\'rec-screen-placeholder\'>stc_recruitment.png</span>'" /></div><div class="rec-severity"><div class="rec-sev-dot sev-3"></div><span class="rec-sev-label">Severity 3</span></div><p class="rec-issue">Recruitment · No post-submission feedback</p><h3 class="rec-title">Application status tracker with timeline</h3><p class="rec-body">After submitting, users hear nothing unless called for interview. A status tracker removes the ambiguity.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- REFLECTION -->
-<section class="reflection-section" id="reflection">
-  <div class="section-inner fade-in">
-    <div class="reflection-grid">
-      <div>
-        <p class="section-label purple">Reflection</p>
-        <blockquote class="reflection-quote">"A 100% completion rate isn't success. It's the floor. Real UX success is whether people come back — and whether they trust the system enough to use it without anxiety."</blockquote>
-        <p class="reflection-body">This project taught me that usability metrics don't tell the full story. SUS was 65 — technically functional. NPS was −40 — actively damaging. Both were true at the same time. The gap between those two numbers is where the real design problem lives.</p>
-        <p class="reflection-body">Running sessions across time zones with real employees on a live enterprise system pushed our rigor in ways that a lab study never would have. We couldn't break anything. We couldn't fabricate tasks. We had to work with what the system actually was — and that constraint forced us to be precise about what we were measuring and why.</p>
-        <p class="reflection-body">The biggest lesson: when a system makes employees feel incompetent doing tasks they've done dozens of times, that's not a usability problem. That's a design philosophy problem. The portal was built for departments, not people — and every finding traced back to that original sin.</p>
-        <p style="font-size:11px;color:var(--gray-text);font-style:italic;margin-top:20px;">Academic project · HCI 460 · DePaul University · Research conducted with real STC employees under institutional consent protocols.</p>
-      </div>
-      <div>
-        <div class="next-project">
-          <p class="next-label">Next Project</p>
-          <h3 class="next-title">MoodMode — Emotion-adaptive iOS app for ADHD users</h3>
-          <a href="case-study-moodmode.html" class="next-arrow">View case study →</a>
-        </div>
-        <div style="margin-top:20px;padding:28px;background:var(--gray-light);border-radius:4px;">
-          <p class="section-label" style="margin-bottom:16px;">What we'd do differently</p>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="font-size:13px;color:var(--gray-text);line-height:1.5;padding-left:16px;position:relative;"><span style="position:absolute;left:0;color:var(--purple);">→</span>Run a follow-up round of testing after implementing high-severity fixes</div>
-            <div style="font-size:13px;color:var(--gray-text);line-height:1.5;padding-left:16px;position:relative;"><span style="position:absolute;left:0;color:var(--purple);">→</span>Include participants from more departments beyond procurement</div>
-            <div style="font-size:13px;color:var(--gray-text);line-height:1.5;padding-left:16px;position:relative;"><span style="position:absolute;left:0;color:var(--purple);">→</span>Build lightweight wireframe solutions to test alongside the issues</div>
-            <div style="font-size:13px;color:var(--gray-text);line-height:1.5;padding-left:16px;position:relative;"><span style="position:absolute;left:0;color:var(--purple);">→</span>Present findings directly to the STC product team for implementation feedback</div>
+          <div class="timing" data-reveal>
+            <div class="timing-top">
+              <h4>Completion time vs ideal</h4>
+              <div class="tabs" data-tabs="time" role="tablist" aria-label="Choose task">
+                <button role="tab" data-key="0" aria-selected="false" data-cursor="Task 1">Vacation</button>
+                <button role="tab" data-key="1" aria-selected="true" data-cursor="Task 2">KPIs</button>
+                <button role="tab" data-key="2" aria-selected="false" data-cursor="Task 3">Recruitment</button>
+              </div>
+            </div>
+            <div class="tchart" id="tchart" aria-live="polite"></div>
+            <p class="tnote">Think-aloud adds talking time, so anything over <strong>ideal + 1:50</strong> was flagged as an efficiency failure (red). 40% of users also left the optimal path on Tasks 2 &amp; 3.</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- FOOTER -->
-<footer>
-  <span>© 2025 Pratiksha Kulam</span>
-  <span>Designed with a side of coffee, code & AI</span>
-  <span><a href="index.html">Back to home</a></span>
+  <!-- ═════════ 03 ═════════ -->
+  <section class="chapter" id="findings" style="padding-top:60px">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">03</div>
+        <div>
+          <p class="eyebrow c">Chapter three</p>
+          <h2 class="chapter-title" data-split>Four categories of failure. <em>One root cause.</em></h2>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">What we found</p>
+        <div>
+          <p data-reveal>Every problem across the five sessions fell into one of four categories — all symptoms of services built by departments for departments. We rated each issue on Nielsen's 0–4 severity scale.</p>
+          <div class="legend-row" data-reveal>
+            <span class="sev"><i class="s4"></i>4 · Catastrophe</span><span class="sev"><i class="s3"></i>3 · Major</span><span class="sev"><i class="s2"></i>2 · Minor</span><span class="sev"><i class="s1"></i>1 · Cosmetic</span>
+          </div>
+          <div style="margin-top:44px" data-reveal>
+            <div class="tabs" data-tabs="cat" role="tablist" aria-label="Finding categories">
+              <button role="tab" data-key="workflow" aria-selected="true">Workflow</button>
+              <button role="tab" data-key="nav" aria-selected="false">Navigation</button>
+              <button role="tab" data-key="auto" aria-selected="false">Automation</button>
+              <button role="tab" data-key="know" aria-selected="false">Knowledge</button>
+            </div>
+          </div>
+          <div class="fpanel" data-panel="cat:workflow">
+            <div class="lead"><div class="big">01</div><h4>Workflow opacity</h4><p>No visibility into what happens after submission — no approval chain, no SLA, no next steps.</p></div>
+            <ul class="issues">
+              <li style="--i:0"><p class="iss">Vacation requests show no workflow — users don't know if their manager will be notified.</p><p class="rec">Expandable workflow preview before submission</p></li>
+              <li style="--i:1"><p class="iss">The delegated colleague can't approve or reject — they're only notified after the fact.</p><p class="rec">Approve/reject step before the request reaches management</p></li>
+              <li style="--i:2"><p class="iss">The KPI workflow changes every year, with no visible current-year flow.</p><p class="rec">Auto-updated flow display synced to HR changes</p></li>
+              <li style="--i:3"><p class="iss">Recruitment confidentiality policy is never communicated — causing anxiety and deterring use.</p><p class="rec">Surface the HR policy directly in the service</p></li>
+            </ul>
+          </div>
+          <div class="fpanel" data-panel="cat:nav" hidden>
+            <div class="lead"><div class="big">02</div><h4>Navigation &amp; discoverability</h4><p>40% of users left the happy path on Tasks 2 &amp; 3. Services were buried or split across platforms.</p></div>
+            <ul class="issues">
+              <li style="--i:0"><p class="iss">KPI submission lives on a separate platform (Add'e) — users lose context immediately.</p><p class="rec">Consolidate into a single portal interface</p></li>
+              <li style="--i:1"><p class="iss">Internal recruitment redirects to an external site — users feel lost.</p><p class="rec">Embed it, or create clear wayfinding back</p></li>
+              <li style="--i:2"><p class="iss">Users took up to 35 seconds to find the KPI service vs a 25-second ideal.</p><p class="rec">Search and shortcuts on the main dashboard</p></li>
+            </ul>
+          </div>
+          <div class="fpanel" data-panel="cat:auto" hidden>
+            <div class="lead"><div class="big">03</div><h4>Automation &amp; integration gaps</h4><p>The system kept asking for information it already had.</p></div>
+            <ul class="issues">
+              <li style="--i:0"><p class="iss">After picking vacation dates, users re-enter the same dates for delegation.</p><p class="rec">Auto-populate delegation dates from the vacation</p></li>
+              <li style="--i:1"><p class="iss">KPI question sets must be re-selected for every KPI, even when identical.</p><p class="rec">Carry questions forward, with an override</p></li>
+              <li style="--i:2"><p class="iss">Uploading a CV populates nothing — users re-type everything.</p><p class="rec">Parse the CV and pull known data from the HR database</p></li>
+            </ul>
+          </div>
+          <div class="fpanel" data-panel="cat:know" hidden>
+            <div class="lead"><div class="big">04</div><h4>User knowledge gaps</h4><p>Users knew what to do. They didn't know how the system expected them to do it.</p></div>
+            <ul class="issues">
+              <li style="--i:0"><p class="iss">Tasks 2 and 3 needed researcher help — there's no in-service guidance anywhere.</p><p class="rec">Contextual service manuals inside each workflow</p></li>
+              <li style="--i:1"><p class="iss">KPI fields like “target weight” and “target type” confused every participant.</p><p class="rec">Inline field descriptions with examples</p></li>
+              <li style="--i:2"><p class="iss">After applying internally, users hear nothing unless called for interview.</p><p class="rec">Application status tracker with a visible timeline</p></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <p class="eyebrow">Recommendations</p>
+          <div>
+            <h3 data-reveal><span data-count="15" data-suffix="+">15+</span> prioritised recommendations. Filter them.</h3>
+            <p data-reveal>Every recommendation maps to a finding and is rated by severity — scoped, justified and ordered by impact. The twelve with the clearest evidence are below.</p>
+          </div>
+        </div>
+        <div class="rec-tools">
+          <div class="chips" id="recFilter" role="group" aria-label="Filter by category"></div>
+          <div class="sort">Sort <button type="button" id="sortSev" aria-pressed="true">Severity</button><button type="button" id="sortCat" aria-pressed="false">Category</button></div>
+        </div>
+        <div class="recs" id="recs"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 04 ═════════ -->
+  <section class="band" id="outcome">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true" style="-webkit-text-stroke-color:#C9A7F0">04</div>
+        <div>
+          <p class="eyebrow">Chapter four</p>
+          <h2 class="chapter-title" data-split>What changed. <em style="color:#C9A7F0">What I'd do next.</em></h2>
+        </div>
+      </div>
+
+      <blockquote class="pull" data-reveal>A 100% completion rate isn't success. It's the floor. Real UX success is whether people come back — and trust the system enough to use it without anxiety.</blockquote>
+
+      <div class="block block-head" style="margin-bottom:90px">
+        <p class="eyebrow">Reflection</p>
+        <div data-reveal>
+          <p>Usability metrics don't tell the full story. SUS was 65 — technically functional. NPS was −40 — actively damaging. Both were true at once, and the gap between them is where the real design problem lived.</p>
+          <p>Testing real employees on a live enterprise system across time zones pushed our rigour further than a lab would. We couldn't break anything or invent tasks — we had to be precise about what we measured and why.</p>
+          <p>The biggest lesson: when a system makes people feel incompetent at tasks they've done dozens of times, that's not a usability problem. It's a design-philosophy problem.</p>
+        </div>
+      </div>
+
+      <div class="block block-head" style="margin-bottom:0">
+        <p class="eyebrow">Next time</p>
+        <ul class="ticks" data-reveal style="margin-top:0">
+          <li>Run a follow-up round after the high-severity fixes ship</li>
+          <li>Include participants beyond procurement</li>
+          <li>Test lightweight wireframe solutions alongside the issues</li>
+          <li>Present findings directly to the STC product team</li>
+        </ul>
+      </div>
+      <p class="disclaimer" style="color:rgba(255,255,255,.4);margin-top:70px">Academic project · HCI 460 · DePaul University · Research conducted with real STC employees under institutional consent protocols.</p>
+    </div>
+  </section>
+
+  <section class="more" aria-labelledby="more-title">
+    <div class="wrap">
+      <div class="more-head">
+        <h2 id="more-title" data-split>Explore more work.</h2>
+        <a class="back" href="index.html#work" data-magnetic>All projects →</a>
+      </div>
+      <div class="more-grid">
+        <a class="more-card" href="case-study-moodmode.html" data-reveal data-cursor="View">
+          <div class="more-img"><img src="moodmode_project2.png" alt="" loading="lazy"></div>
+          <p class="more-tag">AI Product Design · iOS</p>
+          <p class="more-title">Most apps ignore how you feel. This one starts there.</p>
+        </a>
+        <a class="more-card" href="case-study-wealth.html" data-reveal style="--d:.1s" data-cursor="View">
+          <div class="more-img"><img src="assets/wealth/cover.jpg" alt="" loading="lazy" style="object-position:left top"></div>
+          <p class="more-tag">Product Design · Fintech</p>
+          <p class="more-title">Users could see the data. They just didn't believe it.</p>
+        </a>
+        <a class="more-card" href="case-study-apple.html" data-reveal style="--d:.2s" data-cursor="View">
+          <div class="more-img"><img src="apple-project.png" alt="" loading="lazy"></div>
+          <p class="more-tag">Accessibility · iOS</p>
+          <p class="more-title">Found the gaps. Apple fixed them next.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="cs-footer">
+  <span>© 2026 Pratiksha Kulam</span>
+  <span>Designed with a side of coffee, code &amp; AI</span>
+  <a href="index.html">Back to home ↑</a>
 </footer>
 
 <script>
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+/* build data-driven parts first, so motion.js observes them */
+(() => {
+  const H = [['Aesthetic & Minimalist Design', 17], ['Error Prevention', 8], ['Visibility of System Status', 5], ['Recognition rather than Recall', 5], ['User Control & Freedom', 4], ['Help & Documentation', 4], ['Flexibility & Efficiency', 3], ['Match: System & Real World', 2], ['Consistency & Standards', 2], ['Help Users Recover from Errors', 1]];
+  document.getElementById('hbars').innerHTML = H.map(([n, v], i) =>
+    `<div class="hbar${i === 0 ? ' top' : ''}" role="listitem"><span>${n}</span><div class="track"><div class="fill m-bar" style="--v:${(v / 17).toFixed(3)};--d:${(i * 0.06).toFixed(2)}s"></div></div><b>${v}</b></div>`).join('');
 
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.sn-item');
-  window.addEventListener('scroll', () => {
-    let cur = '';
-    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 140) cur = s.id; });
-    navLinks.forEach(a => {
-      a.classList.remove('active');
-      if (a.getAttribute('href') === '#' + cur) a.classList.add('active');
+  const R = [
+    ['workflow', 3, 'Vacation · no workflow visibility', 'Add a workflow preview before submission', 'Let users see the approval chain before they commit.', 'stc_vacation.png'],
+    ['workflow', 4, 'Vacation · delegate has no agency', 'Give the delegated colleague approve/reject', 'They need agency before the request reaches management, not a notice after.', 'stc_vacation_delegation.png'],
+    ['workflow', 3, 'KPI · flow changes yearly, unseen', 'Auto-updated KPI workflow display', "Reflect HR's current-year flow automatically.", 'stc_kpi.png'],
+    ['workflow', 4, 'Recruitment · confidentiality unclear', 'Surface HR policy directly in-service', 'Confidentiality is policy but never told to users — causing anxiety and fewer applications.', 'stc_recruitment.png'],
+    ['nav', 2, 'KPI · lives on a separate platform', 'Consolidate KPIs into one portal', "Removing the jump to Add'e removes the context-switching confusion.", 'stc_kpi.png'],
+    ['nav', 2, 'Recruitment · redirects externally', 'Embed recruitment within the portal', 'People feel lost the moment they leave. Build it in or add clear wayfinding back.', 'stc_recruitment.png'],
+    ['auto', 2, 'Vacation · dates entered twice', 'Auto-populate delegation from vacation dates', 'The delegation period almost always matches the vacation. Pre-fill it, allow edits.', 'stc_vacation.png'],
+    ['auto', 2, 'KPI · questions duplicated per entry', 'Auto-carry KPI question selection', 'Select once, apply to all KPIs — with a per-entry override.', null, "KPI questions are confidential and can't be shown"],
+    ['auto', 3, 'Recruitment · CV upload fills nothing', 'Parse the CV and pull from the HR system', "Profile data already exists. Don't make people retype it.", 'stc_recruitment.png'],
+    ['know', 3, 'All tasks · no in-service guidance', 'Build a service manual for each workflow', 'Users needed researcher help on Tasks 2 and 3. Contextual guidance prevents that.', null, 'In-service contextual guidance'],
+    ['know', 2, 'KPI · unclear field labels', 'Inline field descriptions and examples', '“Target weight” and “target type” confused every participant.', 'stc_kpi.png'],
+    ['know', 3, 'Recruitment · silence after applying', 'Application status tracker with a timeline', 'Users hear nothing unless called for interview. A tracker removes the ambiguity.', 'stc_recruitment.png']
+  ];
+  const CAT = { workflow: 'Workflow', nav: 'Navigation', auto: 'Automation', know: 'Knowledge' };
+  const recs = document.getElementById('recs');
+  recs.innerHTML = R.map(([c, s, where, t, d, img, ph], i) => `
+    <article class="rcard" data-cat="${c}" data-sev="${s}" data-i="${i}">
+      <div class="shot">${img ? `<img src="assets/stc/${img}" alt="" loading="lazy">` : `<span>${ph}</span>`}</div>
+      <div class="body">
+        <div class="meta"><span class="cat">${CAT[c]}</span><span class="sev"><i class="s${s}"></i>Severity ${s}${s === 4 ? ' · critical' : ''}</span></div>
+        <p class="where">${where}</p><h5>${t}</h5><p>${d}</p>
+      </div>
+    </article>`).join('');
+
+  const filter = document.getElementById('recFilter');
+  const counts = R.reduce((a, r) => (a[r[0]] = (a[r[0]] || 0) + 1, a), {});
+  filter.innerHTML = [['all', 'All', R.length], ...Object.entries(CAT).map(([k, v]) => [k, v, counts[k]])]
+    .map(([k, v, n]) => `<button type="button" class="chip" data-f="${k}" aria-pressed="${k === 'all'}" data-cursor="Filter">${v}<span class="ct">${n}</span></button>`).join('');
+  let cur = 'all', sort = 'sev';
+  const apply = () => {
+    const order = Object.keys(CAT);
+    const cards = [...recs.children].sort((a, b) => sort === 'sev'
+      ? (b.dataset.sev - a.dataset.sev) || (a.dataset.i - b.dataset.i)
+      : (order.indexOf(a.dataset.cat) - order.indexOf(b.dataset.cat)) || (a.dataset.i - b.dataset.i));
+    let k = 0;
+    cards.forEach((c) => {
+      recs.appendChild(c);
+      const show = cur === 'all' || c.dataset.cat === cur;
+      c.classList.toggle('hide', !show);
+      c.classList.remove('enter');
+      if (show) { void c.offsetWidth; c.style.animationDelay = (k++ * 45) + 'ms'; c.classList.add('enter'); }
     });
+  };
+  filter.addEventListener('click', (e) => {
+    const b = e.target.closest('.chip'); if (!b) return;
+    cur = b.dataset.f; filter.querySelectorAll('.chip').forEach((x) => x.setAttribute('aria-pressed', x === b)); apply();
   });
+  const sSev = document.getElementById('sortSev'), sCat = document.getElementById('sortCat');
+  sSev.onclick = () => { sort = 'sev'; sSev.setAttribute('aria-pressed', true); sCat.setAttribute('aria-pressed', false); apply(); };
+  sCat.onclick = () => { sort = 'cat'; sCat.setAttribute('aria-pressed', true); sSev.setAttribute('aria-pressed', false); apply(); };
+  apply();
+})();
+</script>
+<script src="motion.js"></script>
+<script src="case-study.js"></script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* SUS gauge: arc fill + 68 threshold tick */
+  const arc = document.getElementById('gaugeArc'), L = arc.getTotalLength();
+  const pt = (v, r) => { const a = Math.PI * (1 - v / 100); return [120 + r * Math.cos(a), 130 - r * Math.sin(a)]; };
+  const [x1, y1] = pt(68, 84), [x2, y2] = pt(68, 116), [lx, ly] = pt(68, 128);
+  const thr = document.getElementById('thr');
+  thr.setAttribute('x1', x1); thr.setAttribute('y1', y1); thr.setAttribute('x2', x2); thr.setAttribute('y2', y2);
+  const tl = document.getElementById('thrLbl'); tl.setAttribute('x', lx - 2); tl.setAttribute('y', ly - 2);
+  const fillGauge = () => { arc.style.strokeDasharray = `${(L * 0.65).toFixed(1)} ${L}`; };
+  arc.style.strokeDasharray = reduce ? `${(L * 0.65).toFixed(1)} ${L}` : `0 ${L}`;
+  const g = document.getElementById('gauge');
+  if (g.classList.contains('in')) fillGauge(); else g.addEventListener('m:in', fillGauge, { once: true });
+
+  /* completion time chart (seconds) */
+  const T = [
+    { ideal: 60, times: [135, 154, 104, 190, 149] },
+    { ideal: 240, times: [330, 357, 290, 372, 382] },
+    { ideal: 180, times: [252, 249, 228, 293, 200] }
+  ];
+  const MAX = 420, mm = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  const chart = document.getElementById('tchart');
+  chart.innerHTML = [1, 2, 3, 4, 5].map((u) => `<div class="trow"><span>User ${u}</span><div class="lane"><div class="tb"></div></div><b>–</b></div>`).join('')
+    + '<div class="tline" id="tIdeal"><em></em></div><div class="tline limit" id="tLimit"><em></em></div>';
+  const rows = [...chart.querySelectorAll('.trow')];
+  const ideal = document.getElementById('tIdeal'), limit = document.getElementById('tLimit');
+  const place = (el, s, label) => {
+    const lane = rows[0].querySelector('.lane');
+    el.style.left = (lane.offsetLeft + lane.offsetWidth * s / MAX) + 'px';
+    el.firstChild.textContent = label;
+  };
+  let current = 1, started = false;
+  const draw = () => {
+    const t = T[current];
+    rows.forEach((r, i) => {
+      const s = t.times[i], bar = r.querySelector('.tb');
+      bar.style.width = (s / MAX * 100) + '%';
+      bar.classList.toggle('over', s > t.ideal + 110);
+      r.querySelector('b').textContent = mm(s);
+    });
+    place(ideal, t.ideal, `Ideal ${mm(t.ideal)}`);
+    place(limit, t.ideal + 110, `Limit ${mm(t.ideal + 110)}`);
+  };
+  document.querySelector('[data-tabs="time"]').addEventListener('tabchange', (e) => { current = +e.detail; if (started) draw(); });
+  const box = chart.closest('.timing');
+  const start = () => { started = true; draw(); };
+  if (box.classList.contains('in')) start(); else box.addEventListener('m:in', start, { once: true });
+  addEventListener('resize', () => started && draw());
+})();
 </script>
 </body>
 </html>

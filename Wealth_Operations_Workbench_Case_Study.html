@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wealth Operations Workbench — Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16202b; --soft:#54636f; --bg:#f7f6f3; --card:#fff; --line:#e4e0d8;
+  --navy:#1d3f5e; --navy-soft:#e8eef4;
+  --amber:#b5761c; --amber-soft:#fbf0dc;
+  --red:#a83f34; --red-soft:#faeae7;
+  --green:#2c6e52; --green-soft:#e6f1eb;
+  --r:13px; --sh:0 1px 2px rgba(22,32,43,.05),0 10px 28px rgba(22,32,43,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 30px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:60;background:rgba(247,246,243,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{font-family:'Newsreader',serif;font-size:18px;font-weight:600}
+.logo i{color:var(--navy);font-style:normal}
+.nlinks{display:flex;gap:20px;font-size:13px;font-weight:500}
+.nlinks a{color:var(--soft);text-decoration:none;cursor:pointer}
+.nlinks a:hover{color:var(--navy)}
+
+/* hero */
+.hero{padding:70px 0 44px}
+.pill{display:inline-block;font-size:12.5px;font-weight:600;color:var(--navy);background:var(--navy-soft);padding:5px 13px;border-radius:99px;margin-bottom:20px}
+h1{font-family:'Newsreader',serif;font-weight:600;font-size:clamp(32px,4.6vw,48px);line-height:1.08;letter-spacing:-.02em;max-width:19ch;margin-bottom:18px}
+.lead{font-size:18.5px;color:var(--soft);max-width:66ch}
+.metas{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:32px;padding-top:26px;border-top:1px solid var(--line)}
+.metas .k{font-size:11.5px;font-weight:600;color:var(--soft);margin-bottom:3px}
+.metas .v{font-size:14.5px;font-weight:600}
+
+/* sections */
+section{padding:48px 0;border-top:1px solid var(--line)}
+.num{font-family:'Newsreader',serif;font-size:14px;color:var(--navy);font-weight:600;margin-bottom:7px}
+h2{font-family:'Newsreader',serif;font-weight:600;font-size:29px;letter-spacing:-.015em;margin-bottom:14px;max-width:24ch}
+p.body{font-size:16.5px;color:var(--soft);max-width:66ch;margin-bottom:13px}
+p.body strong{color:var(--ink);font-weight:600}
+h3.sub{font-size:15px;font-weight:700;margin:26px 0 12px;letter-spacing:.01em}
+
+/* generic cards */
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--sh)}
+.card h4{font-size:15px;font-weight:600;margin-bottom:6px}
+.card p{font-size:14px;color:var(--soft)}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:99px;margin-bottom:10px}
+.t-red{color:var(--red);background:var(--red-soft)}
+.t-amber{color:var(--amber);background:var(--amber-soft)}
+.t-green{color:var(--green);background:var(--green-soft)}
+.t-navy{color:var(--navy);background:var(--navy-soft)}
+
+/* the conflict visual */
+.conflict{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center;margin-top:24px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--sh)}
+.sysbox{border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--bg)}
+.sysbox .sysname{font-size:11.5px;font-weight:600;color:var(--soft);margin-bottom:8px}
+.sysbox .field{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--ink);margin-bottom:4px}
+.sysbox .val{font-weight:700}
+.val.ok{color:var(--green)} .val.bad{color:var(--red)}
+.vs{font-size:13px;font-weight:700;color:var(--red);text-align:center}
+.resolve{margin-top:18px;background:var(--green-soft);border:1px solid #cfe2d7;border-radius:10px;padding:16px 18px;display:flex;gap:12px;align-items:flex-start}
+.resolve .ic{font-size:17px}
+.resolve p{font-size:14.5px;color:var(--ink)}
+
+/* roles table */
+.roles{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.rrow{display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid var(--line)}
+.rrow:last-child{border-bottom:none}
+.rrow .who{padding:14px 18px;font-size:13.5px;font-weight:600;background:var(--bg);border-right:1px solid var(--line)}
+.rrow .what{padding:14px 18px;font-size:14px;color:var(--soft)}
+.rrow.mine .who{background:var(--navy-soft);color:var(--navy)}
+.rrow.mine .what{color:var(--ink)}
+
+/* tradeoff blocks */
+.tradeoff{margin-top:18px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:0 var(--r) var(--r) 0;padding:22px 24px;box-shadow:var(--sh)}
+.tradeoff h4{font-size:16px;font-weight:600;margin-bottom:10px}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0}
+.opt{border:1px solid var(--line);border-radius:9px;padding:13px 15px;background:var(--bg)}
+.opt .lab{font-size:11.5px;font-weight:700;margin-bottom:5px}
+.opt.rejected .lab{color:var(--red)} .opt.chosen .lab{color:var(--green)}
+.opt p{font-size:13.5px;color:var(--soft)}
+.tradeoff .why{font-size:14.5px;color:var(--ink);padding-top:12px;border-top:1px solid var(--line)}
+.tradeoff .why b{color:var(--amber)}
+
+/* demo */
+.controls{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 8px}
+.seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px}
+.seg button{border:none;background:none;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--soft);padding:8px 17px;border-radius:99px;cursor:pointer}
+.seg button.on{background:var(--navy);color:#fff}
+.screen{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);overflow:hidden;margin-top:18px}
+.sbar{display:flex;align-items:center;gap:7px;padding:11px 15px;border-bottom:1px solid var(--line);background:var(--bg)}
+.dot{width:10px;height:10px;border-radius:50%}
+.d1{background:#dc6b62}.d2{background:#dfb03f}.d3{background:#58a97f}
+.surl{margin-left:10px;flex:1;background:var(--card);border:1px solid var(--line);border-radius:6px;font-size:11.5px;color:var(--soft);padding:5px 11px}
+.sbody{padding:24px}
+
+/* app ui */
+.apphead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.apptitle{font-size:16px;font-weight:700}
+.appsub{font-size:12px;color:var(--soft)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tab{font-size:12.5px;font-weight:600;color:var(--soft);padding:9px 14px;border-bottom:2px solid transparent;cursor:default}
+.tab.on{color:var(--navy);border-bottom-color:var(--navy)}
+.tab .cnt{background:var(--red);color:#fff;font-size:10px;border-radius:99px;padding:1px 6px;margin-left:5px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;font-size:11px;font-weight:600;color:var(--soft);padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 10px;border-bottom:1px solid var(--line);color:var(--ink)}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px}
+.b-ok{background:var(--green-soft);color:var(--green)}
+.b-err{background:var(--red-soft);color:var(--red)}
+.b-warn{background:var(--amber-soft);color:var(--amber)}
+.b-pend{background:#eceef0;color:var(--soft)}
+.mono{font-family:ui-monospace,monospace;font-size:11.5px}
+.rowflag{font-size:10.5px;color:var(--red);font-weight:600;margin-top:2px}
+.act{font-size:11.5px;font-weight:600;color:var(--navy);cursor:default}
+.messy{background:var(--red-soft);border:1px solid #edc8c2;color:var(--red);font-size:12.5px;font-weight:600;padding:9px 13px;border-radius:8px;margin-bottom:14px}
+.good{background:var(--green-soft);border:1px solid #cfe2d7;color:var(--green);font-size:12.5px;font-weight:600;padding:9px 13px;border-radius:8px;margin-bottom:14px}
+.prio{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.pchip{font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--soft)}
+.pchip.hot{background:var(--red-soft);border-color:#edc8c2;color:var(--red)}
+
+/* design system strip */
+.dsgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+.dscard{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px;box-shadow:var(--sh)}
+.dscard .dslab{font-size:11px;font-weight:600;color:var(--soft);margin-bottom:10px}
+.swatches{display:flex;gap:6px;margin-bottom:8px}
+.sw{width:26px;height:26px;border-radius:6px;border:1px solid rgba(0,0,0,.06)}
+.dsnote{font-size:11.5px;color:var(--soft)}
+
+/* outcomes */
+.ocs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.oc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px;box-shadow:var(--sh)}
+.oc .n{font-family:'Newsreader',serif;font-size:30px;font-weight:600;color:var(--green);line-height:1;margin-bottom:8px}
+.oc .l{font-size:13.5px;color:var(--soft)}
+.signal{margin-top:20px;background:var(--navy-soft);border:1px solid #d3e0ea;border-radius:var(--r);padding:22px 24px}
+.signal .q{font-family:'Newsreader',serif;font-size:19px;color:var(--navy);line-height:1.4;margin-bottom:8px}
+.signal .attr{font-size:13px;color:var(--soft)}
+
+/* reflection */
+.reflect{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--navy);border-radius:0 var(--r) var(--r) 0;padding:24px 26px;margin-top:20px;box-shadow:var(--sh)}
+.reflect p{font-size:16px;color:var(--ink);max-width:64ch}
+.reflect p + p{margin-top:12px}
+
+/* ---- COMPETITIVE ANALYSIS ---- */
+.comp{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.comp table{width:100%;border-collapse:collapse;font-size:13px}
+.comp th{background:var(--bg);font-size:11.5px;font-weight:700;color:var(--soft);padding:12px 14px;border-bottom:1px solid var(--line);text-align:left}
+.comp th.usc{background:var(--navy-soft);color:var(--navy)}
+.comp td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.comp td.usc{background:#f4f8fb}
+.comp tr:last-child td{border-bottom:none}
+.comp .crit{font-weight:600;color:var(--ink);font-size:12.5px}
+.yes{color:var(--green);font-weight:700}
+.no{color:var(--red);font-weight:700}
+.part{color:var(--amber);font-weight:700}
+.comp .note{font-size:11.5px;color:var(--soft);display:block;margin-top:3px}
+.takeaway{margin-top:16px;background:var(--navy-soft);border:1px solid #d3e0ea;border-radius:10px;padding:16px 18px;font-size:14.5px}
+.takeaway b{color:var(--navy)}
+
+/* ---- SWOT / FIGJAM STICKIES ---- */
+.figjam{margin-top:22px;background:#fbfaf8;border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--sh);
+  background-image:radial-gradient(circle,#dfdbd2 1px,transparent 1px);background-size:22px 22px}
+.fj-bar{display:flex;align-items:center;gap:9px;margin-bottom:18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;width:fit-content}
+.fj-bar .fdot{width:9px;height:9px;border-radius:50%;background:#c9c4b9}
+.fj-bar span{font-size:11.5px;font-weight:600;color:var(--soft)}
+.swot{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.quad{background:rgba(255,255,255,.75);border:1px dashed #cfc9bd;border-radius:10px;padding:14px}
+.quad .qh{font-size:11.5px;font-weight:700;letter-spacing:.04em;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+.q-s .qh{color:var(--green)} .q-w .qh{color:var(--red)}
+.q-o .qh{color:var(--navy)} .q-t .qh{color:var(--amber)}
+.notes{display:flex;flex-wrap:wrap;gap:9px}
+.sticky{font-size:11.5px;line-height:1.35;padding:10px 11px;border-radius:3px;width:calc(50% - 5px);min-height:64px;
+  box-shadow:1px 2px 4px rgba(0,0,0,.09);transform:rotate(-.5deg)}
+.sticky:nth-child(even){transform:rotate(.7deg)}
+.st-y{background:#fdf0b8}.st-p{background:#f8ccd8}.st-b{background:#c9e2f5}.st-g{background:#cdeccd}.st-o{background:#fbd9b5}
+.sticky b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.03em;opacity:.55;margin-bottom:3px}
+
+/* ---- IA / LUCIDCHART ---- */
+.ia{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 22px;box-shadow:var(--sh);overflow-x:auto}
+.ia-head{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:11.5px;font-weight:600;color:var(--soft)}
+.ia-head .sq{width:12px;height:12px;border-radius:2px;background:var(--navy)}
+.ia-tree{min-width:840px}
+.lvl{display:flex;justify-content:center;gap:14px;margin-bottom:0}
+.node{border:1.5px solid var(--navy);background:var(--navy-soft);color:var(--navy);border-radius:6px;padding:11px 14px;font-size:12.5px;font-weight:600;text-align:center;min-width:120px}
+.node.root{background:var(--navy);color:#fff}
+.node.leaf{border-color:var(--line);background:var(--bg);color:var(--soft);font-weight:500;min-width:104px}
+.node.hot{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.node .sn{display:block;font-size:10.5px;font-weight:500;opacity:.8;margin-top:2px}
+.connv{height:20px;width:1.5px;background:#c3cdd6;margin:0 auto}
+.connh{height:1.5px;background:#c3cdd6;margin:0 auto}
+.branchrow{display:flex;justify-content:center;align-items:flex-start;gap:14px}
+.branch{display:flex;flex-direction:column;align-items:center}
+
+/* ---- DASHBOARD STATS ---- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:18px}
+.kpi{border:1px solid var(--line);border-radius:9px;padding:13px 14px;background:var(--bg)}
+.kpi .kl{font-size:10.5px;font-weight:600;color:var(--soft);margin-bottom:5px}
+.kpi .kv{font-size:22px;font-weight:700;line-height:1;font-family:'Newsreader',serif}
+.kpi .kd{font-size:10.5px;margin-top:4px;font-weight:600}
+.kd.up{color:var(--green)}.kd.dn{color:var(--red)}
+.kpi.alert{background:var(--red-soft);border-color:#edc8c2}
+.kpi.alert .kv{color:var(--red)}
+.charts{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-bottom:18px}
+.chartbox{border:1px solid var(--line);border-radius:9px;padding:14px;background:var(--bg)}
+.chartbox .ct{font-size:11px;font-weight:600;color:var(--soft);margin-bottom:12px}
+.bars{display:flex;align-items:flex-end;gap:7px;height:78px}
+.bar{flex:1;background:var(--navy);border-radius:3px 3px 0 0;position:relative;min-height:6px}
+.bar.r{background:var(--red)}
+.bar span{position:absolute;bottom:-16px;left:0;right:0;text-align:center;font-size:9.5px;color:var(--soft)}
+.donutwrap{display:flex;align-items:center;gap:14px}
+.donut{width:78px;height:78px;border-radius:50%;flex-shrink:0;
+  background:conic-gradient(var(--red) 0 22%, var(--amber) 22% 34%, var(--green) 34% 100%)}
+.donut-in{width:44px;height:44px;background:var(--bg);border-radius:50%;margin:17px auto}
+.leg{font-size:11px;color:var(--soft)}
+.leg div{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.leg i{width:9px;height:9px;border-radius:2px;display:inline-block;font-style:normal}
+
+footer{padding:46px 0 64px;border-top:1px solid var(--line);text-align:center}
+footer p{font-size:13px;color:var(--soft)}
+
+@media(max-width:820px){
+  .grid2,.grid3,.opts,.ocs,.dsgrid,.metas{grid-template-columns:1fr}
+  .conflict{grid-template-columns:1fr}
+  .rrow{grid-template-columns:1fr}
+  .nlinks{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="nav"><div class="wrap">
+  <div class="logo">Wealth Operations <i>Workbench</i></div>
+  <nav class="nlinks">
+    <a onclick="go('problem')">Problem</a><a onclick="go('role')">Role</a><a onclick="go('research')">Research</a>
+    <a onclick="go('decisions')">Decisions</a><a onclick="go('execution')">Execution</a><a onclick="go('impact')">Impact</a><a onclick="go('reflection')">Reflection</a>
+  </nav>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <span class="pill">Product Design Case Study</span>
+  <h1>Rebuilding trust in a financial operations dashboard</h1>
+  <p class="lead">An internal platform used by wealth-management and operations teams to track and process financial transactions. Conflicting data across backend systems meant users stopped trusting what they saw on screen — and started working around the product entirely.</p>
+  <div class="metas">
+    <div><div class="k">My role</div><div class="v">Product Designer — sole designer</div></div>
+    <div><div class="k">Team</div><div class="v">PM · EM · 5 Eng · 2 QA · BA</div></div>
+    <div><div class="k">Users</div><div class="v">Ops analysts &amp; compliance</div></div>
+    <div><div class="k">Scale</div><div class="v">~10k+ transactions / day</div></div>
+  </div>
+</div></header>
+
+<!-- 1. PROBLEM -->
+<section id="problem"><div class="wrap">
+  <div class="num">01 — The problem &amp; context</div>
+  <h2>Users could see the data. They just didn't believe it.</h2>
+  <p class="body">Every morning, operations analysts opened this dashboard to answer one question: <strong>what needs my attention today?</strong> Pending trades, settled trades, and anything that had failed validation. Each row represented real money moving between institutions, so getting it wrong had downstream settlement consequences.</p>
+  <p class="body">The data came from two different backend systems that updated on different schedules — a core transaction system and a separate validation layer. That timing gap created a specific, corrosive failure: <strong>the same trade could appear as "Completed" in one place and still be flagged as an error in another.</strong></p>
+
+  <div class="conflict">
+    <div class="sysbox">
+      <div class="sysname">Core transaction system</div>
+      <div class="field">settlement_status: <span class="val ok">Completed</span></div>
+      <div class="field">trade_date: 03/14</div>
+    </div>
+    <div class="vs">CONFLICT</div>
+    <div class="sysbox">
+      <div class="sysname">Validation layer</div>
+      <div class="field">validation_flag: <span class="val bad">Error</span></div>
+      <div class="field">resolution_status: Open</div>
+    </div>
+  </div>
+
+  <div class="grid3">
+    <div class="card"><span class="tag t-red">User cost</span><h4>Manual double-checking</h4><p>Analysts stopped trusting the queue and began verifying trades by hand — slowing the whole morning down.</p></div>
+    <div class="card"><span class="tag t-red">Workaround</span><h4>Shadow spreadsheets</h4><p>Teams tracked exceptions in their own Excel files, outside the product entirely.</p></div>
+    <div class="card"><span class="tag t-red">Business cost</span><h4>Delayed resolution</h4><p>Issues surfaced late, which pushed against downstream settlement timelines.</p></div>
+  </div>
+
+  <p class="body" style="margin-top:22px">The clearest signal something was wrong was never technical. It was an ops lead messaging to say <strong>they couldn't tell which trades needed attention</strong> — which meant they couldn't start their day.</p>
+</div></section>
+
+<!-- 2. ROLE -->
+<section id="role"><div class="wrap">
+  <div class="num">02 — My role &amp; collaborators</div>
+  <h2>Sole designer, owning the transaction workflow end to end</h2>
+  <p class="body">I was the only designer on the product, which meant I owned the problem from discovery through to what shipped — and I was the person ops leads came to directly when something didn't match how they actually worked.</p>
+  <div class="roles">
+    <div class="rrow mine"><div class="who">Me — Product Designer</div><div class="what">Problem framing, user sessions with ops &amp; compliance, workflow mapping, IA, wireframes, high-fidelity design, prototypes, usability testing, design system ownership, edge-case and state definition, engineering walkthroughs</div></div>
+    <div class="rrow"><div class="who">Product Manager</div><div class="what">Business requirements, prioritisation, release scope</div></div>
+    <div class="rrow"><div class="who">Business Analyst</div><div class="what">Data definitions, field-level logic, validation rules</div></div>
+    <div class="rrow"><div class="who">Engineering (EM + 5)</div><div class="what">Feasibility, data structure constraints, implementation</div></div>
+    <div class="rrow"><div class="who">QA (2)</div><div class="what">State &amp; edge-case verification against designed behaviour</div></div>
+    <div class="rrow"><div class="who">Ops &amp; Compliance users</div><div class="what">Primary users — workflow observation, testing, ongoing feedback</div></div>
+  </div>
+</div></section>
+
+<!-- 3. RESEARCH -->
+<section id="research"><div class="wrap">
+  <div class="num">03 — Research &amp; inputs</div>
+  <h2>I stopped assuming it was a UI problem</h2>
+  <p class="body">My first instinct was that this was a sync or refresh issue on the front end. That turned out to be wrong — and finding that out changed the entire direction of the work.</p>
+
+  <h3 class="sub">Qualitative — SWOT synthesis from user sessions</h3>
+  <p class="body">After sitting with ops analysts through their morning routine and running workflow sessions with ops leads and BAs, I synthesised everything in FigJam and clustered it into a SWOT to decide where design could actually move the needle.</p>
+
+  <div class="figjam">
+    <div class="fj-bar"><span class="fdot"></span><span>FigJam — Ops research synthesis · 6 sessions</span></div>
+    <div class="swot">
+      <div class="quad q-s"><div class="qh">STRENGTHS</div><div class="notes">
+        <div class="sticky st-g"><b>Data</b>All the information users need already exists in the system</div>
+        <div class="sticky st-g"><b>Expertise</b>Users know their domain deeply — they're not confused by finance, just by the UI</div>
+        <div class="sticky st-g"><b>Access</b>Direct line to users — ops leads message me the moment something feels wrong</div>
+        <div class="sticky st-g"><b>Single entry</b>The dashboard is already the accepted starting point of their day</div>
+      </div></div>
+      <div class="quad q-w"><div class="qh">WEAKNESSES</div><div class="notes">
+        <div class="sticky st-p"><b>Trust</b>Two systems disagree on screen — users stop believing any of it</div>
+        <div class="sticky st-p"><b>Triage</b>No prioritisation — everything looks equally urgent</div>
+        <div class="sticky st-p"><b>Invisible</b>Records with no status appear in no view at all</div>
+        <div class="sticky st-p"><b>Scanning</b>Exceptions buried in hundreds of rows, found manually</div>
+      </div></div>
+      <div class="quad q-o"><div class="qh">OPPORTUNITIES</div><div class="notes">
+        <div class="sticky st-b"><b>Reconcile</b>Resolve conflicts in the product instead of passing them to the user</div>
+        <div class="sticky st-b"><b>Surface</b>A dedicated queue could replace the Excel workaround entirely</div>
+        <div class="sticky st-b"><b>Urgency</b>SLA data already exists and isn't being used to prioritise</div>
+        <div class="sticky st-b"><b>System</b>Patterns here could standardise all five views</div>
+      </div></div>
+      <div class="quad q-t"><div class="qh">THREATS</div><div class="notes">
+        <div class="sticky st-o"><b>Resistance</b>Tenured users equate density with control — will resist removal</div>
+        <div class="sticky st-o"><b>Backend</b>Grouping logic may not be supportable in current data structure</div>
+        <div class="sticky st-o"><b>Fragmenting</b>A second queue risks becoming another place to check</div>
+        <div class="sticky st-o"><b>False alarms</b>Over-flagging could erode trust the same way silence did</div>
+      </div></div>
+    </div>
+  </div>
+
+  <h3 class="sub">Quantitative — competitive &amp; internal benchmarking</h3>
+  <p class="body">I benchmarked how comparable operations and exception-management tools handle conflicting states and triage, to understand which patterns were established conventions versus genuine gaps.</p>
+
+  <div class="comp"><table>
+    <tr><th style="width:24%">Capability</th><th>Internal legacy tool</th><th>Enterprise ops platform A</th><th>Exception-mgmt tool B</th><th class="usc">Our direction</th></tr>
+    <tr><td class="crit">Conflicting statuses reconciled</td>
+      <td><span class="no">✕</span><span class="note">Shows raw fields side by side</span></td>
+      <td><span class="part">◐</span><span class="note">Last-write-wins, not rule-based</span></td>
+      <td><span class="yes">✓</span><span class="note">Severity-based precedence</span></td>
+      <td class="usc"><span class="yes">✓</span><span class="note">Rule-based, validation takes precedence</span></td></tr>
+    <tr><td class="crit">Dedicated exception queue</td>
+      <td><span class="no">✕</span><span class="note">Inline highlighting only</span></td>
+      <td><span class="yes">✓</span><span class="note">Separate module</span></td>
+      <td><span class="yes">✓</span><span class="note">Core of the product</span></td>
+      <td class="usc"><span class="yes">✓</span><span class="note">Queue + count visible from main view</span></td></tr>
+    <tr><td class="crit">Urgency / SLA prioritisation</td>
+      <td><span class="no">✕</span><span class="note">Manual sorting</span></td>
+      <td><span class="part">◐</span><span class="note">Sortable, not surfaced</span></td>
+      <td><span class="yes">✓</span><span class="note">Auto-escalation</span></td>
+      <td class="usc"><span class="yes">✓</span><span class="note">Breaches surface to top automatically</span></td></tr>
+    <tr><td class="crit">Reason stated, not inferred</td>
+      <td><span class="no">✕</span><span class="note">Error codes only</span></td>
+      <td><span class="no">✕</span><span class="note">Codes with tooltip</span></td>
+      <td><span class="part">◐</span><span class="note">Category label</span></td>
+      <td class="usc"><span class="yes">✓</span><span class="note">Plain-language cause per row</span></td></tr>
+    <tr><td class="crit">Null / missing state handled</td>
+      <td><span class="no">✕</span><span class="note">Record vanishes from views</span></td>
+      <td><span class="part">◐</span><span class="note">Appears in "all" only</span></td>
+      <td><span class="part">◐</span><span class="note">Unassigned bucket</span></td>
+      <td class="usc"><span class="yes">✓</span><span class="note">Explicit "pending update" bucket</span></td></tr>
+  </table></div>
+  <div class="takeaway"><b>What the benchmarking told me:</b> a dedicated exception queue was a proven convention, so the risk there was low. But <em>reconciling conflicting statuses into a single stated reason</em> was something nobody did well — which is where the real opportunity was, and also where I'd need to be most careful about getting the precedence rule right.</div>
+
+  <div class="resolve" style="margin-top:22px">
+    <span class="ic">🔍</span>
+    <p><strong>The reframe:</strong> this was never a visual problem. The interface was faithfully showing raw data from two systems that disagreed. The design problem was <strong>deciding what the product should say when its own sources conflict.</strong></p>
+  </div>
+
+  <h3 class="sub">Information architecture</h3>
+  <p class="body">Before designing screens, I restructured the IA around the question users actually arrive with — <em>what needs me today?</em> — rather than around how the backend organises data.</p>
+
+  <div class="ia">
+    <div class="ia-head"><span class="sq"></span>Information architecture — restructured around user intent</div>
+    <div class="ia-tree">
+      <div class="lvl"><div class="node root">Operations Workbench</div></div>
+      <div class="connv"></div>
+      <div class="connh" style="width:74%"></div>
+      <div class="branchrow" style="margin-top:0">
+        <div class="branch"><div class="connv"></div><div class="node hot">Needs attention<span class="sn">primary entry point</span></div></div>
+        <div class="branch"><div class="connv"></div><div class="node">Pending</div></div>
+        <div class="branch"><div class="connv"></div><div class="node">Completed</div></div>
+        <div class="branch"><div class="connv"></div><div class="node">SLA tracking</div></div>
+        <div class="branch"><div class="connv"></div><div class="node">Pending update<span class="sn">null-status records</span></div></div>
+      </div>
+      <div class="connh" style="width:30%;margin-top:18px"></div>
+      <div class="branchrow">
+        <div class="branch"><div class="connv"></div><div class="node leaf">Validation error</div></div>
+        <div class="branch"><div class="connv"></div><div class="node leaf">SLA breach</div></div>
+        <div class="branch"><div class="connv"></div><div class="node leaf">Date sequence</div></div>
+      </div>
+      <div class="connv"></div>
+      <div class="lvl"><div class="node leaf" style="min-width:200px">Record detail — raw source values, history, resolve action</div></div>
+    </div>
+  </div>
+  <p class="body" style="margin-top:14px">The key structural move: <strong>"Needs attention" became the default landing view</strong> rather than a filter buried inside an "all transactions" table — and every exception type still resolves back to one shared record detail, so there's never a second version of the truth.</p>
+</div></section>
+
+<!-- 4. DECISIONS -->
+<section id="decisions"><div class="wrap">
+  <div class="num">04 — Key decisions &amp; trade-offs</div>
+  <h2>Three decisions, each with something given up</h2>
+
+  <div class="tradeoff">
+    <h4>Decision 1 — Resolve conflicts to a single actionable status</h4>
+    <div class="opts">
+      <div class="opt rejected"><div class="lab">CONSIDERED &amp; REJECTED</div><p><b>Show both raw values</b> and let users interpret. Most transparent — but it pushed the reconciliation work onto the user and was exactly what caused the distrust.</p></div>
+      <div class="opt rejected"><div class="lab">TRIED &amp; INSUFFICIENT</div><p><b>Increase data refresh frequency.</b> My first attempt. It narrowed the window but never closed it, because the two systems update on fundamentally different cycles.</p></div>
+    </div>
+    <div class="opt chosen"><div class="lab">CHOSEN</div><p><b>Derive one combined status at the UI layer</b>, prioritising the validation flag over settlement status whenever the two disagree.</p></div>
+    <p class="why" style="margin-top:14px"><b>The trade-off:</b> a trade that was seconds away from resolving could still briefly surface as "needs attention." I accepted that false-positive cost deliberately — in a settlement context, showing a problem that turns out to be fine is recoverable; hiding a real problem is not. I made the underlying values available on the record detail so nothing was hidden, just no longer competing for the user's judgement.</p>
+  </div>
+
+  <div class="tradeoff">
+    <h4>Decision 2 — Pull exceptions out of the main table into a dedicated queue</h4>
+    <div class="opts">
+      <div class="opt rejected"><div class="lab">CONSIDERED &amp; REJECTED</div><p><b>Highlight exception rows in place.</b> Lower effort and kept one source of truth — but users were still scanning hundreds of rows to find them.</p></div>
+      <div class="opt chosen"><div class="lab">CHOSEN</div><p><b>A separate, prioritised exception queue</b>, grouped by error type and open/closed state, with urgency surfaced first.</p></div>
+    </div>
+    <p class="why"><b>The trade-off:</b> a second place to look risks fragmenting the workflow. I mitigated it by making the exception count visible from the main view and keeping a single record detail shared between both, so users never had to reconcile two versions of the same trade.</p>
+  </div>
+
+  <div class="tradeoff">
+    <h4>Decision 3 — Progressive disclosure, against user preference</h4>
+    <div class="opts">
+      <div class="opt rejected"><div class="lab">TENSION</div><p><b>Ops wanted every field visible.</b> They had built their confidence around seeing everything at once and pushed back on removing anything.</p></div>
+      <div class="opt rejected"><div class="lab">TENSION</div><p><b>Product wanted a clean, minimal view.</b> New joiners were visibly overwhelmed by the existing density.</p></div>
+    </div>
+    <div class="opt chosen"><div class="lab">CHOSEN</div><p><b>Lead with the fields that drive the decision</b> — status, urgency, ownership — and keep secondary detail one interaction away rather than removed.</p></div>
+    <p class="why" style="margin-top:14px"><b>The trade-off:</b> I sat with each group separately to find which fields they genuinely used versus which they simply felt safer seeing. Some long-tenured users still preferred the old density, and I accepted that — most adapted after a few iterations, and nothing was actually taken away.</p>
+  </div>
+</div></section>
+
+<!-- 5. EXECUTION -->
+<section id="execution"><div class="wrap">
+  <div class="num">05 — Execution &amp; artifacts</div>
+  <h2>From raw conflicting data to a prioritised queue</h2>
+  <p class="body">Toggle between the original view and the redesign. The core shift is from <strong>"here is all the data"</strong> to <strong>"here is what needs you, and why."</strong></p>
+
+  <div class="controls">
+    <div class="seg">
+      <button id="bB" class="on" onclick="setV('before')">Before</button>
+      <button id="bA" onclick="setV('after')">After</button>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div class="sbar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><div class="surl">workbench / transactions</div></div>
+    <div class="sbody" id="demo"></div>
+  </div>
+
+  <h3 class="sub">States &amp; edge cases I defined</h3>
+  <p class="body">Because a single unhandled state here means a missed trade, I specified behaviour for each case rather than leaving it to implementation.</p>
+  <div class="grid3">
+    <div class="card"><span class="tag t-amber">Edge case</span><h4>Conflicting statuses</h4><p>Resolves to the actionable state; both raw values shown on the detail record.</p></div>
+    <div class="card"><span class="tag t-amber">Edge case</span><h4>Missing status</h4><p>Grouped into an explicit "Pending update" bucket so no record is invisible.</p></div>
+    <div class="card"><span class="tag t-amber">Edge case</span><h4>Illogical date sequence</h4><p>Settlement before trade date is flagged and routed out of the clean queue.</p></div>
+    <div class="card"><span class="tag t-amber">Edge case</span><h4>SLA breach</h4><p>Escalates to the top of the queue with explicit urgency treatment.</p></div>
+    <div class="card"><span class="tag t-amber">Edge case</span><h4>Empty queue</h4><p>Confirms "nothing needs attention" rather than showing an ambiguous blank state.</p></div>
+    <div class="card"><span class="tag t-amber">Edge case</span><h4>Stale / loading data</h4><p>Surfaces last-updated time so users know whether they're seeing current information.</p></div>
+  </div>
+
+  <h3 class="sub">Design system contributions</h3>
+  <p class="body">These patterns had to hold up across five views, so I built them as components rather than one-off screens.</p>
+  <div class="dsgrid">
+    <div class="dscard"><div class="dslab">STATUS TOKENS</div>
+      <div class="swatches"><div class="sw" style="background:#e6f1eb"></div><div class="sw" style="background:#faeae7"></div><div class="sw" style="background:#fbf0dc"></div><div class="sw" style="background:#eceef0"></div></div>
+      <div class="dsnote">Semantic, not decorative — one meaning per token, used identically everywhere.</div></div>
+    <div class="dscard"><div class="dslab">DATA TABLE</div><div class="dsnote">Shared column logic, sorting, density and row-state behaviour across all five views.</div></div>
+    <div class="dscard"><div class="dslab">STATE PATTERNS</div><div class="dsnote">Default, loading, empty, error and stale defined once and reused.</div></div>
+    <div class="dscard"><div class="dslab">GUIDANCE</div><div class="dsnote">Contextual help pattern added after testing showed users knew <em>what</em> was wrong but not <em>what to do</em>.</div></div>
+  </div>
+
+  <div class="resolve" style="margin-top:22px"><span class="ic">🔧</span><p><strong>A constraint I designed around:</strong> the grouping I wanted wasn't supported by the backend at the time. Rather than block the release, I worked with engineering on a UI-layer approach that delivered the value immediately while the proper data-side change was planned.</p></div>
+</div></section>
+
+<!-- 6. IMPACT -->
+<section id="impact"><div class="wrap">
+  <div class="num">06 — Impact &amp; outcomes</div>
+  <h2>How I knew it actually worked</h2>
+  <p class="body">We measured it two ways — task performance in testing, and whether the behaviour that signalled distrust actually stopped.</p>
+  <div class="ocs">
+    <div class="oc"><div class="n">Faster</div><div class="l">Time to identify and act on an exception dropped between testing rounds</div></div>
+    <div class="oc"><div class="n">Fewer</div><div class="l">Errors and missed items in the second usability round after the guidance redesign</div></div>
+    <div class="oc"><div class="n">Lower</div><div class="l">Duplicate-handling and "missing trade" complaints from ops</div></div>
+  </div>
+  <div class="signal">
+    <div class="q">"I don't need to keep my own spreadsheet anymore."</div>
+    <div class="attr">— Operations lead, after release. The clearest signal: the workaround people had built to compensate for the product simply stopped being necessary.</div>
+  </div>
+  <p class="body" style="margin-top:20px">That one was the outcome I cared about most. Task time is useful, but people only abandon a workaround they've invested in when they genuinely trust the system to do the job instead.</p>
+</div></section>
+
+<!-- 7. REFLECTION -->
+<section id="reflection"><div class="wrap">
+  <div class="num">07 — Reflection</div>
+  <h2>What I'd do differently</h2>
+  <div class="reflect">
+    <p><strong>I brought the ops team in too late.</strong> I did the research and the workflow mapping with them, but then went away and came back with something close to final. That turned what should have been a collaborative decision into a reaction — and it's why the pushback on density was sharper than it needed to be.</p>
+    <p>If I ran it again, I'd co-design the density and hierarchy decisions <em>with</em> the long-tenured users, in the room, at low fidelity. Not because they'd have designed it better, but because people defend a decision they helped shape and resist one that arrives finished.</p>
+    <p>The related lesson: my first instinct — that this was a refresh problem — was wrong, and I spent real time there. I've since become much faster at asking "is the data actually wrong, or is the product just repeating a disagreement it should be resolving?" before assuming the fix lives in the interface.</p>
+  </div>
+</div></section>
+
+<footer><div class="wrap"><p>Case study presented with client details anonymised · Pratiksha Kulam</p></div></footer>
+
+<script>
+function go(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+let v='before';
+function setV(x){v=x;
+  document.getElementById('bB').classList.toggle('on',x==='before');
+  document.getElementById('bA').classList.toggle('on',x==='after');
+  r();}
+
+function before(){return `
+<div class="messy">⚠ One flat table · raw conflicting statuses · exceptions buried in the list</div>
+<div class="apphead"><div><div class="apptitle">All Transactions</div><div class="appsub">2,847 records</div></div></div>
+<table>
+<tr><th>Trade ID</th><th>Date</th><th>Asset class</th><th>Settlement status</th><th>Validation flag</th><th>Resolution</th></tr>
+<tr><td class="mono">TRD-88412</td><td>03/14</td><td>Equity</td><td><span class="badge b-ok">Completed</span></td><td><span class="badge b-err">Error</span></td><td>Open</td></tr>
+<tr><td class="mono">TRD-88413</td><td>03/14</td><td>Fixed income</td><td><span class="badge b-ok">Completed</span></td><td>—</td><td>—</td></tr>
+<tr><td class="mono">TRD-88414</td><td>03/14</td><td>Equity</td><td><span class="badge b-pend">Pending</span></td><td>—</td><td>—</td></tr>
+<tr><td class="mono">TRD-88415</td><td>03/13</td><td>FX</td><td><span class="badge b-ok">Completed</span></td><td><span class="badge b-err">Error</span></td><td>Open</td></tr>
+<tr><td class="mono">TRD-88416</td><td>03/14</td><td>Equity</td><td><span class="badge b-pend">—</span></td><td>—</td><td>—</td></tr>
+<tr><td class="mono">TRD-88417</td><td>03/12</td><td>Fixed income</td><td><span class="badge b-ok">Completed</span></td><td>—</td><td>—</td></tr>
+</table>
+<p style="font-size:12.5px;color:var(--soft);margin-top:14px">Two status columns that can disagree · no prioritisation · a blank status means the record disappears from filtered views.</p>`}
+
+function after(){return `
+<div class="good">✓ One resolved status · exceptions in a prioritised queue · urgency surfaced first</div>
+<div class="apphead"><div><div class="apptitle">Transactions</div><div class="appsub">Updated 2 min ago · 2,847 records today</div></div></div>
+
+<div class="kpis">
+  <div class="kpi alert"><div class="kl">NEEDS ATTENTION</div><div class="kv">12</div><div class="kd dn">3 breaching SLA</div></div>
+  <div class="kpi"><div class="kl">PENDING SETTLEMENT</div><div class="kv">284</div><div class="kd">on track</div></div>
+  <div class="kpi"><div class="kl">SETTLED TODAY</div><div class="kv">2,539</div><div class="kd up">↑ 4% vs yesterday</div></div>
+  <div class="kpi"><div class="kl">AVG RESOLUTION</div><div class="kv">1.4h</div><div class="kd up">↓ from 3.2h</div></div>
+</div>
+
+<div class="charts">
+  <div class="chartbox"><div class="ct">EXCEPTIONS BY HOUR — TODAY</div>
+    <div class="bars">
+      <div class="bar" style="height:28%"><span>08</span></div>
+      <div class="bar" style="height:52%"><span>09</span></div>
+      <div class="bar r" style="height:88%"><span>10</span></div>
+      <div class="bar" style="height:46%"><span>11</span></div>
+      <div class="bar" style="height:34%"><span>12</span></div>
+      <div class="bar" style="height:22%"><span>13</span></div>
+      <div class="bar" style="height:40%"><span>14</span></div>
+      <div class="bar" style="height:16%"><span>15</span></div>
+    </div>
+  </div>
+  <div class="chartbox"><div class="ct">EXCEPTION TYPES</div>
+    <div class="donutwrap">
+      <div class="donut"><div class="donut-in"></div></div>
+      <div class="leg">
+        <div><i style="background:#a83f34"></i> SLA breach · 3</div>
+        <div><i style="background:#b5761c"></i> Date sequence · 2</div>
+        <div><i style="background:#2c6e52"></i> Validation · 7</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab on">Needs attention <span class="cnt">12</span></div>
+  <div class="tab">Pending</div><div class="tab">Completed</div><div class="tab">SLA tracking</div><div class="tab">Pending update</div>
+</div>
+<div class="prio"><span class="pchip hot">SLA breach · 3</span><span class="pchip">Validation error · 7</span><span class="pchip">Date sequence · 2</span></div>
+<table>
+<tr><th>Trade ID</th><th>Status</th><th>Why</th><th>Age</th><th></th></tr>
+<tr><td class="mono">TRD-88415</td><td><span class="badge b-err">Needs attention</span><div class="rowflag">SLA breach</div></td><td>Validation error — open, settlement reported complete</td><td>2d</td><td class="act">Resolve →</td></tr>
+<tr><td class="mono">TRD-88412</td><td><span class="badge b-err">Needs attention</span></td><td>Validation error — open</td><td>4h</td><td class="act">Resolve →</td></tr>
+<tr><td class="mono">TRD-88419</td><td><span class="badge b-warn">Review</span></td><td>Settlement date precedes trade date</td><td>4h</td><td class="act">Review →</td></tr>
+<tr><td class="mono">TRD-88416</td><td><span class="badge b-pend">Pending update</span></td><td>No status received from source system</td><td>1h</td><td class="act">View →</td></tr>
+</table>
+<p style="font-size:12.5px;color:var(--soft);margin-top:14px">One resolved status per row · the reason is stated, not inferred · raw source values remain on the record detail.</p>`}
+
+function r(){document.getElementById('demo').innerHTML = v==='before'?before():after()}
+r();
+</script>
+</body>
+</html>

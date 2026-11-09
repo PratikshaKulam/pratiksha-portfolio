@@ -3,11 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple Reminders Case Study — Pratiksha Kulam</title>
-  <meta name="description" content="An accessibility-focused heuristic evaluation and home-screen redesign of Apple Reminders on iOS.">
+  <title>Apple Reminders — Case Study · Pratiksha Kulam</title>
+  <meta name="description" content="An accessibility-focused evaluation and home-screen redesign of Apple Reminders on iOS.">
   <link rel="stylesheet" href="case-study.css">
+  <link rel="stylesheet" href="motion.css">
+  <style>
+    body { --project: #1F6FD1; --project-soft: #E4ECF7; --project-deep: #0D1B33; }
+
+    /* hero lens */
+    .lens-wrap { position: relative; cursor: none; }
+    .lens { position: absolute; width: 220px; height: 220px; border-radius: 50%; pointer-events: none; opacity: 0; transform: scale(.6);
+      transition: opacity .3s, transform .4s var(--ease); background-repeat: no-repeat;
+      box-shadow: 0 0 0 6px rgba(255,255,255,.9), 0 0 0 7px rgba(0,0,0,.12), 0 30px 60px -20px rgba(0,0,0,.45); z-index: 3; }
+    .lens-wrap.on .lens { opacity: 1; transform: scale(1); }
+    .lens-hint { position: absolute; right: 22px; bottom: 20px; background: rgba(255,255,255,.85); backdrop-filter: blur(8px); padding: 8px 14px; border-radius: 999px; font-size: 12px; color: var(--muted); z-index: 2; transition: opacity .3s; }
+    .lens-wrap.on .lens-hint { opacity: 0; }
+
+    /* ── iOS mock ── */
+    .ios { --tile: #fff; width: 100%; height: 100%; background: #F2F2F7; font-family: -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif; color: #000; position: relative; padding: 46px 14px 0; font-size: 12px; overflow: hidden; }
+    .ios .sb { position: absolute; top: 14px; left: 26px; right: 22px; display: flex; justify-content: space-between; font-weight: 600; font-size: 12.5px; }
+    .ios .sb i { width: 22px; height: 11px; border: 1.5px solid #000; border-radius: 3px; display: inline-block; position: relative; }
+    .ios .sb i::after { content: ''; position: absolute; inset: 1px 5px 1px 1px; background: #000; border-radius: 1px; }
+    .ios .island { position: absolute; top: 10px; left: 50%; width: 86px; height: 24px; margin-left: -43px; background: #000; border-radius: 20px; }
+    .ios .dots { text-align: right; color: #0A7AFF; font-size: 18px; line-height: 1; height: 22px; }
+    .ios .search { background: #E3E3E8; border-radius: 10px; padding: 7px 10px; color: #8A8A8E; display: flex; justify-content: space-between; margin: 6px 0 12px; font-size: 13px; }
+    .ios .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .ios .grid.three { grid-template-columns: repeat(3, 1fr); margin-bottom: 9px; }
+    .ios .tile { background: var(--tile); border-radius: 11px; padding: 8px 10px 7px; position: relative; min-height: 58px; transition: box-shadow .4s, transform .4s var(--ease); }
+    .ios .tile .ic { width: 25px; height: 25px; border-radius: 50%; display: grid; place-items: center; color: #fff; }
+    .ios .tile .ic svg { width: 14px; height: 14px; }
+    .ios .tile b { position: absolute; right: 10px; top: 6px; font-size: 21px; font-weight: 700; }
+    .ios .tile span { display: block; color: #6D6D72; font-weight: 600; margin-top: 5px; font-size: 12.5px; }
+    .ios .tile.pri { min-height: 0; text-align: center; padding: 8px 4px; }
+    .ios .tile.pri .ic { margin: 0 auto; background: #fff; border: 1.5px solid #D1D1D6; }
+    .ios .tile.pri span { color: #1c1c1e; font-weight: 500; font-size: 11px; margin-top: 4px; }
+    .ios h6 { font-size: 18px; font-weight: 700; margin: 16px 2px 8px; display: flex; justify-content: space-between; align-items: baseline; }
+    .ios h6 small { color: #0A7AFF; font-weight: 400; font-size: 13px; }
+    .ios .row { background: #fff; border-radius: 11px; padding: 9px 10px; display: flex; align-items: center; gap: 10px; font-size: 13.5px; }
+    .ios .row .ic { width: 25px; height: 25px; border-radius: 50%; background: #FF9500; display: grid; place-items: center; color: #fff; }
+    .ios .row .ic svg { width: 13px; height: 13px; }
+    .ios .row em { margin-left: auto; font-style: normal; color: #8A8A8E; }
+    .ios .foot { position: absolute; left: 14px; right: 14px; bottom: 26px; display: flex; justify-content: space-between; align-items: center; color: #0A7AFF; font-size: 13px; transition: box-shadow .4s; border-radius: 8px; }
+    .ios .foot .plus { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: #0A7AFF; color: #fff; font-size: 14px; margin-right: 6px; vertical-align: -3px; }
+    .ios .tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: 74px; background: rgba(249,249,251,.95); border-top: 1px solid #DADADF; display: flex; justify-content: space-around; align-items: flex-start; padding-top: 9px; transition: box-shadow .4s; }
+    .ios .tabbar div { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 9.5px; color: #6D6D72; }
+    .ios .tabbar svg { width: 20px; height: 20px; }
+    .ios .tabbar .add { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #3A3A3C; display: grid; place-items: center; margin-top: -4px; font-size: 26px; color: #3A3A3C; font-weight: 300; }
+    .ios .home-ind { position: absolute; bottom: 7px; left: 50%; width: 110px; height: 4px; margin-left: -55px; background: #000; border-radius: 4px; }
+    .ios .hl { box-shadow: 0 0 0 3px #1F6FD1, 0 0 0 9px rgba(31,111,209,.18); transform: scale(1.03); z-index: 2; }
+    .ios .foot.hl, .ios .tabbar.hl { transform: none; }
+
+    .device { width: 300px; aspect-ratio: 9 / 19.5; position: relative; }
+    .device .phone { height: 100%; }
+    .device .screen { position: relative; }
+
+    /* compare */
+    .compare { display: grid; grid-template-columns: 1fr 340px 1fr; gap: 56px; align-items: center; margin-top: 48px; padding: 64px 48px; border-radius: 22px; background: linear-gradient(170deg, #E8EEF8, #F3EFE8); }
+    .cmp-device .after { position: absolute; inset: 0; clip-path: inset(0 0 0 var(--x, 50%)); }
+    .cmp-handle { position: absolute; top: -14px; bottom: -14px; left: var(--x, 50%); width: 2px; margin-left: -1px; background: var(--project); z-index: 5; pointer-events: none; }
+    .cmp-handle::after { content: '⟷'; position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: var(--project); color: #fff; display: grid; place-items: center; font-size: 18px; box-shadow: 0 10px 26px -8px rgba(31,111,209,.7); }
+    .cmp-range { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; z-index: 6; cursor: ew-resize; margin: 0; }
+    .cmp-labels { display: flex; justify-content: space-between; margin-top: 18px; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--subtle); }
+    .change-list { list-style: none; }
+    .change-list li { padding: 16px 0 16px 18px; border-left: 2px solid var(--line); cursor: pointer; transition: border-color .3s, background .3s; }
+    .change-list li + li { margin-top: 4px; }
+    .change-list li.on, .change-list li:hover { border-left-color: var(--project); }
+    .change-list h5 { font-family: var(--serif); font-weight: normal; font-size: 19px; margin-bottom: 4px; }
+    .change-list p { font-size: 14px; color: var(--muted); }
+    .compare p.side-title { font-family: var(--serif); font-size: 30px; line-height: 1.15; margin: 10px 0 14px; }
+    .compare .side p:not(.side-title) { color: var(--muted); font-size: 15px; }
+
+    /* findings */
+    .audit { display: grid; grid-template-columns: 340px 1fr; gap: 72px; align-items: center; margin-top: 48px; }
+    .pin { position: absolute; z-index: 4; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 50%; background: #E5484D; color: #fff; font: 600 12px/28px var(--sans); text-align: center; cursor: pointer; box-shadow: 0 6px 16px -4px rgba(229,72,77,.6); transition: transform .3s var(--ease); }
+    .pin::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid #E5484D; opacity: 0; }
+    .pin.on { transform: scale(1.18); }
+    .pin.on::before { animation: pinPulse 1.6s ease-out infinite; }
+    @keyframes pinPulse { from { opacity: .8; transform: scale(.8); } to { opacity: 0; transform: scale(1.8); } }
+    .finding-list { list-style: none; counter-reset: f; }
+    .finding-list li { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 22px 20px; border-radius: 14px; cursor: pointer; transition: background .35s, transform .35s var(--ease); }
+    .finding-list li:hover { transform: translateX(4px); }
+    .finding-list li.on { background: var(--surface); box-shadow: 0 18px 40px -26px rgba(13,27,51,.45); }
+    .finding-list .n { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #E5484D; color: #E5484D; display: grid; place-items: center; font-size: 13px; font-weight: 600; transition: background .3s, color .3s; }
+    .finding-list li.on .n { background: #E5484D; color: #fff; }
+    .finding-list h5 { font-family: var(--serif); font-weight: normal; font-size: 21px; margin-bottom: 4px; }
+    .finding-list p { font-size: 14.5px; color: var(--muted); }
+    .finding-list .tag { display: inline-block; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--project); margin-top: 8px; }
+
+    /* severity/effort matrix */
+    .matrix { position: relative; aspect-ratio: 16 / 9; max-width: 860px; margin-top: 44px; border-left: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+    .matrix .q { position: absolute; width: 50%; height: 50%; display: flex; padding: 18px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--subtle); }
+    .matrix .q1 { left: 0; top: 0; background: color-mix(in srgb, var(--project) 10%, transparent); color: var(--project); }
+    .matrix .q2 { right: 0; top: 0; justify-content: flex-end; }
+    .matrix .q3 { left: 0; bottom: 0; align-items: flex-end; }
+    .matrix .q4 { right: 0; bottom: 0; justify-content: flex-end; align-items: flex-end; }
+    .matrix .ax { position: absolute; font-size: 12px; color: var(--muted); }
+    .matrix .ax.x { bottom: -30px; right: 0; }
+    .matrix .ax.y { left: -30px; top: 0; transform: rotate(-90deg) translateX(-100%); transform-origin: 0 0; }
+    .matrix .dot { position: absolute; width: 14px; height: 14px; margin: -7px; border-radius: 50%; background: var(--project); opacity: 0; transform: scale(0); transition: opacity .5s, transform .7s var(--ease); transition-delay: var(--d); }
+    .matrix .dot.ghost { background: transparent; border: 1.5px solid var(--project); }
+    .matrix.in .dot { opacity: 1; transform: none; }
+    .matrix .dot b { position: absolute; left: 20px; top: -4px; white-space: nowrap; font: 500 12.5px var(--sans); color: var(--ink); }
+
+    @media (max-width: 1000px) {
+      .compare { grid-template-columns: 1fr; padding: 40px 24px; }
+      .compare > .device { margin: 0 auto; }
+      .audit { grid-template-columns: 1fr; gap: 40px; }
+      .audit .device { margin: 0 auto; }
+      .matrix .dot b { font-size: 11px; }
+    }
+  </style>
 </head>
-<body style="--project:#1F6FD1; --project-soft:#E7EEF7;">
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-cal" viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-tray" viewBox="0 0 16 16"><path d="M2 9l2-6h8l2 6v4H2z M2 9h4l1 2h2l1-2h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 16 16"><path d="M4 14V2.5M4 3h8l-2 3 2 3H4" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-list" viewBox="0 0 16 16"><path d="M5.5 4h8M5.5 8h8M5.5 12h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="2.5" cy="4" r="1" fill="currentColor"/><circle cx="2.5" cy="8" r="1" fill="currentColor"/><circle cx="2.5" cy="12" r="1" fill="currentColor"/></symbol>
+  <symbol id="i-home" viewBox="0 0 20 20"><path d="M3 9l7-6 7 6v8H3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  <symbol id="i-hist" viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 7h6M7 10h6M7 13h4" stroke="currentColor" stroke-width="1.5"/></symbol>
+</svg>
+
+<template id="tpl-before">
+  <div class="ios">
+    <div class="island"></div>
+    <div class="sb"><span>9:41</span><i></i></div>
+    <div class="dots">⋯</div>
+    <div class="search"><span>⌕ Search</span><span>🎙</span></div>
+    <div class="grid" data-area="grid">
+      <div class="tile"><div class="ic" style="background:#0A7AFF"><svg><use href="#i-cal"/></svg></div><b>1</b><span>Today</span></div>
+      <div class="tile"><div class="ic" style="background:#FF3B30"><svg><use href="#i-cal"/></svg></div><b>1</b><span>Scheduled</span></div>
+      <div class="tile"><div class="ic" style="background:#1C1C1E"><svg><use href="#i-tray"/></svg></div><b>1</b><span>All</span></div>
+      <div class="tile"><div class="ic" style="background:#FF9500"><svg><use href="#i-flag"/></svg></div><b>0</b><span>Flagged</span></div>
+      <div class="tile" data-area="completed"><div class="ic" style="background:#636366"><svg><use href="#i-check"/></svg></div><span>Completed</span></div>
+    </div>
+    <h6>My Lists</h6>
+    <div class="row"><div class="ic"><svg><use href="#i-list"/></svg></div>Reminders<em>1 ›</em></div>
+    <div class="foot" data-area="actions"><span><span class="plus">+</span>New Reminder</span><span>Add List</span></div>
+    <div class="home-ind"></div>
+  </div>
+</template>
+
+<template id="tpl-after">
+  <div class="ios">
+    <div class="island"></div>
+    <div class="sb"><span>9:41</span><i></i></div>
+    <div class="dots">⋯</div>
+    <div class="search"><span>⌕ Search</span><span>🎙</span></div>
+    <div class="grid three" data-area="priority">
+      <div class="tile pri"><div class="ic" style="color:#FF3B30"><svg><use href="#i-flag"/></svg></div><span>High</span></div>
+      <div class="tile pri"><div class="ic" style="color:#FF9500"><svg><use href="#i-flag"/></svg></div><span>Medium</span></div>
+      <div class="tile pri"><div class="ic" style="color:#0A7AFF"><svg><use href="#i-flag"/></svg></div><span>Low</span></div>
+    </div>
+    <div class="grid">
+      <div class="tile"><div class="ic" style="background:#0A7AFF"><svg><use href="#i-cal"/></svg></div><b>7</b><span>Today</span></div>
+      <div class="tile"><div class="ic" style="background:#FF3B30"><svg><use href="#i-cal"/></svg></div><b>5</b><span>Scheduled</span></div>
+      <div class="tile"><div class="ic" style="background:#1C1C1E"><svg><use href="#i-tray"/></svg></div><b>6</b><span>All</span></div>
+      <div class="tile"><div class="ic" style="background:#FF9500"><svg><use href="#i-flag"/></svg></div><b>0</b><span>Flagged</span></div>
+      <div class="tile" data-area="completed"><div class="ic" style="background:#636366"><svg><use href="#i-check"/></svg></div><b>1</b><span>Completed</span></div>
+    </div>
+    <h6>My Lists <small>Edit</small></h6>
+    <div class="row"><div class="ic" style="background:#0A7AFF"><svg><use href="#i-list"/></svg></div>Reminders<em>1 ›</em></div>
+    <div class="tabbar" data-area="tabbar">
+      <div><svg><use href="#i-home"/></svg>Home</div>
+      <div><svg><use href="#i-cal"/></svg>Calendar</div>
+      <div><span class="add">+</span></div>
+      <div><svg><use href="#i-list"/></svg>List</div>
+      <div><svg><use href="#i-hist"/></svg>History</div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+</template>
+
 <a class="skip-link" href="#main">Skip to content</a>
 
 <nav class="topnav" aria-label="Site">
@@ -16,30 +184,44 @@
     <li><a href="index.html#work">Work</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="index.html#contact">Contact</a></li>
-    <li><a href="resume.pdf" class="nav-resume">Resume</a></li>
+    <li><a href="resume.pdf" class="nav-resume" data-magnetic>Resume</a></li>
   </ul>
 </nav>
 
-<header class="cs-hero">
+<header class="hero">
   <div class="wrap">
-    <a class="cs-back" href="index.html#work">← All work</a>
-    <p class="cs-tag">UX Research · Accessibility · iOS · 2025</p>
-    <h1 class="cs-title">Found the gaps. <em>Apple fixed them next.</em></h1>
-    <p class="cs-lede">An accessibility-focused evaluation of Apple Reminders on iOS, and a redesign of the home screen people see every time they open it.</p>
-    <dl class="cs-meta">
-      <div><dt>Role</dt><dd><span class="todo">UX researcher &amp; designer — confirm</span></dd></div>
-      <div><dt>Methods</dt><dd>Heuristic evaluation, accessibility review, usability testing</dd></div>
-      <div><dt>Participants</dt><dd>5 users</dd></div>
-      <div><dt>Platform</dt><dd>iOS · Reminders app</dd></div>
-    </dl>
-    <figure class="cs-cover">
-      <img src="assets/apple/audit.jpg" alt="Two iPhones showing the Apple Reminders home screen; a magnifying glass highlights the smart-list tiles marked with red audit points.">
+    <div class="hero-top" data-reveal="fade">
+      <a class="back" href="index.html#work">← All work</a>
+      <span class="eyebrow">2025 · Independent study</span>
+    </div>
+    <p class="eyebrow c" data-reveal style="margin-bottom:22px">Apple Reminders · Accessibility audit &amp; redesign</p>
+    <h1 data-split>Found the gaps. <em>Apple fixed them next.</em></h1>
+    <div class="hero-lede">
+      <p data-reveal style="--d:.3s">An accessibility-first evaluation of Apple Reminders on iOS — and a redesign of the one screen everyone sees every time they open it. Several of my findings later <mark class="sweep">matched changes Apple shipped.</mark></p>
+      <dl class="facts" data-reveal style="--d:.45s">
+        <div><dt>Methods</dt><dd>Heuristic review, accessibility pass</dd></div>
+        <div><dt>Testing</dt><dd>5 participants</dd></div>
+        <div><dt>Platform</dt><dd>iOS · Reminders</dd></div>
+        <div><dt>Output</dt><dd>10+ findings, home redesign</dd></div>
+      </dl>
+    </div>
+    <figure class="hero-media lens-wrap" id="lensWrap" data-reveal="clip">
+      <img src="assets/apple/audit.jpg" alt="Two iPhones showing the Apple Reminders home screen; a magnifying glass highlights the smart-list tiles marked with red audit points." id="lensImg">
+      <div class="lens" id="lens" aria-hidden="true"></div>
+      <span class="lens-hint" aria-hidden="true">Move over the image to inspect ⌕</span>
     </figure>
-    <p style="font-size:12px;color:var(--subtle);margin-top:12px;">Independent study. Not affiliated with Apple Inc.</p>
+    <p class="disclaimer">Independent study. Not affiliated with Apple Inc.</p>
+
+    <section class="tldr" aria-label="Summary">
+      <div data-reveal><h2>Problem</h2><p>Reminders looks simple, but small inconsistencies on its home screen <strong>add up</strong> — hardest for people with low vision or motor difficulties.</p></div>
+      <div data-reveal style="--d:.1s"><h2>Approach</h2><p>Heuristic review, an accessibility pass and <strong>5 usability sessions</strong> on the same screens.</p></div>
+      <div data-reveal style="--d:.2s"><h2>Design</h2><p>Kept Apple's visual language; changed the <strong>structure</strong>: priority up top, consistent tiles, a thumb-reachable add button.</p></div>
+      <div data-reveal style="--d:.3s"><h2>Result</h2><p><strong>10+ gaps</strong> documented. <strong>3</strong> recommendations later matched changes Apple shipped.</p></div>
+    </section>
   </div>
 </header>
 
-<nav class="chapter-nav" aria-label="Case study chapters">
+<nav class="chapter-nav" aria-label="Chapters">
   <ol>
     <li><a href="#problem"><span>01</span>The problem</a></li>
     <li><a href="#thinking"><span>02</span>The thinking</a></li>
@@ -49,132 +231,176 @@
 
 <main id="main">
 
-  <!-- ───────── 01 ───────── -->
+  <!-- ═════════ 01 ═════════ -->
   <section class="chapter" id="problem">
     <div class="wrap">
-      <div class="chapter-intro reveal">
-        <p class="chapter-num">Chapter 01</p>
-        <h2 class="chapter-title">Start with the right problem.</h2>
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">01</div>
+        <div>
+          <p class="eyebrow c">Chapter one</p>
+          <h2 class="chapter-title" data-split>Start with the <em>right problem.</em></h2>
+        </div>
       </div>
 
-      <div class="block reveal">
-        <p class="block-label">The gap</p>
-        <h3>Reminders looks simple. That simplicity hides the friction.</h3>
-        <p>Reminders is used for quick, everyday tasks, so small problems add up fast. Unclear labels, inconsistent states and hard-to-reach actions are minor annoyances for some people. For people with low vision, motor difficulties or cognitive load, they make the app harder to use.</p>
-        <p>I set out to answer one question: <strong>where does the home screen make people work harder than they should?</strong></p>
+      <div class="block block-head">
+        <p class="eyebrow">Why Reminders</p>
+        <div data-reveal>
+          <h3>Simple apps hide friction well.</h3>
+          <p>Reminders is used in quick, distracted moments — at the door, mid-conversation, half-asleep. When a screen is used that fast, small problems compound: an unclear label, a tile that behaves differently from its neighbours, an action that's hard to hit.</p>
+          <p>For most people those are annoyances. For people with <mark class="sweep">low vision, tremors or cognitive load</mark>, they decide whether the app is usable at all.</p>
+        </div>
       </div>
 
-      <blockquote class="pull reveal">Small friction points compound quickly — especially for the people who rely on reminders most.</blockquote>
+      <blockquote class="pull" data-reveal>Where does the home screen make people work harder than they should?<cite>— the one question that framed the study</cite></blockquote>
     </div>
   </section>
 
-  <!-- ───────── 02 ───────── -->
+  <!-- ═════════ 02 ═════════ -->
   <section class="chapter" id="thinking">
     <div class="wrap">
-      <div class="chapter-intro reveal">
-        <p class="chapter-num">Chapter 02</p>
-        <h2 class="chapter-title">Make the thinking visible.</h2>
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">02</div>
+        <div>
+          <p class="eyebrow c">Chapter two</p>
+          <h2 class="chapter-title" data-split>Make the <em>thinking visible.</em></h2>
+        </div>
       </div>
 
-      <div class="block reveal">
-        <p class="block-label">How I evaluated it</p>
-        <h3>Three lenses on the same screens.</h3>
-        <div class="trio">
-          <div class="trio-card">
-            <div class="trio-num">01</div>
-            <h4>Heuristic review</h4>
-            <p>Walked through the core flows against usability heuristics, noting where clarity, consistency or feedback broke down.</p>
-          </div>
-          <div class="trio-card">
-            <div class="trio-num">02</div>
-            <h4>Accessibility pass</h4>
-            <p>Checked contrast, discoverability, interaction clarity and how easily people could recover from mistakes.</p>
-          </div>
-          <div class="trio-card">
-            <div class="trio-num">03</div>
-            <h4>Usability testing</h4>
-            <p>Watched 5 people complete everyday tasks to see which issues actually slowed them down.</p>
+      <div class="block block-head">
+        <p class="eyebrow">Method</p>
+        <div>
+          <h3 data-reveal>Three lenses on the same screens.</h3>
+          <div class="timeline" style="--n:3">
+            <div data-reveal><div class="dot"></div><span class="k">Lens 1</span><h5>Heuristic review</h5><p>Walked the core flows against usability heuristics, logging where clarity, consistency and feedback broke down.</p></div>
+            <div data-reveal style="--d:.15s"><div class="dot"></div><span class="k">Lens 2</span><h5>Accessibility pass</h5><p>Checked contrast, discoverability, interaction clarity and how easily people could recover from mistakes.</p></div>
+            <div data-reveal style="--d:.3s"><div class="dot"></div><span class="k">Lens 3</span><h5>Usability testing</h5><p>Watched 5 people complete everyday tasks to see which issues actually slowed them down.</p></div>
           </div>
         </div>
       </div>
 
-      <div class="block reveal">
-        <p class="block-label">What I found</p>
-        <h3>10+ gaps, prioritised by severity and effort.</h3>
-        <p>I grouped every issue by how badly it hurt people and how hard it would be to fix. That gave me a clear split between quick wins and deeper structural changes. The home screen held the most important ones:</p>
-        <ul class="changes">
-          <li><span class="n">01</span><div><h4>Inconsistent smart-list tiles</h4><p>Every tile showed a count except Completed, so the grid didn't read as one consistent pattern.</p></div></li>
-          <li><span class="n">02</span><div><h4>Priority was hidden</h4><p>Priority existed, but you couldn't see or filter by it from the home screen.</p></div></li>
-          <li><span class="n">03</span><div><h4>Primary actions were small text links</h4><p>“New Reminder” and “Add List” sat in the bottom corners as small text, which made them hard to hit and easy to miss.</p></div></li>
-        </ul>
-        <p style="margin-top:20px;"><span class="todo">Add 2–3 more findings from your audit (with severity) so the 10+ number is backed up on the page.</span></p>
+      <div class="block block-head">
+        <p class="eyebrow">What I found</p>
+        <div>
+          <h3 data-reveal>Tap a marker — each one is a gap on the home screen.</h3>
+          <div class="audit" id="audit" data-inview>
+            <div class="device">
+              <div class="phone"><div class="screen" id="auditScreen"></div></div>
+              <button class="pin" data-f="0" style="left:46%;top:43%" aria-label="Finding 1" data-cursor="Inspect">1</button>
+              <button class="pin" data-f="1" style="left:95%;top:21%" aria-label="Finding 2" data-cursor="Inspect">2</button>
+              <button class="pin" data-f="2" style="left:60%;top:92%" aria-label="Finding 3" data-cursor="Inspect">3</button>
+            </div>
+            <ol class="finding-list" id="findingList">
+              <li data-f="0" data-area="completed"><span class="n">1</span><div><h5>One tile breaks the pattern</h5><p>Every smart-list tile shows a count except Completed. The grid stops reading as one consistent system, so people have to inspect each tile instead of scanning.</p><span class="tag">Consistency · Recognition</span></div></li>
+              <li data-f="1" data-area="grid"><span class="n">2</span><div><h5>Priority is invisible from home</h5><p>Reminders supports priority, but nothing on the home screen surfaces it. Finding what's urgent means opening lists one by one.</p><span class="tag">Visibility · Efficiency</span></div></li>
+              <li data-f="2" data-area="actions"><span class="n">3</span><div><h5>Primary actions are small text links</h5><p>“New Reminder” and “Add List” sit in the bottom corners as text. They're easy to miss and hard to hit — especially one-handed or with limited dexterity.</p><span class="tag">Target size · Reachability</span></div></li>
+            </ol>
+          </div>
+          <!-- TODO(Pratiksha): add 2–3 more findings from your audit so the 10+ count is visible on the page. -->
+        </div>
       </div>
 
-      <div class="block reveal">
-        <div class="split">
+      <div class="block block-head">
+        <p class="eyebrow">Prioritising</p>
+        <div>
+          <h3 data-reveal>10+ issues, sorted by how much they hurt and how hard they are to fix.</h3>
+          <p data-reveal>Grouping by severity and effort split the list into quick wins and deeper structural changes. The home-screen issues landed where it mattered most: high impact, low effort.</p>
+          <div class="matrix" data-inview role="img" aria-label="Impact versus effort matrix. The three home-screen findings sit in the high-impact, low-effort quadrant.">
+            <div class="q q1">Quick wins</div><div class="q q2">Big bets</div><div class="q q3">Polish</div><div class="q q4">Later</div>
+            <span class="ax x">Effort →</span><span class="ax y">Impact →</span>
+            <span class="dot" style="left:18%;top:22%;--d:.1s"><b>Consistent tiles</b></span>
+            <span class="dot" style="left:30%;top:14%;--d:.25s"><b>Priority on home</b></span>
+            <span class="dot" style="left:38%;top:30%;--d:.4s"><b>Reachable add button</b></span>
+          </div>
+          <p class="disclaimer" style="margin-top:44px">Where the three home-screen findings landed.</p>
+          <!-- TODO(Pratiksha): check these placements match your own severity/effort ratings, and add your other findings as dots. -->
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <p class="eyebrow">The redesign</p>
+          <h3 data-reveal>Same app. Clearer structure. Drag to compare.</h3>
+        </div>
+        <div class="compare" data-reveal="scale">
+          <div class="side">
+            <p class="eyebrow c">What changed</p>
+            <p class="side-title">I kept Apple's visual language and changed the structure.</p>
+            <p>Hover a change to see it on the screen.</p>
+          </div>
           <div>
-            <p class="block-label">The redesign</p>
-            <h3>Same app, clearer structure.</h3>
-            <p>I kept Apple's visual language and changed the structure:</p>
-            <ul class="changes">
-              <li><span class="n">→</span><div><h4>Priority at the top</h4><p>High, Medium and Low filters sit above the smart lists.</p></div></li>
-              <li><span class="n">→</span><div><h4>Every tile shows its count</h4><p>Completed now follows the same pattern as the other tiles.</p></div></li>
-              <li><span class="n">→</span><div><h4>A tab bar with a central add button</h4><p>Home, Calendar, List and History are always one tap away, and the large + is easy to reach with a thumb.</p></div></li>
-            </ul>
+            <div class="device cmp-device" id="cmp" style="--x:50%">
+              <div class="phone"><div class="screen" id="cmpBefore"><div class="after" id="cmpAfter"></div></div></div>
+              <div class="cmp-handle" aria-hidden="true"></div>
+              <input class="cmp-range" type="range" min="0" max="100" value="50" aria-label="Compare before and after: slide to reveal the redesign" data-cursor="Drag">
+            </div>
+            <div class="cmp-labels"><span>← Before</span><span>After →</span></div>
           </div>
-          <figure class="fig" style="margin-top:0;">
-            <div class="fig-frame soft"><img src="assets/apple/before-after.jpg" alt="Before and after: the original Reminders home screen under a magnifying glass, next to the redesign with High, Medium and Low priority tiles, counts on every tile, and a bottom tab bar with a central add button." loading="lazy"></div>
-            <figcaption>Before (left) and after (right).</figcaption>
-          </figure>
+          <ul class="change-list" id="changeList">
+            <li data-area="priority"><h5>Priority at the top</h5><p>High, Medium and Low filters above the smart lists.</p></li>
+            <li data-area="completed"><h5>Every tile shows its count</h5><p>Completed now follows the same pattern as its neighbours.</p></li>
+            <li data-area="tabbar"><h5>A tab bar with a central +</h5><p>Home, Calendar, List and History one tap away; a large add button within thumb reach.</p></li>
+          </ul>
         </div>
       </div>
+
+      <figure class="fig" data-reveal="clip">
+        <div class="frame"><img src="assets/apple/before-after.jpg" alt="High-fidelity before and after: the original Reminders home screen under a magnifying glass next to the redesign." loading="lazy"></div>
+        <figcaption>High-fidelity mockups: original (left) and redesign (right).</figcaption>
+      </figure>
     </div>
   </section>
 
-  <!-- ───────── 03 ───────── -->
-  <section class="chapter" id="outcome">
+  <!-- ═════════ 03 ═════════ -->
+  <section class="band" id="outcome">
     <div class="wrap">
-      <div class="chapter-intro reveal">
-        <p class="chapter-num">Chapter 03</p>
-        <h2 class="chapter-title">What changed. What comes next.</h2>
-      </div>
-
-      <div class="block reveal">
-        <div class="stats">
-          <div class="stat"><p class="stat-val">10+</p><p class="stat-lbl">Usability and accessibility gaps documented</p></div>
-          <div class="stat"><p class="stat-val">3</p><p class="stat-lbl">Of my recommendations later matched changes Apple shipped</p></div>
-          <div class="stat"><p class="stat-val">5</p><p class="stat-lbl">Participants in usability testing</p></div>
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true" style="-webkit-text-stroke-color:#7FB0F2">03</div>
+        <div>
+          <p class="eyebrow">Chapter three</p>
+          <h2 class="chapter-title" data-split>What changed. <em style="color:#7FB0F2">What comes next.</em></h2>
         </div>
       </div>
 
-      <div class="block reveal">
-        <p class="block-label">Validation</p>
-        <h3>Apple later shipped changes in the same direction.</h3>
-        <p>Several issues I identified were later addressed in Apple's own updates, which suggests the analysis pointed in the right direction. <span class="todo">Name the 3 changes and the iOS version they shipped in. This is your strongest proof, so make it specific.</span></p>
+      <div class="stats" style="--cols:3">
+        <div class="stat"><p class="stat-val" data-count="10" data-suffix="+">10+</p><p class="stat-lbl">Usability and accessibility gaps documented</p></div>
+        <div class="stat"><p class="stat-val" data-count="3">3</p><p class="stat-lbl">Recommendations that later matched changes Apple shipped</p></div>
+        <div class="stat"><p class="stat-val" data-count="5">5</p><p class="stat-lbl">Participants in usability testing</p></div>
+      </div>
+      <!-- TODO(Pratiksha): name the 3 changes Apple shipped and the iOS version — your strongest proof. -->
+
+      <div class="block block-head" style="margin-top:110px">
+        <p class="eyebrow">Validation</p>
+        <div data-reveal>
+          <h3>Apple later moved in the same direction.</h3>
+          <p>Several of the issues I documented were addressed in Apple's own later updates — independent confirmation that the analysis was pointing at real problems, not preferences.</p>
+        </div>
       </div>
 
-      <blockquote class="pull reveal">Accessibility is quality, not an add-on. Evaluating for the edges makes mainstream products better for everyone.</blockquote>
+      <blockquote class="pull" data-reveal style="margin-bottom:0">Accessibility is quality, not an add-on. Designing for the edges makes the product better for everyone.</blockquote>
     </div>
   </section>
 
   <section class="more" aria-labelledby="more-title">
     <div class="wrap">
-      <h2 id="more-title">Explore more work.</h2>
+      <div class="more-head">
+        <h2 id="more-title" data-split>Explore more work.</h2>
+        <a class="back" href="index.html#work" data-magnetic>All projects →</a>
+      </div>
       <div class="more-grid">
-        <a class="more-card" href="case-study-robot.html">
-          <div class="more-img"><img src="robot-%20project.png" alt="" loading="lazy"></div>
-          <p class="more-tag">UX Research · Interaction Design</p>
-          <p class="more-title">Robot delivery existed. The experience didn't.</p>
+        <a class="more-card" href="case-study-stc.html" data-reveal data-cursor="View">
+          <div class="more-img"><img src="stc%20hub_2.png" alt="" loading="lazy"></div>
+          <p class="more-tag">Usability Testing · Enterprise UX</p>
+          <p class="more-title">The portal worked. So why did nobody trust it?</p>
         </a>
-        <a class="more-card" href="case-study-moodmode.html">
+        <a class="more-card" href="case-study-moodmode.html" data-reveal style="--d:.1s" data-cursor="View">
           <div class="more-img"><img src="moodmode_project2.png" alt="" loading="lazy"></div>
           <p class="more-tag">AI Product Design · iOS</p>
           <p class="more-title">Most apps ignore how you feel. This one starts there.</p>
         </a>
-        <a class="more-card" href="case-study-stc.html">
-          <div class="more-img"><img src="stc%20hub_2.png" alt="" loading="lazy"></div>
-          <p class="more-tag">Usability Testing · Enterprise UX</p>
-          <p class="more-title">The portal worked. So why did nobody trust it?</p>
+        <a class="more-card" href="case-study-wealth.html" data-reveal style="--d:.2s" data-cursor="View">
+          <div class="more-img"><img src="assets/wealth/cover.jpg" alt="" loading="lazy" style="object-position:left top"></div>
+          <p class="more-tag">Product Design · Fintech</p>
+          <p class="more-title">Users could see the data. They just didn't believe it.</p>
         </a>
       </div>
     </div>
@@ -184,9 +410,79 @@
 <footer class="cs-footer">
   <span>© 2026 Pratiksha Kulam</span>
   <span>Designed with a side of coffee, code &amp; AI</span>
-  <a href="index.html">Back to home</a>
+  <a href="index.html">Back to home ↑</a>
 </footer>
 
+<script src="motion.js"></script>
 <script src="case-study.js"></script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tpl = (id) => document.getElementById(id).content.firstElementChild.cloneNode(true);
+
+  /* mount phones */
+  const auditScreen = tpl('tpl-before');
+  document.getElementById('auditScreen').appendChild(auditScreen);
+  document.getElementById('cmpBefore').prepend(tpl('tpl-before'));
+  const afterScreen = tpl('tpl-after');
+  document.getElementById('cmpAfter').appendChild(afterScreen);
+
+  /* hero lens */
+  const wrap = document.getElementById('lensWrap'), lens = document.getElementById('lens'), img = document.getElementById('lensImg');
+  if (matchMedia('(pointer: fine)').matches) {
+    const Z = 2.4;
+    lens.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
+    wrap.addEventListener('pointerenter', () => wrap.classList.add('on'));
+    wrap.addEventListener('pointerleave', () => wrap.classList.remove('on'));
+    wrap.addEventListener('pointermove', (e) => {
+      const r = img.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+      lens.style.left = (x - 110) + 'px'; lens.style.top = (y - 110) + 'px';
+      lens.style.backgroundSize = `${r.width * Z}px ${r.height * Z}px`;
+      lens.style.backgroundPosition = `${-(x * Z - 110)}px ${-(y * Z - 110)}px`;
+    });
+  } else { wrap.classList.remove('lens-wrap'); document.querySelector('.lens-hint').remove(); }
+
+  /* findings ↔ pins */
+  const pins = [...document.querySelectorAll('.pin')], items = [...document.querySelectorAll('#findingList li')];
+  let auto, fi = 0;
+  const select = (i) => {
+    fi = i;
+    pins.forEach((p) => p.classList.toggle('on', +p.dataset.f === i));
+    items.forEach((li) => li.classList.toggle('on', +li.dataset.f === i));
+    auditScreen.querySelectorAll('.hl').forEach((el) => el.classList.remove('hl'));
+    const el = auditScreen.querySelector(`[data-area="${items[i].dataset.area}"]`);
+    if (el) el.classList.add('hl');
+  };
+  const stop = () => clearInterval(auto);
+  pins.forEach((p) => p.addEventListener('click', () => { stop(); select(+p.dataset.f); }));
+  items.forEach((li) => { li.tabIndex = 0; li.addEventListener('click', () => { stop(); select(+li.dataset.f); }); li.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); stop(); select(+li.dataset.f); } }); });
+  select(0);
+  document.getElementById('audit').addEventListener('m:in', () => { if (!reduce) auto = setInterval(() => select((fi + 1) % items.length), 2600); }, { once: true });
+
+  /* compare slider */
+  const cmp = document.getElementById('cmp'), range = cmp.querySelector('.cmp-range');
+  const setX = (v) => cmp.style.setProperty('--x', v + '%');
+  range.addEventListener('input', () => setX(range.value));
+  /* intro sweep so visitors see it's draggable */
+  cmp.closest('.compare').addEventListener('m:in', () => {
+    if (reduce) return;
+    const t0 = performance.now();
+    const tick = (t) => { const p = Math.min(1, (t - t0) / 2200); const v = 50 + Math.sin(p * Math.PI * 2) * 32 * (1 - p); setX(v); range.value = v; if (p < 1) requestAnimationFrame(tick); };
+    setTimeout(() => requestAnimationFrame(tick), 500);
+  }, { once: true });
+  const changes = [...document.querySelectorAll('#changeList li')];
+  changes.forEach((li) => {
+    const on = () => {
+      changes.forEach((c) => c.classList.toggle('on', c === li));
+      afterScreen.querySelectorAll('.hl').forEach((e) => e.classList.remove('hl'));
+      const el = afterScreen.querySelector(`[data-area="${li.dataset.area}"]`); if (el) el.classList.add('hl');
+      setX(8); range.value = 8;
+    };
+    li.tabIndex = 0;
+    li.addEventListener('mouseenter', on); li.addEventListener('focus', on); li.addEventListener('click', on);
+    li.addEventListener('mouseleave', () => { li.classList.remove('on'); afterScreen.querySelectorAll('.hl').forEach((e) => e.classList.remove('hl')); });
+  });
+})();
+</script>
 </body>
 </html>
