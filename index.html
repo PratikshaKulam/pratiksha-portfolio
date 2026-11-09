@@ -9,7 +9,7 @@
 <body>
   <nav class="site-nav site-nav--home" id="siteNav">
     <div class="nav-shell">
-      <a class="nav-home-logo" href="index.html" style="font-family:Georgia,serif;font-size:42px;font-weight:700;color:#0A0A0A;text-decoration:none;letter-spacing:-0.5px;line-height:1;">प्र</a>
+      <a class="nav-home-logo" href="index.html" style="font-family:Georgia,serif;font-size:42px;font-weight:700;color:#1C1915;text-decoration:none;letter-spacing:-0.5px;line-height:1;">प्र</a>
       <button class="menu-toggle menu-toggle--home" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
       <div class="nav-home-right" id="navMenu">
         <div class="nav-home-links">
@@ -34,12 +34,9 @@
             Found 3 problems before I even got to checkout.
           </p>
           <h1 class="home-hero__headline reveal-heading">
-            <span class="home-hero__headline-line">I design for</span>
+            <span class="home-hero__headline-line">I find where products</span>
             <span class="home-hero__headline-line home-hero__headline-line--cycle">
-              <span class="home-hero__cycle-outer">
-                <!-- CHANGE 1: "humans" → "change" -->
-                <span class="home-hero__cycle-inner" id="cycleWord">change.</span>
-              </span>
+              <em class="home-hero__cycle-inner">lose people.</em>
             </span>
           </h1>
           <div class="home-hero__pills">
@@ -116,7 +113,7 @@
           </div>
         </a>
 
-        <div class="project-card reveal-card" style="cursor:default;">
+        <a class="project-card reveal-card" href="case-study-moodmode.html">
   <div class="project-content">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
       <p class="project-context" style="margin:0;">2025 · AI Design · Lean UX · Mobile</p>
@@ -134,8 +131,8 @@
       <div class="project-stat"><p class="project-stat-value">3</p><p class="project-stat-label">AI focus modes</p></div>
       <div class="project-stat"><p class="project-stat-value">4</p><p class="project-stat-label">Lean UX phases</p></div>
     </div>
-    <p style="font-family:'Helvetica Neue',sans-serif;font-size:13px;color:#888888;margin:0 0 16px;font-style:italic;">Currently building with real OpenAI integration.</p>
-    <span style="font-family:'Helvetica Neue',sans-serif;font-size:13px;color:#BBBBBB;cursor:default;">Case study coming soon</span>
+    <p style="font-family:'Helvetica Neue',sans-serif;font-size:13px;color:#877D70;margin:0 0 16px;font-style:italic;">Currently building with real OpenAI integration.</p>
+    <span class="project-cta">View case study →</span>
     <div class="corner-moods" aria-hidden="true">
       <span class="corner-mood corner-mood-1">😌</span>
       <span class="corner-mood corner-mood-2">😤</span>
@@ -143,7 +140,7 @@
     </div>
   </div>
   <div class="project-media" style="background:#E4E8E4;"><img src="moodmode_project2.png" alt="MoodMode App" style="width:100%;height:100%;object-fit:cover;"></div>
-</div>
+</a>
 
         <a class="project-card reveal-card" href="case-study-stc.html">
           <div class="project-media" style="background:#E4E4E8;"><img src="stc hub_2.png" alt="STC Hub Portal" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -501,9 +498,10 @@
         grainCanvas.width = Math.max(1, Math.floor(hero.clientWidth));
         grainCanvas.height = Math.max(1, Math.floor(hero.clientHeight));
       };
+      // Static grain: drawn once per resize instead of every frame (saves CPU/battery).
       const drawGrain = () => {
         const w = grainCanvas.width, h = grainCanvas.height;
-        if (w < 1 || h < 1) { requestAnimationFrame(drawGrain); return; }
+        if (w < 1 || h < 1) return;
         const imageData = gctx.createImageData(w, h);
         const buf = imageData.data;
         for (let i = 0; i < buf.length; i += 4) {
@@ -511,11 +509,14 @@
           buf[i] = n; buf[i+1] = n; buf[i+2] = n; buf[i+3] = 255;
         }
         gctx.putImageData(imageData, 0, 0);
-        requestAnimationFrame(drawGrain);
       };
+      let grainTimer;
       resizeGrain();
-      window.addEventListener("resize", resizeGrain);
-      requestAnimationFrame(drawGrain);
+      drawGrain();
+      window.addEventListener("resize", () => {
+        clearTimeout(grainTimer);
+        grainTimer = setTimeout(() => { resizeGrain(); drawGrain(); }, 150);
+      });
     }
 
     const cycleWord = document.getElementById("cycleWord");

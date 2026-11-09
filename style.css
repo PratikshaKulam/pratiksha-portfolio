@@ -1,11 +1,11 @@
 :root {
-  --bg: #FAFAFA;
-  --surface: #F5F5F5;
-  --border: #E5E5E5;
-  --text: #0A0A0A;
-  --muted: #555555;
-  --subtle: #888888;
-  --accent: #C8A97E;
+  --bg: #F6F1E9;
+  --surface: #EFE8DD;
+  --border: #E3DACB;
+  --text: #1C1915;
+  --muted: #5E564B;
+  --subtle: #877D70;
+  --accent: #A4472A;
 }
 
 *,
@@ -66,13 +66,13 @@ img {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(246,241,233,0.92);
   backdrop-filter: blur(12px);
   transition: border-color 0.2s ease;
 }
 
 .site-nav.scrolled {
-  border-bottom: 0.5px solid #E5E5E5;
+  border-bottom: 0.5px solid #E3DACB;
 }
 
 .site-nav--home.scrolled {
@@ -81,9 +81,9 @@ img {
 
 /* —— Home page navbar (index only) —— */
 .site-nav--home {
-  background: #ffffff;
+  background: rgba(246,241,233,0.92);
   backdrop-filter: blur(12px);
-  box-shadow: 0 1px 0 0 #f0f0f0;
+  box-shadow: 0 1px 0 0 #E3DACB;
 }
 
 .site-nav--home .nav-shell {
@@ -100,7 +100,7 @@ img {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 16px;
   font-weight: 700;
-  color: #0A0A0A;
+  color: #1C1915;
 }
 
 .nav-home-right {
@@ -120,7 +120,7 @@ img {
   font-family: -apple-system, "Helvetica Neue", sans-serif;
   font-size: 15px;
   font-weight: 500;
-  color: #0A0A0A;
+  color: #1C1915;
   transition: color 0.2s ease;
 }
 
@@ -131,14 +131,14 @@ img {
   bottom: -3px;
   width: 100%;
   height: 1px;
-  background: #C8A97E;
+  background: #A4472A;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.2s ease;
 }
 
 .nav-home-link:hover {
-  color: #0A0A0A;
+  color: #1C1915;
 }
 
 .nav-home-link:hover::after {
@@ -149,27 +149,27 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #0a0a0a;
+  border: 1px solid #1C1915;
   border-radius: 2px;
   padding: 7px 18px;
   font-family: -apple-system, "Helvetica Neue", sans-serif;
   font-size: 13px;
   font-weight: 500;
-  color: #0a0a0a;
+  color: #1C1915;
   background: transparent;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
 .nav-home-resume:hover {
-  background: #0A0A0A;
+  background: #1C1915;
   color: #ffffff;
 }
 
 .menu-toggle--home {
-  border-color: #E5E5E5;
+  border-color: #E3DACB;
   background: #ffffff;
-  color: #0A0A0A;
+  color: #1C1915;
 }
 
 .nav-inner {
@@ -274,7 +274,7 @@ img {
   position: relative;
   min-height: 100vh;
   min-height: 100svh;
-  background: #fafafa;
+  background: #F6F1E9;
   display: flex;
   align-items: center;
   padding: 0;
@@ -321,7 +321,7 @@ img {
   font-style: italic;
   font-size: 16px;
   line-height: 1.8;
-  color: #888888;
+  color: #877D70;
 }
 
 .home-hero__headline {
@@ -331,7 +331,7 @@ img {
   font-size: 68px;
   line-height: 1.05;
   letter-spacing: -0.02em;
-  color: #0A0A0A;
+  color: #1C1915;
 }
 
 .home-hero__headline-line {
@@ -351,7 +351,7 @@ img {
 
 .home-hero__cycle-inner {
   display: inline-block;
-  color: #C8A97E;
+  color: #A4472A;
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
@@ -376,19 +376,19 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 0.5px solid #e0e0e0;
+  border: 0.5px solid #E3DACB;
   border-radius: 40px;
   padding: 8px 16px;
   font-family: -apple-system, "Helvetica Neue", sans-serif;
   font-size: 12px;
-  color: #555555;
+  color: #5E564B;
   background: transparent;
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .home-hero__pill:hover {
-  border-color: #c8a97e;
-  color: #0a0a0a;
+  border-color: #A4472A;
+  color: #1C1915;
 }
 
 .home-hero__pill-dot-glow {
@@ -408,7 +408,7 @@ img {
 
 .home-hero__pill-icon {
   font-size: 12px;
-  color: #c8a97e;
+  color: #A4472A;
   line-height: 1;
   flex-shrink: 0;
 }
@@ -433,9 +433,9 @@ img {
 }
 
 .home-hero__btn--primary {
-  background: #0a0a0a;
+  background: #1C1915;
   color: #ffffff;
-  border: 1px solid #0a0a0a;
+  border: 1px solid #1C1915;
   font-weight: 500;
 }
 
@@ -446,12 +446,12 @@ img {
 
 .home-hero__btn--secondary {
   background: transparent;
-  color: #0a0a0a;
-  border: 1px solid #0a0a0a;
+  color: #1C1915;
+  border: 1px solid #1C1915;
 }
 
 .home-hero__btn--secondary:hover {
-  background: #0a0a0a;
+  background: #1C1915;
   color: #ffffff;
 }
 
@@ -493,7 +493,7 @@ img {
 
 .home-hero__ticker-item {
   padding: 16px;
-  border-bottom: 0.5px solid #F5F5F5;
+  border-bottom: 0.5px solid #EFE8DD;
 }
 
 .home-hero__ticker-cat {
@@ -502,7 +502,7 @@ img {
   font-size: 8px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #c8a97e;
+  color: #A4472A;
 }
 
 .home-hero__ticker-skill {
@@ -510,7 +510,7 @@ img {
   margin-top: 4px;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 13px;
-  color: #0A0A0A;
+  color: #1C1915;
 }
 
 .home-hero__ticker-fade {
@@ -524,12 +524,12 @@ img {
 
 .home-hero__ticker-fade--top {
   top: 0;
-  background: linear-gradient(to bottom, #fafafa, rgba(250, 250, 250, 0));
+  background: linear-gradient(to bottom, #F6F1E9, rgba(250, 250, 250, 0));
 }
 
 .home-hero__ticker-fade--bottom {
   bottom: 0;
-  background: linear-gradient(to top, #fafafa, rgba(250, 250, 250, 0));
+  background: linear-gradient(to top, #F6F1E9, rgba(250, 250, 250, 0));
 }
 
 /* Work / projects (index #work only) */
@@ -544,7 +544,7 @@ img {
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  color: #0a0a0a;
+  color: #1C1915;
 }
 
 .work-list {
@@ -569,7 +569,7 @@ img {
 
 #work .project-card:hover {
   transform: translateY(-3px);
-  border: 0.5px solid #c8a97e;
+  border: 0.5px solid #A4472A;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
 }
 
@@ -621,7 +621,7 @@ img {
   font-weight: 700;
   font-size: 28px;
   line-height: 1.2;
-  color: #0a0a0a;
+  color: #1C1915;
 }
 
 #work .project-punchline span {
@@ -651,7 +651,7 @@ img {
   font-size: 30px;
   font-weight: 700;
   line-height: 1.1;
-  color: #0a0a0a;
+  color: #1C1915;
 }
 
 #work .project-stat-label {
@@ -669,14 +669,14 @@ img {
   padding-bottom: 2px;
   font-family: -apple-system, "Helvetica Neue", sans-serif;
   font-size: 13px;
-  color: #0a0a0a;
-  border-bottom: 1px solid #0a0a0a;
+  color: #1C1915;
+  border-bottom: 1px solid #1C1915;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 #work .project-card:hover .project-cta {
-  color: #c8a97e;
-  border-color: #c8a97e;
+  color: #A4472A;
+  border-color: #A4472A;
 }
 
 @keyframes robotDrift {
@@ -788,7 +788,7 @@ img {
 
 #work .corner-line {
   height: 2px;
-  background: #E0E0E0;
+  background: #E3DACB;
   border-radius: 2px;
 }
 
@@ -857,7 +857,7 @@ img {
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 700;
   font-size: 42px;
-  color: #0a0a0a;
+  color: #1C1915;
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
@@ -898,7 +898,7 @@ img {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 20px;
   font-weight: 700;
-  color: #0a0a0a;
+  color: #1C1915;
   line-height: 1.3;
 }
 
@@ -918,7 +918,7 @@ img {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 52px;
   font-weight: 700;
-  color: #0a0a0a;
+  color: #1C1915;
   line-height: 1;
   margin: 0 0 10px;
 }
@@ -927,7 +927,7 @@ img {
   margin: 0;
   font-family: -apple-system, "Helvetica Neue", sans-serif;
   font-size: 12px;
-  color: #888888;
+  color: #877D70;
   line-height: 1.6;
 }
 
@@ -945,7 +945,7 @@ img {
   padding: 4px 12px;
   font-family: -apple-system, "Helvetica Neue", sans-serif;
   font-size: 11px;
-  color: #555555;
+  color: #5E564B;
 }
 
 .tools-grid {
@@ -968,7 +968,7 @@ img {
 .tool-item-label {
   font-family: -apple-system, "Helvetica Neue", sans-serif;
   font-size: 10px;
-  color: #555555;
+  color: #5E564B;
   text-align: center;
 }
 
@@ -1422,8 +1422,8 @@ img {
     padding: 18px 40px 22px;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(12px);
-    border-top: 0.5px solid #E5E5E5;
-    border-bottom: 0.5px solid #E5E5E5;
+    border-top: 0.5px solid #E3DACB;
+    border-bottom: 0.5px solid #E3DACB;
   }
 
   .site-nav--home.open .nav-home-right {
@@ -1547,7 +1547,7 @@ img {
   font-family: Georgia, serif;
   font-weight: 700;
   font-size: 42px;
-  color: #0A0A0A;
+  color: #1C1915;
   margin-bottom: 32px;
 }
 
@@ -1571,7 +1571,7 @@ img {
 
 /* --- Contact section split layout --- */
 .section-contact {
-  border-top: 1px solid #E5E5E5;
+  border-top: 1px solid #E3DACB;
   padding-top: 80px;
   padding-bottom: 0;
 }
@@ -1597,7 +1597,7 @@ img {
   font-size: 88px;
   line-height: 0.88;
   letter-spacing: -0.03em;
-  color: #0A0A0A;
+  color: #1C1915;
 }
 
 .contact-split__right {
@@ -1624,7 +1624,7 @@ img {
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border: 0.5px solid #E5E5E5;
+  border: 0.5px solid #E3DACB;
   border-radius: 8px;
   text-decoration: none;
   transition: background 0.2s ease, border-color 0.2s ease;
@@ -1633,19 +1633,19 @@ img {
 
 .contact-row:hover {
   background: #F8F8F8;
-  border-color: #0A0A0A;
+  border-color: #1C1915;
 }
 
 .contact-row__label {
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: #0A0A0A;
+  color: #1C1915;
 }
 
 .contact-row__arrow {
   font-size: 16px;
-  color: #0A0A0A;
+  color: #1C1915;
 }
 
 /* --- Footer --- */
@@ -1654,7 +1654,7 @@ img {
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  border-top: 0.5px solid #E5E5E5;
+  border-top: 0.5px solid #E3DACB;
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 12px;
   color: #AAAAAA;
@@ -1693,7 +1693,7 @@ img {
 }
 /* CHANGE 8: Navbar soft shadow on scroll */
 .site-nav.scrolled {
-  box-shadow: 0 1px 0 0 #E5E5E5, 0 4px 16px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 0 0 #E3DACB, 0 4px 16px rgba(0,0,0,0.05);
 }
 
 /* CHANGE 3: Section headings italic + slightly lighter */
@@ -1714,7 +1714,7 @@ img {
 
 .project-card:hover {
   background: #F5F2EC !important;
-  border: 2px solid #C8A97E !important;
+  border: 2px solid #A4472A !important;
   transform: translateY(-4px) !important;
   box-shadow: 0 12px 40px rgba(0,0,0,0.08) !important;
 }
@@ -1726,3 +1726,10 @@ img {
 
 /* CHANGE 9: Tools card spans 3 rows to fill empty space */
 /* Already handled in HTML via grid-row:1/4 */
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal-card, .reveal-heading { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
