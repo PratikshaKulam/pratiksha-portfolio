@@ -3,237 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pratiksha Kulam — Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Pratiksha Kulam · Product Designer</title>
+  <meta name="description" content="Pratiksha Kulam, product designer. I find where products lose people, and design what brings them back.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Instrument+Sans:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="motion.css">
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <nav class="site-nav site-nav--home" id="siteNav">
-    <div class="nav-shell">
-      <a class="nav-home-logo" href="index.html" style="font-family:Georgia,serif;font-size:42px;font-weight:700;color:#1C1915;text-decoration:none;letter-spacing:-0.5px;line-height:1;">प्र</a>
-      <button class="menu-toggle menu-toggle--home" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
-      <div class="nav-home-right" id="navMenu">
-        <div class="nav-home-links">
-          <a class="nav-home-link" href="#work">Work</a>
-          <a class="nav-home-link" href="about.html">About</a>
-          <a class="nav-home-link" href="#contact">Contact</a>
-        </div>
-        <a data-magnetic class="nav-home-resume" href="resume.pdf">Resume ↗</a>
+<a class="skip-link" href="#work">Skip to work</a>
+
+<nav class="nav" id="nav" aria-label="Site">
+  <div class="nav-inner">
+    <a class="logo" href="index.html" aria-label="Home">प्र</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#think">How I think</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="resume.pdf">Resume</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1 class="h1" data-reveal>I find where products <span class="cycle" id="cycle"><span>lose people.</span></span></h1>
+      <p class="lead" data-reveal style="--d:.15s">Hi, I'm Pratiksha, a <strong>product designer who researches first</strong>. I once downloaded six food delivery apps just to study their checkout flows, and found three problems before I reached checkout.</p>
+      <div class="hero-ctas" data-reveal style="--d:.3s">
+        <a class="btn btn-dark" href="#work" data-magnetic>See the work</a>
+        <a class="btn btn-line" href="#think" data-magnetic>How I think</a>
+      </div>
+      <div class="hero-tags" data-reveal style="--d:.45s">
+        <span class="tag">Product design</span><span class="tag">UX research</span><span class="tag">Fintech &amp; enterprise</span><span class="tag">Accessibility</span><span class="tag">AI products</span>
       </div>
     </div>
-  </nav>
+    <figure class="photo" data-reveal="scale" style="margin:0">
+      <div class="photo-frame"><img src="prof-me1.jpeg" alt="Pratiksha Kulam"></div>
+      <figcaption class="photo-cap">hi, I'm Pratiksha</figcaption>
+    </figure>
+  </div>
+</header>
 
-  <header class="home-hero">
-    <canvas class="home-hero__grain" id="grainCanvas" aria-hidden="true"></canvas>
-    <div class="home-hero__shell">
-      <div class="home-hero__cols">
-        <div class="home-hero__left">
-          <!-- CHANGE 2: Line breaks for dramatic effect -->
-          <p class="home-hero__intro">
-            Hi, I'm Pratiksha. I downloaded 6 food delivery apps.<br>
-            No, I wasn't hungry — I was studying their checkout flows.<br>
-            Found 3 problems before I even got to checkout.
-          </p>
-          <h1 class="home-hero__headline reveal-heading">
-            <span class="home-hero__headline-line">I find where products</span>
-            <span class="home-hero__headline-line home-hero__headline-line--cycle">
-              <em class="home-hero__cycle-inner">lose people.</em>
-            </span>
-          </h1>
-          <div class="home-hero__pills">
-            <span class="home-hero__pill"><span class="home-hero__pill-dot-glow" aria-hidden="true"></span>Product Designer</span>
-            <span class="home-hero__pill"><span class="home-hero__pill-icon" aria-hidden="true">◎</span>Annoyingly Thorough</span>
-            <span class="home-hero__pill"><span class="home-hero__pill-icon" aria-hidden="true">⬡</span>Thinks in Systems</span>
-            <span class="home-hero__pill"><span class="home-hero__pill-icon" aria-hidden="true">✦</span>AI Curious</span>
-          </div>
-          <div class="home-hero__ctas">
-            <a data-magnetic class="home-hero__btn home-hero__btn--primary" href="#work">View My Work ↓</a>
-            <a data-magnetic class="home-hero__btn home-hero__btn--secondary" href="resume.pdf">Download Resume ↗</a>
-          </div>
+<main>
+<section class="section" id="work">
+  <div class="wrap">
+    <div class="sec-head"><h2 class="h2" data-reveal>Selected work</h2><span class="scribble" data-reveal>the problems I couldn't let go of</span></div>
+    <div class="rows">
+
+      <article class="row" data-reveal>
+        <a class="row-media" href="case-study-wealth.html" data-cursor="View" style="background:#ECE8F7"><img src="assets/wealth/transaction-dashboard.jpg" alt="Wealth Operations Workbench on a laptop with the exception queue and record detail"><span class="row-badge">Fintech · Internal tool</span></a>
+        <div class="row-copy">
+          <span class="label">Wealth Operations Workbench · 2025–2026</span>
+          <h3 class="h3">Users could see the data. They just didn't believe it.</h3>
+          <p>Two backend systems disagreed on screen, so analysts double-checked everything and kept shadow spreadsheets. <strong>One resolved status and a prioritised queue, and ops dropped their spreadsheet.</strong></p>
+          <a class="btn btn-line" href="case-study-wealth.html">See the full story</a>
         </div>
-        <div class="home-hero__divider" aria-hidden="true"></div>
-        <aside class="home-hero__ticker" aria-label="Skills">
-          <div class="home-hero__ticker-fade home-hero__ticker-fade--top"></div>
-          <div class="home-hero__ticker-fade home-hero__ticker-fade--bottom"></div>
-          <div class="home-hero__ticker-viewport">
-            <div class="home-hero__ticker-track">
-              <div class="home-hero__ticker-group">
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">RESEARCH</span><span class="home-hero__ticker-skill">User Research</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">DESIGN</span><span class="home-hero__ticker-skill">Interaction Design</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">AI</span><span class="home-hero__ticker-skill">AI Product Design</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">FRONTEND</span><span class="home-hero__ticker-skill">HTML · CSS · JS</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">ACCESSIBILITY</span><span class="home-hero__ticker-skill">WCAG · A11y</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">STRATEGY</span><span class="home-hero__ticker-skill">Product Thinking</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">TOOLS</span><span class="home-hero__ticker-skill">Figma · Miro</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">RESEARCH</span><span class="home-hero__ticker-skill">Usability Testing</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">SYSTEMS</span><span class="home-hero__ticker-skill">Design Systems</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">METHODS</span><span class="home-hero__ticker-skill">Think-Aloud · SUS</span></div>
-              </div>
-              <div class="home-hero__ticker-group" aria-hidden="true">
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">RESEARCH</span><span class="home-hero__ticker-skill">User Research</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">DESIGN</span><span class="home-hero__ticker-skill">Interaction Design</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">AI</span><span class="home-hero__ticker-skill">AI Product Design</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">FRONTEND</span><span class="home-hero__ticker-skill">HTML · CSS · JS</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">ACCESSIBILITY</span><span class="home-hero__ticker-skill">WCAG · A11y</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">STRATEGY</span><span class="home-hero__ticker-skill">Product Thinking</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">TOOLS</span><span class="home-hero__ticker-skill">Figma · Miro</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">RESEARCH</span><span class="home-hero__ticker-skill">Usability Testing</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">SYSTEMS</span><span class="home-hero__ticker-skill">Design Systems</span></div>
-                <div class="home-hero__ticker-item"><span class="home-hero__ticker-cat">METHODS</span><span class="home-hero__ticker-skill">Think-Aloud · SUS</span></div>
-              </div>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </div>
-  </header>
+      </article>
 
-  <section class="section" id="work">
-    <div class="container">
-      <!-- CHANGE 3: Italic heading -->
-      <h2 class="work-section-heading reveal-heading"><em>Selected Work.</em></h2>
-      <div class="work-list">
+      <article class="row" data-reveal>
+        <a class="row-media" href="case-study-smartloan.html" data-cursor="View" style="background:#DCEBE7"><img src="cover.jpg" alt="SmartLoan Connect redesigned income step on web and mobile"><span class="row-badge">Fintech · Digital lending</span></a>
+        <div class="row-copy">
+          <span class="label">SmartLoan Connect · Mphasis · 2021–2023</span>
+          <h3 class="h3">People started applying. Then they quietly gave up.</h3>
+          <p>A bank's online loan form lost most people at the income step. I added progress, plain language and reassurance where it felt riskiest. <strong>Application completion rose 18%.</strong></p>
+          <a class="btn btn-line" href="case-study-smartloan.html">See the full story</a>
+        </div>
+      </article>
 
-        <a class="project-card reveal-card" data-cursor="View" href="case-study-wealth.html">
-          <div class="project-content">
-            <p class="project-context">2025–2026 · Product Design · Fintech · Enterprise</p>
-            <p class="project-subtitle">Wealth Operations Workbench — Sole Product Designer</p>
-            <h3 class="project-punchline">
-              <span>Users could see the data.</span>
-              <span class="project-punchline-italic">They just didn't believe it.</span>
-            </h3>
-            <div class="project-stats-row">
-              <div class="project-stat"><p class="project-stat-value">10k+</p><p class="project-stat-label">Transactions / day</p></div>
-              <div class="project-stat"><p class="project-stat-value">5</p><p class="project-stat-label">Views unified</p></div>
-              <div class="project-stat"><p class="project-stat-value">6</p><p class="project-stat-label">Research sessions</p></div>
-            </div>
-            <span class="project-cta">View case study →</span>
-          </div>
-          <div class="project-media" style="background:#ECE8F7;"><img src="assets/wealth/transaction-dashboard.jpg" alt="Wealth Operations Workbench on a laptop: the needs-attention queue, a dashboard of exception metrics, and a record detail panel showing raw source values" style="width:100%;height:100%;object-fit:cover;object-position:center;"></div>
-        </a>
+      <article class="row" data-reveal>
+        <a class="row-media" href="case-study-robot.html" data-cursor="View" style="background:#E8E4DC"><img src="robot-%20project.png" alt="Robot delivery screens in a third-party delivery app"><span class="row-badge">UX research · Interaction</span></a>
+        <div class="row-copy">
+          <span class="label">Robot delivery redesign · 2026</span>
+          <h3 class="h3">Robot delivery existed. The experience didn't.</h3>
+          <p>Robots were delivering orders inside third-party apps, but the flow around them was an afterthought. <strong>Tested with 5+ participants, benchmarked 5 competitors, and redesigned 3 screens into 5.</strong></p>
+          <a class="btn btn-line" href="case-study-robot.html">See the full story</a>
+        </div>
+      </article>
 
-        <a class="project-card reveal-card" data-cursor="View" href="case-study-robot.html">
-          <div class="project-media" style="background:#E8E4DC;"><img src="robot- project.png" alt="Robot Delivery Redesign" style="width:100%;height:100%;object-fit:cover;"></div>
-          <div class="project-content">
-            <p class="project-context">2026 · UX Research · Interaction Design</p>
-            <p class="project-subtitle">Redesigning Robot Delivery in Third-Party Platforms</p>
-            <h3 class="project-punchline">
-              <span>Robot delivery existed.</span>
-              <span class="project-punchline-italic">The experience didn't.</span>
-            </h3>
-            <div class="project-stats-row">
-              <div class="project-stat"><p class="project-stat-value">5+</p><p class="project-stat-label">Participants</p></div>
-              <div class="project-stat"><p class="project-stat-value">5</p><p class="project-stat-label">Competitors</p></div>
-              <!-- CHANGE 4: Robot stat updated -->
-              <div class="project-stat"><p class="project-stat-value">3→5</p><p class="project-stat-label">Screens redesigned</p></div>
-            </div>
-            <span class="project-cta">View case study →</span>
-            <div class="corner-robot" aria-hidden="true">🤖</div>
-          </div>
-        </a>
+      <article class="row" data-reveal>
+        <a class="row-media" href="case-study-moodmode.html" data-cursor="View" style="background:#E4E8E4"><img src="moodmode_project2.png" alt="MoodMode app screens"><span class="row-badge">In progress · AI product</span></a>
+        <div class="row-copy">
+          <span class="label">MoodMode · 2025</span>
+          <h3 class="h3">Most apps ignore how you feel. This one starts there.</h3>
+          <p>A productivity app that adapts to your mood, with three AI focus modes, designed through four Lean UX phases. <strong>40% faster task start.</strong> Currently building it with a real OpenAI integration.</p>
+          <a class="btn btn-line" href="case-study-moodmode.html">See the full story</a>
+        </div>
+      </article>
 
-        <a class="project-card reveal-card" data-cursor="View" href="case-study-moodmode.html">
-  <div class="project-content">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-      <p class="project-context" style="margin:0;">2025 · AI Design · Lean UX · Mobile</p>
-      <span style="display:inline-flex;align-items:center;gap:5px;background:#FDF3E3;border:1px solid #E8C97A;color:#A67C00;font-family:'Helvetica Neue',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;">
-        ● In Progress
-      </span>
-    </div>
-    <p class="project-subtitle">MoodMode — AI-Powered Productivity App</p>
-    <h3 class="project-punchline">
-      <span>Most apps ignore how you feel.</span>
-      <span class="project-punchline-italic">This one starts there.</span>
-    </h3>
-    <div class="project-stats-row">
-      <div class="project-stat"><p class="project-stat-value">40%</p><p class="project-stat-label">Faster task start</p></div>
-      <div class="project-stat"><p class="project-stat-value">3</p><p class="project-stat-label">AI focus modes</p></div>
-      <div class="project-stat"><p class="project-stat-value">4</p><p class="project-stat-label">Lean UX phases</p></div>
-    </div>
-    <p style="font-family:'Helvetica Neue',sans-serif;font-size:13px;color:#877D70;margin:0 0 16px;font-style:italic;">Currently building with real OpenAI integration.</p>
-    <span class="project-cta">View case study →</span>
-    <div class="corner-moods" aria-hidden="true">
-      <span class="corner-mood corner-mood-1">😌</span>
-      <span class="corner-mood corner-mood-2">😤</span>
-      <span class="corner-mood corner-mood-3">😴</span>
+      <article class="row" data-reveal>
+        <a class="row-media" href="case-study-stc.html" data-cursor="View" style="background:#E4E4E8"><img src="stc%20hub_2.png" alt="STC Hub employee portal dashboard"><span class="row-badge">Usability study · Enterprise</span></a>
+        <div class="row-copy">
+          <span class="label">STC Hub employee portal · 2024</span>
+          <h3 class="h3">Complex admin portal. 15+ fixes that mattered.</h3>
+          <p>An employee portal that technically worked but left people unsure of what to do next. <strong>Tested with 6 users, measured SUS, and delivered 15+ prioritised recommendations.</strong></p>
+          <a class="btn btn-line" href="case-study-stc.html">See the full story</a>
+        </div>
+      </article>
+
+      <article class="row" data-reveal>
+        <a class="row-media" href="case-study-apple.html" data-cursor="View" style="background:#E8E8E4"><img src="apple-project.png" alt="Apple Reminders accessibility audit"><span class="row-badge">Accessibility · iOS</span></a>
+        <div class="row-copy">
+          <span class="label">Apple Reminders accessibility · 2025</span>
+          <h3 class="h3">Found the gaps. Apple fixed them next.</h3>
+          <p>A heuristic and accessibility review of Reminders, tested with 5 users. <strong>10+ gaps found, and 3 of my recommendations match changes Apple later shipped.</strong></p>
+          <a class="btn btn-line" href="case-study-apple.html">See the full story</a>
+        </div>
+      </article>
+
     </div>
   </div>
-  <div class="project-media" style="background:#E4E8E4;"><img src="moodmode_project2.png" alt="MoodMode App" style="width:100%;height:100%;object-fit:cover;"></div>
-</a>
+</section>
 
-        <a class="project-card reveal-card" data-cursor="View" href="case-study-stc.html">
-          <div class="project-media" style="background:#E4E4E8;"><img src="stc hub_2.png" alt="STC Hub Portal" style="width:100%;height:100%;object-fit:cover;"></div>
-          <div class="project-content">
-            <p class="project-context">2024 · Usability Testing · Enterprise UX</p>
-            <p class="project-subtitle">STC Hub Employee Portal — Usability Study</p>
-            <h3 class="project-punchline">
-              <span>Complex admin portal.</span>
-              <span class="project-punchline-italic">15+ fixes that mattered.</span>
-            </h3>
-            <div class="project-stats-row">
-              <div class="project-stat"><p class="project-stat-value">6</p><p class="project-stat-label">Users tested</p></div>
-              <div class="project-stat"><p class="project-stat-value">15+</p><p class="project-stat-label">Recommendations</p></div>
-              <div class="project-stat"><p class="project-stat-value">SUS</p><p class="project-stat-label">Score measured</p></div>
-            </div>
-            <span class="project-cta">View case study →</span>
-            <div class="corner-bars" aria-hidden="true">
-              <span class="corner-bar corner-bar-1"></span>
-              <span class="corner-bar corner-bar-2"></span>
-              <span class="corner-bar corner-bar-3"></span>
-              <span class="corner-bar corner-bar-4"></span>
-            </div>
-          </div>
-        </a>
-
-        <a class="project-card reveal-card" data-cursor="View" href="case-study-apple.html">
-          <div class="project-content">
-            <p class="project-context">2025 · UX Research · Accessibility · iOS</p>
-            <p class="project-subtitle">Apple Reminders Accessibility Redesign</p>
-            <h3 class="project-punchline">
-              <span>Found the gaps.</span>
-              <span class="project-punchline-italic">Apple fixed them next.</span>
-            </h3>
-            <div class="project-stats-row">
-              <div class="project-stat"><p class="project-stat-value">10+</p><p class="project-stat-label">Gaps found</p></div>
-              <div class="project-stat"><p class="project-stat-value">3</p><p class="project-stat-label">Apple changes match</p></div>
-              <div class="project-stat"><p class="project-stat-value">5</p><p class="project-stat-label">Users tested</p></div>
-            </div>
-            <span class="project-cta">View case study →</span>
-            <div class="corner-todos" aria-hidden="true">
-              <div class="corner-todo-row"><span class="corner-check corner-check-1"></span><span class="corner-line corner-line-1"></span></div>
-              <div class="corner-todo-row"><span class="corner-check corner-check-2"></span><span class="corner-line corner-line-2"></span></div>
-              <div class="corner-todo-row"><span class="corner-check corner-check-3"></span><span class="corner-line corner-line-3"></span></div>
-            </div>
-          </div>
-          <div class="project-media" style="background:#E8E8E4;"><img src="apple-project.png" alt="Apple Reminders Redesign" style="width:100%;height:100%;object-fit:cover;"></div>
-        </a>
-
-        <a class="project-card reveal-card" data-cursor="View" href="case-study-smartloan.html">
-          <div class="project-media" style="background:#DCEBE7;"><img src="assets/smartloan/cover.jpg" alt="SmartLoan Connect redesigned income step on web and mobile, with a five-step progress tracker" style="width:100%;height:100%;object-fit:cover;object-position:center;"></div>
-          <div class="project-content">
-            <p class="project-context">2021–2023 · UX/UI Design · Fintech</p>
-            <p class="project-subtitle">SmartLoan Connect — Digital Lending Platform</p>
-            <h3 class="project-punchline">
-              <span>People started applying.</span>
-              <span class="project-punchline-italic">Then they quietly gave up.</span>
-            </h3>
-            <div class="project-stats-row">
-              <div class="project-stat"><p class="project-stat-value">+18%</p><p class="project-stat-label">Application completion</p></div>
-              <div class="project-stat"><p class="project-stat-value">4</p><p class="project-stat-label">Friction points fixed</p></div>
-              <div class="project-stat"><p class="project-stat-value">2</p><p class="project-stat-label">Platforms: web + mobile</p></div>
-            </div>
-            <span class="project-cta">View case study →</span>
-          </div>
-        </a>
-
+<section class="section" id="think">
+  <div class="wrap">
+    <div class="sec-head"><h2 class="h2" data-reveal>How I think</h2><span class="scribble" data-reveal>lessons my projects taught me</span></div>
+    <div class="think">
+      <div class="think-rail" aria-hidden="true">
+        <div class="rail"><div class="rail-fill"></div><div class="rail-dot"></div></div>
+        <div class="rail-note"><span class="label" id="railNum">01 / 05</span><span class="scribble" id="railQ">Is the data wrong, or is the product repeating a disagreement?</span></div>
       </div>
+      <ol class="principles" id="principles">
+        <li class="principle on" data-q="Is the data wrong, or is the product repeating a disagreement?"><span class="num">01</span><h3>Ask what the product should say</h3><p>Before assuming the fix lives in the interface. On the Wealth workbench, the screens were faithfully showing two systems that disagreed. The real design problem was the rule.</p><span class="from">From Wealth Operations Workbench</span></li>
+        <li class="principle" data-q="Where exactly do people leave, and why there?"><span class="num">02</span><h3>Find where people leave</h3><p>Drop-off is a map. Mapping SmartLoan's flow end to end showed people weren't quitting at random; they quit at the step that felt riskiest.</p><span class="from">From SmartLoan Connect</span></li>
+        <li class="principle" data-q="What are people doing outside the product?"><span class="num">03</span><h3>Watch for the workaround</h3><p>A shadow spreadsheet or a phone call to support tells you exactly what the product failed to do. It's the most honest research data there is.</p><span class="from">From Wealth and SmartLoan</span></li>
+        <li class="principle" data-q="Which insight does this change answer?"><span class="num">04</span><h3>Make every change traceable</h3><p>Each design decision should map back to something real I learned, not a hunch. If I can't say which insight a change answers, I don't ship it.</p><span class="from">From SmartLoan Connect</span></li>
+        <li class="principle" data-q="Who needs to be in the room for this call?"><span class="num">05</span><h3>Co-design the contentious call</h3><p>People defend a decision they helped shape and resist one that arrives finished. I bring users in at low fidelity for the hard calls, not just the research before them.</p><span class="from">My Wealth reflection</span></li>
+      </ol>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section section-skillset">
-    <div class="container">
+  <section class="section section-skillset" id="skills">
+  <div class="wrap">
       <!-- CHANGE 3: Italic heading -->
-      <h2 class="skillset-heading"><em>The Skillset.</em></h2>
+      <div class="sec-head"><h2 class="h2" data-reveal>The skillset</h2><span class="scribble" data-reveal>what I bring to the table</span></div>
       <div class="bento-grid">
 
         <!-- Card 1: Research (wide) -->
@@ -446,7 +353,7 @@
 
         <!-- Card 7: Stat 4+ -->
         <div class="bento-card stat-card" style="grid-column:7/10;grid-row:3;">
-          <div class="stat-number">4+</div>
+          <div class="stat-number">6</div>
           <div class="stat-desc">projects built from real research, real users, and real usability testing.</div>
         </div>
 
@@ -474,129 +381,98 @@
     </div>
   </section>
 
-  <section class="section section-contact" id="contact">
-    <div class="container">
-      <div class="contact-split">
-        <div class="contact-split__left">
-          <div class="contact-big-text">
-            <span>LET'S</span>
-            <span>TALK</span>
-          </div>
-        </div>
-        <div class="contact-split__right">
-          <p class="contact-split__desc">Open to new opportunities, collaborations, and conversations about research, design, and product strategy.</p>
-          <div class="contact-rows">
-            <a class="contact-row" href="mailto:pratiksham.kulam@gmail.com">
-              <span class="contact-row__label">pratiksham.kulam@gmail.com</span>
-              <span class="contact-row__arrow">→</span>
-            </a>
-            <a class="contact-row" href="https://www.linkedin.com/in/pratiksha-kulam-a55b44264/" target="_blank" rel="noopener noreferrer">
-              <span class="contact-row__label">LinkedIn — Pratiksha Kulam</span>
-              <span class="contact-row__arrow">→</span>
-            </a>
-          </div>
+
+<section class="section" id="off">
+  <div class="wrap">
+    <div class="sec-head"><h2 class="h2" data-reveal>Off the screen</h2><span class="scribble" data-reveal>where my patience for detail comes from</span></div>
+    <div class="off">
+      <a class="snap" href="about.html" style="--r:-3deg" data-reveal><img src="painting.jpeg" alt="One of Pratiksha's paintings" loading="lazy"><span>painting</span></a>
+      <a class="snap" href="about.html" style="--r:2deg" data-reveal><img src="mandala.jpeg" alt="A hand-drawn mandala" loading="lazy"><span>mandalas</span></a>
+      <a class="snap" href="about.html" style="--r:-1.5deg" data-reveal><img src="photography.jpeg" alt="A photograph by Pratiksha" loading="lazy"><span>photography</span></a>
+      <a class="snap" href="about.html" style="--r:3deg" data-reveal><img src="reading.jpeg" alt="Reading" loading="lazy"><span>reading</span></a>
+    </div>
+    <div class="off-more" data-reveal><a class="btn btn-line" href="about.html">More about me</a></div>
+  </div>
+</section>
+</main>
+
+<footer class="contact" id="contact">
+  <div class="wrap">
+    <h2 class="h1" data-reveal>Got a flow that's<br><span class="blue">losing people?</span> Let's talk.</h2>
+    <div class="contact-grid">
+      <div>
+        <span class="label">Find me</span>
+        <div class="contact-links">
+          <a href="https://www.linkedin.com/in/pratiksha-kulam-a55b44264/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+          <a href="resume.pdf">Resume ↓</a>
         </div>
       </div>
+      <div>
+        <span class="label">Email</span>
+        <div class="email"><a href="mailto:pratiksham.kulam@gmail.com" id="emailAddr">pratiksham.kulam@gmail.com</a><button class="copy" id="copyBtn" type="button">Copy</button></div>
+      </div>
     </div>
-    <!-- CHANGE 6: footer text coffee not stress -->
-    <footer class="site-footer">
-      <span>Pratiksha Kulam © 2026</span>
-      <span>Designed with a side of coffee, code &amp; AI ✦</span>
-    </footer>
-  </section>
+    <div class="foot"><span>© 2026 Pratiksha Kulam</span><span>Designed with a side of coffee, code &amp; AI</span></div>
+  </div>
+</footer>
 
-  <script>
-    const nav = document.getElementById("siteNav");
-    const menuToggle = document.getElementById("menuToggle");
-    const navMenu = document.getElementById("navMenu");
-
-    const updateNavBorder = () => { nav.classList.toggle("scrolled", window.scrollY > 60); };
-    updateNavBorder();
-    window.addEventListener("scroll", updateNavBorder);
-
-    menuToggle.addEventListener("click", () => {
-      const isOpen = nav.classList.toggle("open");
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
-    });
-
-    navMenu.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        nav.classList.remove("open");
-        menuToggle.setAttribute("aria-expanded", "false");
-      });
-    });
-
-    const grainCanvas = document.getElementById("grainCanvas");
-    if (grainCanvas) {
-      const gctx = grainCanvas.getContext("2d", { alpha: true });
-      const resizeGrain = () => {
-        const hero = grainCanvas.closest(".home-hero");
-        if (!hero) return;
-        grainCanvas.width = Math.max(1, Math.floor(hero.clientWidth));
-        grainCanvas.height = Math.max(1, Math.floor(hero.clientHeight));
-      };
-      // Static grain: drawn once per resize instead of every frame (saves CPU/battery).
-      const drawGrain = () => {
-        const w = grainCanvas.width, h = grainCanvas.height;
-        if (w < 1 || h < 1) return;
-        const imageData = gctx.createImageData(w, h);
-        const buf = imageData.data;
-        for (let i = 0; i < buf.length; i += 4) {
-          const n = (Math.random() * 255) | 0;
-          buf[i] = n; buf[i+1] = n; buf[i+2] = n; buf[i+3] = 255;
-        }
-        gctx.putImageData(imageData, 0, 0);
-      };
-      let grainTimer;
-      resizeGrain();
-      drawGrain();
-      window.addEventListener("resize", () => {
-        clearTimeout(grainTimer);
-        grainTimer = setTimeout(() => { resizeGrain(); drawGrain(); }, 150);
-      });
-    }
-
-    const cycleWord = document.getElementById("cycleWord");
-    if (cycleWord) {
-      // CHANGE 1: "humans" → "change"
-      const words = ["change.", "impact.", "clarity.", "you."];
-      let wi = 0;
-      const holdMs = 2500, moveMs = 400;
-      const step = () => {
-        cycleWord.classList.add("is-out");
-        setTimeout(() => {
-          wi = (wi + 1) % words.length;
-          cycleWord.textContent = words[wi];
-          cycleWord.classList.remove("is-out");
-          cycleWord.style.transition = "none";
-          cycleWord.style.opacity = "0";
-          cycleWord.style.transform = "translateY(14px)";
-          cycleWord.offsetHeight;
-          cycleWord.style.transition = "";
-          cycleWord.classList.add("is-in");
-          setTimeout(() => {
-            cycleWord.classList.remove("is-in");
-            cycleWord.style.opacity = "";
-            cycleWord.style.transform = "";
-            setTimeout(step, holdMs);
-          }, moveMs);
-        }, moveMs);
-      };
-      setTimeout(step, holdMs);
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) { entry.target.classList.add("in-view"); observer.unobserve(entry.target); }
-      });
-    }, { threshold: 0.15 });
-
-    document.querySelectorAll(".reveal-heading").forEach((el) => observer.observe(el));
-    document.querySelectorAll(".reveal-card").forEach((el, i) => {
-      el.style.transitionDelay = `${i * 0.1}s`;
-      observer.observe(el);
-    });
-  </script>
 <script src="motion.js"></script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* nav */
+  const nav = document.getElementById('nav'), btn = document.getElementById('menuBtn');
+  let lastY = scrollY;
+  const navTick = () => {
+    nav.classList.toggle('scrolled', scrollY > 30);
+    nav.classList.toggle('hide', scrollY > 500 && scrollY > lastY && !nav.classList.contains('open'));
+    lastY = scrollY;
+  };
+  addEventListener('scroll', navTick, { passive: true }); navTick();
+  btn.addEventListener('click', () => { const o = nav.classList.toggle('open'); btn.setAttribute('aria-expanded', o); });
+  nav.querySelectorAll('.nav-links a').forEach((a) => a.addEventListener('click', () => { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }));
+
+  /* cycling word */
+  const cycle = document.querySelector('#cycle span');
+  const words = ['lose people.', 'break trust.', 'slow people down.', 'get confusing.'];
+  let wi = 0;
+  if (!reduce) setInterval(() => {
+    cycle.classList.add('out');
+    setTimeout(() => {
+      wi = (wi + 1) % words.length; cycle.textContent = words[wi];
+      cycle.classList.remove('out'); cycle.classList.add('pre'); void cycle.offsetWidth; cycle.classList.remove('pre');
+    }, 350);
+  }, 2600);
+
+  /* how I think: active principle + rail progress */
+  const items = [...document.querySelectorAll('.principle')];
+  const think = document.querySelector('.think'), rail = document.querySelector('.rail');
+  const num = document.getElementById('railNum'), q = document.getElementById('railQ');
+  let cur = 0;
+  const thinkTick = () => {
+    const r = think.getBoundingClientRect();
+    const p = Math.max(0, Math.min(1, (innerHeight * 0.45 - r.top) / (r.height - innerHeight * 0.3)));
+    rail.style.setProperty('--p', p.toFixed(3));
+    const mid = innerHeight * 0.45;
+    let idx = 0;
+    items.forEach((el, i) => { if (el.getBoundingClientRect().top < mid) idx = i; });
+    if (idx !== cur) {
+      cur = idx; items.forEach((el, i) => el.classList.toggle('on', i === idx));
+      num.textContent = String(idx + 1).padStart(2, '0') + ' / 05';
+      q.style.opacity = 0; setTimeout(() => { q.textContent = items[idx].dataset.q; q.style.opacity = 1; }, 180);
+    }
+  };
+  addEventListener('scroll', thinkTick, { passive: true }); addEventListener('resize', thinkTick); thinkTick();
+
+  /* copy email */
+  const copyBtn = document.getElementById('copyBtn');
+  copyBtn.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(document.getElementById('emailAddr').textContent); copyBtn.textContent = 'Copied ✓'; copyBtn.classList.add('done'); }
+    catch { copyBtn.textContent = 'Press ⌘C'; }
+    setTimeout(() => { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('done'); }, 2000);
+  });
+})();
+</script>
 </body>
 </html>
