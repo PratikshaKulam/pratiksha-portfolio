@@ -436,7 +436,7 @@
 
   /* cycling word */
   const cycle = document.querySelector('#cycle span');
-  const words = ['lose people.', 'break trust.', 'slow people down.', 'get confusing.'];
+  const words = ['lose people.', 'break trust.', 'feel endless.', 'get confusing.'];
   let wi = 0;
   if (!reduce) setInterval(() => {
     cycle.classList.add('out');
@@ -445,6 +445,17 @@
       cycle.classList.remove('out'); cycle.classList.add('pre'); void cycle.offsetWidth; cycle.classList.remove('pre');
     }, 350);
   }, 2600);
+
+  /* photo: sway only while hovered, then ease back to straight */
+  const photo = document.querySelector('.photo');
+  if (photo && !reduce) {
+    photo.addEventListener('mouseenter', () => photo.classList.add('swaying'));
+    photo.addEventListener('mouseleave', () => {
+      const from = getComputedStyle(photo).transform;
+      photo.classList.remove('swaying');
+      photo.animate([{ transform: from === 'none' ? 'rotate(0deg)' : from }, { transform: 'rotate(0deg)' }], { duration: 450, easing: 'cubic-bezier(.2,.7,.1,1)' });
+    });
+  }
 
   /* how I think: active principle + rail progress */
   const items = [...document.querySelectorAll('.principle')];

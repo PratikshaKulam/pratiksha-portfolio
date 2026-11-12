@@ -68,14 +68,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ── hero ── */
 .hero { padding: 150px 0 90px; }
-.hero-grid { display: grid; grid-template-columns: 1.25fr .85fr; gap: 60px; align-items: center; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .85fr); gap: 60px; align-items: center; }
 .hero .lead { max-width: 560px; margin: 28px 0 34px; }
 .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
-.cycle { display: inline-block; color: var(--accent); white-space: nowrap; }
+.cycle { display: block; color: var(--accent); white-space: nowrap; }
 .cycle span { display: inline-block; transition: opacity .35s var(--ease), transform .35s var(--ease); }
 .cycle span.out { opacity: 0; transform: translateY(-14px); }
 .cycle span.pre { opacity: 0; transform: translateY(14px); transition: none; }
-.photo { justify-self: end; position: relative; width: min(400px, 100%); margin-right: 18px; transform-origin: 50% 40%; animation: photoTiltIn 1s var(--ease) both, photoSway 8s ease-in-out 1s infinite; }
+.photo { justify-self: end; position: relative; width: min(400px, 100%); margin-right: 18px; transform-origin: 50% 40%; }
 .photo-frame { position: relative; background: #fff; padding: 14px 14px 58px; border-radius: 4px; box-shadow: 0 30px 60px -28px rgba(21,21,21,.35), 0 2px 6px rgba(21,21,21,.06); }
 .photo-frame img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 20%; }
 .photo-cap { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font-family: var(--hand); font-size: 26px; color: var(--ink); }
@@ -94,8 +94,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .mp-cursor svg { filter: drop-shadow(0 2px 3px rgba(21,21,21,.25)); }
 .mp-cursor span { margin-top: 20px; background: var(--accent); color: #fff; font-family: var(--hand); font-size: 20px; line-height: 1; padding: 5px 10px 6px; border-radius: 4px 10px 10px 10px; white-space: nowrap; box-shadow: 0 6px 14px -6px rgba(45,62,184,.6); }
 
-@keyframes photoTiltIn { from { opacity: 0; transform: rotate(-6deg); } to { opacity: 1; transform: rotate(-1.5deg); } }
-@keyframes photoSway { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+@keyframes photoSway { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-2deg); } 75% { transform: rotate(2deg); } }
+.photo.swaying { animation: photoSway 2.4s ease-in-out infinite; }
 @keyframes selIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes handleIn { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: none; } }
 @keyframes tagIn { from { opacity: 0; transform: translate(-50%, -6px); } to { opacity: 1; transform: translate(-50%, 0); } }
@@ -199,6 +199,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .off { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 640px) {
+  .cycle { white-space: normal; }
   .nav-links { display: none; position: absolute; top: 76px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px 24px 18px; }
   .nav.open .nav-links { display: flex; }
   .nav-links a { display: block; padding: 12px 0; }
