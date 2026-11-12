@@ -83,11 +83,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ── sections ── */
 .section { padding: 120px 0; border-top: 1px solid var(--line); }
-.sec-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 22px; margin-bottom: 70px; }
+.sec-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 22px; margin-bottom: 56px; }
 
 /* ── work rows ── */
-.rows { display: grid; gap: 110px; }
-.row { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; }
+.rows { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.row { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; padding: 64px 0; border-bottom: 1px solid var(--line); }
 .row-media { position: relative; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4 / 3; background: var(--bg-2); }
 .row-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease); }
 .row:hover .row-media img { transform: scale(1.035); }
@@ -131,6 +131,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .tool-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: var(--bg); font-size: 14px; }
 .tool-item svg { flex-shrink: 0; }
+.bento-card:has(.tools-grid) { display: flex; flex-direction: column; }
+.bento-card:has(.tools-grid) .tools-grid { flex: 1; grid-auto-rows: 1fr; }
+.tool-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .bento-card--full { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; }
 
 /* ── off screen ── */
@@ -162,7 +165,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hero-grid, .row, .think, .contact-grid { grid-template-columns: 1fr; }
   .photo { justify-self: start; width: min(340px, 100%); }
   .row { gap: 28px; }
-  .rows { gap: 80px; }
+  .row { padding: 48px 0; }
   .think-rail { display: none; }
   .principle { opacity: 1; }
   .bento-grid { grid-template-columns: 1fr 1fr; }

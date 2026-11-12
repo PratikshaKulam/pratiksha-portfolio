@@ -8,16 +8,16 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #F6F1E9;
-      --black: #1C1915;
+      --bg: #F1F0EC;
+      --black: #151515;
       --white: #FFFFFF;
-      --gray-light: #EFE8DD;
-      --gray-mid: #E3DACB;
-      --gray-text: #5E564B;
-      --gray-border: #E3DACB;
-      --accent: #A4472A;
-      --font-heading: 'Georgia', 'Times New Roman', serif;
-      --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --gray-light: #E8E6E0;
+      --gray-mid: #DAD8D1;
+      --gray-text: #5C5B57;
+      --gray-border: #DAD8D1;
+      --accent: #2D3EB8;
+      --font-heading: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+      --font-body: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
     }
 
     html { scroll-behavior: smooth; }
@@ -38,7 +38,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 20px 68px;
-      background: rgba(246,241,233,0.92);
+      background: rgba(241,240,236,0.92);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--gray-mid);
     }
@@ -187,7 +187,7 @@
     .photo-badge {
       position: absolute;
       bottom: 16px; left: 16px;
-      background: rgba(246,241,233,0.92);
+      background: rgba(241,240,236,0.92);
       backdrop-filter: blur(8px);
       padding: 7px 14px;
       font-size: 11px;
@@ -265,7 +265,7 @@
 
 /* received — gray, tail on left */
 .bubble.received {
-  background: #E3DACB;
+  background: #DAD8D1;
   color: var(--black);
   border-bottom-left-radius: 4px;
 }
@@ -274,7 +274,7 @@
   position: absolute;
   bottom: 0; left: -6px;
   width: 12px; height: 12px;
-  background: #E3DACB;
+  background: #DAD8D1;
   clip-path: polygon(100% 0, 100% 100%, 0 100%);
 }
 
@@ -597,6 +597,15 @@
     }
   </style>
   <link rel="stylesheet" href="motion.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Instrument+Sans:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  /* landing-page design system overrides */
+  body { font-size: 17px; -webkit-font-smoothing: antialiased; --m-accent: var(--accent); }
+  h1, h2, h3, h4 { font-weight: 800 !important; letter-spacing: -0.03em; }
+  h3, h4 { font-weight: 700 !important; letter-spacing: -0.02em; }
+  h1 em, h2 em, h3 em, h4 em, .hero-title em { font-style: normal; color: var(--accent); }
+  nav [class*="logo"] { font-family: Georgia, serif !important; }
+</style>
 </head>
 <body>
 
@@ -604,6 +613,7 @@
   <a class="nav-logo" href="index.html">प्र</a>
   <ul class="nav-links">
     <li><a href="index.html#work">Work</a></li>
+    <li><a href="index.html#think">How I think</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="index.html#contact">Contact</a></li>
     <li><a href="resume.pdf" class="nav-resume" data-magnetic>Resume</a></li>
