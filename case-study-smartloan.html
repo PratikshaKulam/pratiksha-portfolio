@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartLoan Connect — Case Study · Pratiksha Kulam</title>
+  <meta name="description" content="Redesigning a bank's online loan application so customers stop dropping off: progress, plain language, a guided income step and document upload with examples.">
+  <link rel="stylesheet" href="case-study.css">
+  <link rel="stylesheet" href="motion.css">
+  <style>
+    body { --project: #0F6E64; --project-soft: #E5F0EE; --project-deep: #0C2E2A; --rose: #B4453A; --rose-soft: #F9E6E3; --amber: #A8761E; --amber-soft: #FBF1DD; }
+
+    /* ── app window chrome ── */
+    .win { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 40px 80px -40px rgba(12,46,42,.35); font-family: var(--sans); text-align: left; }
+    .win-bar { display: flex; align-items: center; gap: 8px; padding: 11px 16px; background: #F7F5F1; border-bottom: 1px solid var(--line); }
+    .win-bar i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .win-bar .url { flex: 1; margin-left: 6px; background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 4px 12px; font-size: 12px; color: var(--subtle); }
+
+    /* ── the loan app UI (shared by hero + prototype) ── */
+    .app { padding: 30px 34px 26px; color: var(--ink); }
+    .app-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+    .app-logo { font-family: var(--serif); font-size: 18px; }
+    .app-logo span { color: var(--project); }
+    .app-help { font-size: 12px; color: var(--subtle); }
+    .tracker { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 26px; }
+    .tnode { flex: 1; text-align: center; }
+    .tdot { width: 26px; height: 26px; border-radius: 50%; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; background: var(--line); color: var(--muted); }
+    .tnode.done .tdot, .tnode.active .tdot { background: var(--project); color: #fff; }
+    .tnode.active .tdot { box-shadow: 0 0 0 4px var(--project-soft); }
+    .tlabel { font-size: 11px; color: var(--subtle); line-height: 1.3; }
+    .tnode.active .tlabel { color: var(--project); font-weight: 600; }
+    .tline { flex: 0 0 18px; height: 2px; background: var(--line); margin-top: 12px; }
+    .tline.done { background: var(--project); }
+    .form-title { font-family: var(--serif); font-size: 23px; line-height: 1.25; margin-bottom: 6px; }
+    .form-sub { font-size: 14px; color: var(--muted); margin-bottom: 22px; line-height: 1.5; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+    .field .hint { font-size: 12px; color: var(--muted); margin-bottom: 7px; line-height: 1.45; }
+    .field .in { width: 100%; font-size: 14px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--subtle); min-height: 42px; }
+    .field .in.err { border-color: var(--rose); background: var(--rose-soft); }
+    .err-msg { font-size: 11px; color: var(--rose); margin-top: 5px; font-weight: 500; }
+    .long-form .field { margin-bottom: 11px; }
+    .trust { display: block; font-size: 12px; line-height: 1.5; color: var(--muted); margin: 16px 0 14px; padding-top: 14px; border-top: 1px solid var(--line); text-align: center; }
+    .trust b { color: var(--project); }
+    .btn { display: block; width: 100%; font-size: 15px; font-weight: 600; padding: 13px; border-radius: 10px; text-align: center; }
+    .btn-primary { background: var(--project); color: #fff; }
+    .btn-primary.dull { background: #9AA8A6; }
+    .btn-ghost { color: var(--muted); margin-top: 4px; font-weight: 500; }
+    .messy { background: var(--rose-soft); border: 1px solid #E4B7B1; color: var(--rose); font-size: 12px; font-weight: 600; padding: 8px 12px; border-radius: 8px; margin-bottom: 16px; }
+
+    /* ── hero composition ── */
+    .hero-stage { display: grid; grid-template-columns: 1fr; justify-items: center; }
+    .hero-stage .win { width: min(760px, 100%); }
+
+    /* ── journey map ── */
+    .journey { margin-top: 36px; }
+    .flow { display: flex; align-items: stretch; gap: 0; margin-top: 30px; }
+    .fstep { flex: 1; position: relative; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 14px 16px; text-align: center; transition: border-color .4s var(--ease), background .4s var(--ease), transform .4s var(--ease); }
+    .fstep b { display: block; font-family: var(--serif); font-weight: normal; font-size: 17px; line-height: 1.25; }
+    .fstep small { display: block; margin-top: 8px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; min-height: 14px; }
+    .farrow { flex: 0 0 28px; display: flex; align-items: center; justify-content: center; color: var(--subtle); }
+    .flow.before .fstep.drop { border-color: var(--rose); background: var(--rose-soft); }
+    .flow.before .fstep.drop small { color: var(--rose); }
+    .flow.after .fstep { border-color: color-mix(in srgb, var(--project) 45%, #fff); background: var(--project-soft); }
+    .flow.after .fstep small { color: var(--project); }
+    .leak { position: absolute; left: 50%; top: 100%; width: 2px; height: 0; background: repeating-linear-gradient(180deg, var(--rose) 0 5px, transparent 5px 10px); transform: translateX(-50%); transition: height .7s var(--ease); }
+    .leak::after { content: '▼ users lost'; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); font-size: 10.5px; color: var(--rose); white-space: nowrap; font-weight: 600; letter-spacing: .04em; opacity: 0; transition: opacity .4s .5s; }
+    .flow.before .leak { height: 34px; }
+    .flow.before .leak::after { opacity: 1; }
+    .flow-note { margin-top: 64px; font-size: 15px; color: var(--muted); max-width: 640px; min-height: 52px; }
+
+    /* ── decision cards ── */
+    .card .maps { display: inline-block; margin-top: 18px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--project); font-weight: 600; }
+
+    /* ── prototype ── */
+    .proto-controls { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+    .proto-stage { margin-top: 30px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; align-items: start; }
+    .proto-device { display: flex; justify-content: center; }
+    .proto-device .win { width: 100%; max-width: 760px; }
+    .handset { width: 340px; background: #121212; border-radius: 40px; padding: 11px; box-shadow: 0 40px 80px -30px rgba(12,46,42,.45); }
+    .handset .scr { background: #fff; border-radius: 30px; height: 640px; overflow-y: auto; }
+    .handset .notch { height: 24px; display: flex; justify-content: center; }
+    .handset .notch::after { content: ''; width: 108px; height: 20px; background: #121212; border-radius: 0 0 14px 14px; }
+    .handset .app { padding: 18px 20px 30px; }
+    .handset .form-title { font-size: 21px; }
+    .handset .tlabel { font-size: 9.5px; }
+    .handset .tline { flex-basis: 8px; }
+    [data-dev="mobile"] .win, [data-dev="web"] .handset { display: none; }
+    .proto-view { transition: opacity .35s var(--ease); }
+    .proto-view.swap { opacity: 0; }
+    .callouts { list-style: none; display: grid; gap: 12px; }
+    .callouts li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+    .callouts li b { display: block; color: var(--ink); font-size: 14px; margin-bottom: 2px; }
+    .callouts .n { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; background: var(--project); }
+    .callouts.bad .n { background: var(--rose); }
+    .callouts-h { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--subtle); margin-bottom: 14px; font-weight: 600; }
+
+    /* outcome */
+    .band .ticks li { color: rgba(255,255,255,.75); border-bottom-color: rgba(255,255,255,.12); }
+    .band .ticks li::before { color: #7FD1C4; }
+    .band .stat-val.word { font-size: clamp(34px, 4vw, 52px); line-height: 1.05; }
+
+    @media (max-width: 1000px) {
+      .proto-stage { grid-template-columns: 1fr; }
+      .flow { flex-direction: column; }
+      .farrow { flex-basis: 26px; transform: rotate(90deg); }
+      .leak { left: auto; right: 14px; top: 50%; width: 0; height: 2px !important; transform: none; }
+      .leak::after { display: none; }
+      .flow.before .fstep.drop small::after { content: ' · users lost here'; }
+      .flow-note { margin-top: 28px; }
+    }
+    @media (max-width: 640px) {
+      .app { padding: 20px 18px; }
+      .tlabel { font-size: 9.5px; }
+      .tline { flex-basis: 6px; }
+      .handset { width: 100%; max-width: 340px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fstep, .leak, .leak::after, .proto-view { transition: none; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="topnav" aria-label="Site">
+  <a class="nav-logo" href="index.html" aria-label="Home">प्र</a>
+  <ul class="nav-links">
+    <li><a href="index.html#work">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="resume.pdf" class="nav-resume" data-magnetic>Resume</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top" data-reveal="fade">
+      <a class="back" href="index.html#work">← All work</a>
+      <span class="eyebrow">2021–2023 · Fintech · Digital lending</span>
+    </div>
+    <p class="eyebrow c" data-reveal style="margin-bottom:22px">SmartLoan Connect · UX/UI design at Mphasis</p>
+    <h1 data-split>People started applying. <em>Then they quietly gave up.</em></h1>
+    <div class="hero-lede">
+      <p data-reveal style="--d:.3s">A digital lending platform I designed for a large private-sector bank in India. Customers were starting loan applications online but abandoning them before submitting — so I reworked the entire journey to <mark class="sweep">reduce friction and build trust at every step.</mark></p>
+      <dl class="facts" data-reveal style="--d:.45s">
+        <div><dt>My role</dt><dd>UX/UI Designer — end to end</dd></div>
+        <div><dt>Team</dt><dd>PO · BA · 4 Dev · 2 QA · me</dd></div>
+        <div><dt>Platform</dt><dd>Responsive web + mobile</dd></div>
+        <div><dt>Focus</dt><dd>Conversion · Trust · Multi-step flow</dd></div>
+      </dl>
+    </div>
+
+    <figure class="hero-media hero-stage" data-reveal="clip" style="background:transparent;overflow:visible">
+      <div class="win">
+        <div class="win-bar"><i style="background:#E0675B"></i><i style="background:#E2B74E"></i><i style="background:#6FBF73"></i><span class="url">smartloanconnect.bank.in/apply</span></div>
+        <div class="app" data-ui="after"></div>
+      </div>
+    </figure>
+    <p class="disclaimer">Recreated from the shipped design. Client work for Mphasis; bank details anonymised.</p>
+
+    <section class="tldr" aria-label="Summary">
+      <div data-reveal><h2>Problem</h2><p>A large share of applicants <strong>abandoned the loan form before submitting</strong>, and no one knew where or why.</p></div>
+      <div data-reveal style="--d:.1s"><h2>Research</h2><p>Workshops, support tickets and analytics pointed to <strong>four friction points</strong> — worst of all, the income step.</p></div>
+      <div data-reveal style="--d:.2s"><h2>Design</h2><p>A progress tracker, plain-language chunked steps, a <strong>guided income step</strong> and document upload with examples.</p></div>
+      <div data-reveal style="--d:.3s"><h2>Outcome</h2><p><strong>+18% application completion</strong>, less drop-off at the income step and fewer support calls.</p></div>
+    </section>
+  </div>
+</header>
+
+<nav class="chapter-nav" aria-label="Chapters">
+  <ol>
+    <li><a href="#problem"><span>01</span>The problem</a></li>
+    <li><a href="#research"><span>02</span>Research</a></li>
+    <li><a href="#journey"><span>03</span>Journey</a></li>
+    <li><a href="#decisions"><span>04</span>Decisions</a></li>
+    <li><a href="#prototype"><span>05</span>Prototype</a></li>
+    <li><a href="#outcome"><span>06</span>Outcome</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+
+  <!-- ═════════ 01 ═════════ -->
+  <section class="chapter" id="problem">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">01</div>
+        <div>
+          <p class="eyebrow c">The problem</p>
+          <h2 class="chapter-title" data-split>The flow worked. <em>People still left.</em></h2>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Context</p>
+        <div data-reveal>
+          <h3>Moving loan applications out of the branch.</h3>
+          <p>The bank wanted customers to apply for personal and business loans online instead of visiting a branch. The flow technically worked — but <strong>a large share of applicants abandoned the process before submitting</strong>, and no one was sure exactly where or why they were dropping off.</p>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">The signals</p>
+        <div>
+          <div class="cards c3" style="margin-top:0">
+            <article class="card" data-reveal data-tilt><span class="num">Abandonment</span><h4>High</h4><p>Applications started online but never submitted.</p></article>
+            <article class="card" data-reveal style="--d:.1s" data-tilt><span class="num">Where</span><h4>The income step</h4><p>The single biggest drop-off point in the flow.</p></article>
+            <article class="card" data-reveal style="--d:.2s" data-tilt><span class="num">Side effect</span><h4>↑ Support calls</h4><p>Confused applicants phoning the bank mid-form.</p></article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 02 ═════════ -->
+  <section class="chapter" id="research" style="padding-top:60px">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">02</div>
+        <div>
+          <p class="eyebrow c">Research &amp; discovery</p>
+          <h2 class="chapter-title" data-split>I dug into <em>why</em> before touching the design.</h2>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Inputs</p>
+        <div data-reveal>
+          <h3>Workshops, tickets, analytics — and every screen mapped.</h3>
+          <p>I ran requirement workshops with business stakeholders, reviewed <strong>customer support tickets</strong> and existing <strong>application analytics</strong>, and mapped every screen from eligibility check to disbursement. Four clear patterns came out of it.</p>
+        </div>
+      </div>
+
+      <div class="cards c2">
+        <article class="card" data-reveal data-tilt><span class="num">Insight 1</span><h4>No sense of progress</h4><p>Applicants had no idea how many steps were left, so a long form felt endless — and they quit partway through.</p></article>
+        <article class="card" data-reveal style="--d:.1s" data-tilt><span class="num">Insight 2</span><h4>Confusing financial jargon</h4><p>Terms written for bankers, not customers. People weren't sure what was being asked or whether they qualified.</p></article>
+        <article class="card" data-reveal data-tilt><span class="num">Insight 3</span><h4>The income step broke trust</h4><p>The income &amp; verification screen was the biggest drop-off — unclear fields, no guidance, felt risky to enter.</p></article>
+        <article class="card" data-reveal style="--d:.1s" data-tilt><span class="num">Insight 4</span><h4>Document upload guesswork</h4><p>Users didn't know which documents were valid, uploaded the wrong ones, and applications stalled in review.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 03 ═════════ -->
+  <section class="chapter" id="journey" style="padding-top:60px">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">03</div>
+        <div>
+          <p class="eyebrow c">Mapping the journey</p>
+          <h2 class="chapter-title" data-split>Where the old flow <em>leaked users.</em></h2>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Before → after</p>
+        <div>
+          <p data-reveal>Before redesigning screens, I mapped the end-to-end flow to see exactly where people fell out — then restructured it so the hardest steps had support built in. <strong>Switch between the two.</strong></p>
+          <div class="journey" data-reveal>
+            <div class="tabs" data-tabs="flow" role="tablist" aria-label="Journey version">
+              <button role="tab" data-key="before" aria-selected="true">Before</button>
+              <button role="tab" data-key="after" aria-selected="false">After</button>
+            </div>
+            <div class="flow before" id="flow" aria-live="polite">
+              <div class="fstep"><b>Eligibility</b><small data-b="" data-a="plain language"></small></div>
+              <div class="farrow" aria-hidden="true">→</div>
+              <div class="fstep"><b data-b="Long form" data-a="Your details">Long form</b><small data-b="" data-a="chunked"></small></div>
+              <div class="farrow" aria-hidden="true">→</div>
+              <div class="fstep drop"><b data-b="Income &amp; verification" data-a="Income">Income &amp; verification</b><small data-b="biggest drop-off" data-a="guided + reassurance">biggest drop-off</small><span class="leak" aria-hidden="true"></span></div>
+              <div class="farrow" aria-hidden="true">→</div>
+              <div class="fstep drop"><b data-b="Document upload" data-a="Documents">Document upload</b><small data-b="wrong docs" data-a="examples shown">wrong docs</small><span class="leak" aria-hidden="true"></span></div>
+              <div class="farrow" aria-hidden="true">→</div>
+              <div class="fstep"><b data-b="Submit" data-a="Review &amp; submit">Submit</b><small data-b="" data-a="confidence"></small></div>
+            </div>
+            <p class="flow-note" id="flowNote">A long, unguided flow with silent drop-off at the two steps that asked the most of people.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 04 ═════════ -->
+  <section class="chapter" id="decisions" style="padding-top:60px">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">04</div>
+        <div>
+          <p class="eyebrow c">Key design decisions</p>
+          <h2 class="chapter-title" data-split>Four moves that <em>removed the friction.</em></h2>
+        </div>
+      </div>
+
+      <div class="block block-head">
+        <p class="eyebrow">Traceable</p>
+        <div data-reveal>
+          <p>Each decision maps directly to one of the research insights — I wanted every change to be traceable to a real reason, not a guess.</p>
+        </div>
+      </div>
+
+      <div class="cards c2" style="margin-top:0">
+        <article class="card" data-reveal data-tilt><span class="num">01</span><h4>A persistent progress tracker</h4><p>People always know where they are and how much is left — the endless-form feeling disappears.</p><span class="maps">→ Insight 1 · no sense of progress</span></article>
+        <article class="card" data-reveal style="--d:.1s" data-tilt><span class="num">02</span><h4>Plain-language, chunked forms</h4><p>Jargon rewritten in human terms; one long form broken into small, focused steps.</p><span class="maps">→ Insight 2 · financial jargon</span></article>
+        <article class="card" data-reveal data-tilt><span class="num">03</span><h4>Guided income step + reassurance</h4><p>The riskiest-feeling step now explains why the information is needed and signals security — rebuilding trust.</p><span class="maps">→ Insight 3 · income step broke trust</span></article>
+        <article class="card" data-reveal style="--d:.1s" data-tilt><span class="num">04</span><h4>Document upload with examples</h4><p>Clear examples of valid documents and inline validation, so people upload the right thing first time.</p><span class="maps">→ Insight 4 · upload guesswork</span></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 05 ═════════ -->
+  <section class="chapter" id="prototype" style="padding-top:60px">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true">05</div>
+        <div>
+          <p class="eyebrow c">The prototype</p>
+          <h2 class="chapter-title" data-split>Before &amp; after: <em>the income &amp; verification step.</em></h2>
+        </div>
+      </div>
+
+      <p data-reveal style="max-width:660px">This is the step where most people dropped off. Toggle between the original and my redesign, and switch between web and mobile.</p>
+
+      <div class="proto-controls" data-reveal>
+        <div class="tabs" data-tabs="ver" role="tablist" aria-label="Version">
+          <button role="tab" data-key="before" aria-selected="true">Before</button>
+          <button role="tab" data-key="after" aria-selected="false">After · my redesign</button>
+        </div>
+        <div class="tabs" data-tabs="dev" role="tablist" aria-label="Device">
+          <button role="tab" data-key="web" aria-selected="true">Web</button>
+          <button role="tab" data-key="mobile" aria-selected="false">Mobile</button>
+        </div>
+      </div>
+
+      <div class="proto-stage" data-reveal="scale">
+        <div class="proto-device" id="protoDevice" data-dev="web">
+          <div class="win">
+            <div class="win-bar"><i style="background:#E0675B"></i><i style="background:#E2B74E"></i><i style="background:#6FBF73"></i><span class="url">smartloanconnect.bank.in/apply</span></div>
+            <div class="app proto-view"></div>
+          </div>
+          <div class="handset"><div class="scr"><div class="notch"></div><div class="app proto-view"></div></div></div>
+        </div>
+        <div aria-live="polite">
+          <p class="callouts-h" id="calloutsH">What went wrong</p>
+          <ol class="callouts" id="callouts"></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ 06 ═════════ -->
+  <section class="band" id="outcome">
+    <div class="wrap">
+      <div class="chapter-head">
+        <div class="chapter-num" data-reveal="fade" aria-hidden="true" style="-webkit-text-stroke-color:#7FD1C4">06</div>
+        <div>
+          <p class="eyebrow">Outcome</p>
+          <h2 class="chapter-title" data-split>A journey people <em style="color:#7FD1C4">actually finished.</em></h2>
+        </div>
+      </div>
+      <p data-reveal style="max-width:660px;font-size:17px">After launch, we monitored completion and support data. The redesign measurably improved how many applicants made it through — and cut the confusion that was driving people to call the bank.</p>
+      <div class="stats" style="--cols:4">
+        <div class="stat" data-reveal><div class="stat-val" data-count="18" data-prefix="+" data-suffix="%">+18%</div><p class="stat-lbl">Application completion / conversion</p></div>
+        <div class="stat" data-reveal style="--d:.1s"><div class="stat-val word">↓ Drop-off</div><p class="stat-lbl">At the income &amp; verification step</p></div>
+        <div class="stat" data-reveal style="--d:.2s"><div class="stat-val word">↓ Calls</div><p class="stat-lbl">Fewer mid-application support tickets</p></div>
+        <div class="stat" data-reveal style="--d:.3s"><div class="stat-val word">Reusable</div><p class="stat-lbl">Form components adopted platform-wide</p></div>
+      </div>
+
+      <div class="block block-head" style="margin-top:90px">
+        <p class="eyebrow">Beyond the numbers</p>
+        <div data-reveal>
+          <ul class="ticks" style="margin-top:0">
+            <li>Applicants could self-serve through the hardest steps without calling the bank.</li>
+            <li>The reusable form and validation components sped up delivery across the wider platform.</li>
+            <li>The bank reduced its dependency on branch visits for loan applications.</li>
+            <li>The progress tracker and plain-language patterns became a template for other flows.</li>
+          </ul>
+          <p class="disclaimer" style="margin-top:36px;color:rgba(255,255,255,.45)">SmartLoan Connect — digital lending platform · Mphasis client work, details anonymised.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="more" aria-labelledby="more-title">
+    <div class="wrap">
+      <div class="more-head">
+        <h2 id="more-title" data-split>Explore more work.</h2>
+        <a class="back" href="index.html#work" data-magnetic>All projects →</a>
+      </div>
+      <div class="more-grid">
+        <a class="more-card" href="case-study-wealth.html" data-reveal data-cursor="View">
+          <div class="more-img"><img src="assets/wealth/transaction-dashboard.jpg" alt="" loading="lazy"></div>
+          <p class="more-tag">Product Design · Fintech</p>
+          <p class="more-title">Users could see the data. They just didn't believe it.</p>
+        </a>
+        <a class="more-card" href="case-study-stc.html" data-reveal style="--d:.1s" data-cursor="View">
+          <div class="more-img"><img src="stc%20hub_2.png" alt="" loading="lazy"></div>
+          <p class="more-tag">Usability Testing · Enterprise UX</p>
+          <p class="more-title">The portal worked. So why did nobody trust it?</p>
+        </a>
+        <a class="more-card" href="case-study-robot.html" data-reveal style="--d:.2s" data-cursor="View">
+          <div class="more-img"><img src="robot-%20project.png" alt="" loading="lazy"></div>
+          <p class="more-tag">UX Research · Interaction Design</p>
+          <p class="more-title">Robot delivery existed. The experience didn't.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="cs-footer">
+  <span>© 2026 Pratiksha Kulam</span>
+  <span>Designed with a side of coffee, code &amp; AI</span>
+  <a href="index.html">Back to home ↑</a>
+</footer>
+
+<script>
+/* screens — built before case-study.js so its tab events find them */
+const SL = {
+  before: () => `
+    <div class="app-head"><div class="app-logo">SmartLoan<span>Connect</span></div><div class="app-help">Help?</div></div>
+    <div class="messy">⚠ No progress shown · jargon fields · no guidance — this is where users quit</div>
+    <div class="form-title">Loan Application — Financial Details</div>
+    <div class="form-sub">Section 4</div>
+    <div class="long-form">
+      <div class="field"><label>Gross Annual Remuneration (INR)</label><div class="in err">Enter amount</div><div class="err-msg">Required field</div></div>
+      <div class="field"><label>Obligations / FOIR Declaration</label><div class="in"></div></div>
+      <div class="field"><label>Source of Income Classification</label><div class="in"></div></div>
+      <div class="field"><label>Existing EMI Liabilities</label><div class="in"></div></div>
+      <div class="field"><label>Upload Income Proof</label><div class="in">Choose file…</div></div>
+      <div class="field"><label>Collateral / Security Particulars</label><div class="in"></div></div>
+    </div>
+    <div class="btn btn-primary dull">Continue</div>`,
+  after: () => `
+    <div class="app-head"><div class="app-logo">SmartLoan<span>Connect</span></div><div class="app-help">Need help?</div></div>
+    <div class="tracker" aria-label="Step 3 of 5">
+      <div class="tnode done"><div class="tdot">✓</div><div class="tlabel">Eligibility</div></div><div class="tline done"></div>
+      <div class="tnode done"><div class="tdot">✓</div><div class="tlabel">Details</div></div><div class="tline done"></div>
+      <div class="tnode active"><div class="tdot">3</div><div class="tlabel">Income</div></div><div class="tline"></div>
+      <div class="tnode"><div class="tdot">4</div><div class="tlabel">Documents</div></div><div class="tline"></div>
+      <div class="tnode"><div class="tdot">5</div><div class="tlabel">Review</div></div>
+    </div>
+    <div class="form-title">Tell us about your income</div>
+    <div class="form-sub">This helps us show loan options you'll actually qualify for. Just 2 quick fields.</div>
+    <div class="field"><label>Your monthly income (take-home)</label><div class="hint">The amount that lands in your account each month, after tax.</div><div class="in">₹ 0</div></div>
+    <div class="field"><label>Any existing monthly EMIs?</label><div class="hint">Loans or credit-card EMIs you already pay each month. Enter 0 if none.</div><div class="in">₹ 0</div></div>
+    <div class="trust">🔒 Your income details are <b>encrypted</b> and used only to check eligibility.</div>
+    <div class="btn btn-primary">Continue to documents</div>
+    <div class="btn btn-ghost">Save &amp; finish later</div>`
+};
+document.querySelectorAll('[data-ui="after"]').forEach((el) => { el.innerHTML = SL.after(); });
+</script>
+<script src="motion.js"></script>
+<script src="case-study.js"></script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* journey before/after */
+  const flow = document.getElementById('flow'), note = document.getElementById('flowNote');
+  const NOTES = {
+    before: 'A long, unguided flow with silent drop-off at the two steps that asked the most of people.',
+    after: 'Chunked steps, progress always visible, and support built in exactly where people used to leave.'
+  };
+  const setFlow = (v) => {
+    flow.className = 'flow ' + v;
+    flow.querySelectorAll('[data-b]').forEach((el) => { el.innerHTML = v === 'after' ? el.dataset.a : el.dataset.b; });
+    note.textContent = NOTES[v];
+  };
+  document.querySelector('[data-tabs="flow"]').addEventListener('tabchange', (e) => setFlow(e.detail));
+
+  /* prototype */
+  const CALLOUTS = {
+    before: ['What went wrong', 'bad', [
+      ['No progress', '“Section 4” of how many? The form feels endless.'],
+      ['Banker language', 'Remuneration, FOIR, collateral particulars — terms customers don\'t use.'],
+      ['Error before input', 'A red “required” state greets people before they\'ve typed anything.'],
+      ['No reason or reassurance', 'Nothing explains why income is needed or how it\'s protected.']
+    ]],
+    after: ['What changed', '', [
+      ['Progress tracker', 'Step 3 of 5, with completed steps checked off.'],
+      ['Two plain-language fields', 'Take-home income and existing EMIs, each with a one-line hint.'],
+      ['Why we ask', 'Framed around showing loans people will actually qualify for.'],
+      ['Trust + an exit', 'Encryption reassurance, and “save & finish later” instead of abandoning.']
+    ]]
+  };
+  const device = document.getElementById('protoDevice');
+  const views = [...device.querySelectorAll('.proto-view')];
+  const list = document.getElementById('callouts'), head = document.getElementById('calloutsH');
+  let ver = 'before';
+  const paint = () => {
+    views.forEach((v) => { v.innerHTML = SL[ver](); });
+    const [h, cls, items] = CALLOUTS[ver];
+    head.textContent = h; list.className = 'callouts ' + cls;
+    list.innerHTML = items.map(([t, d], i) => `<li><span class="n">${i + 1}</span><div><b>${t}</b>${d}</div></li>`).join('');
+  };
+  const swap = (fn) => {
+    if (reduce) { fn(); return; }
+    views.forEach((v) => v.classList.add('swap'));
+    setTimeout(() => { fn(); views.forEach((v) => v.classList.remove('swap')); }, 200);
+  };
+  document.querySelector('[data-tabs="ver"]').addEventListener('tabchange', (e) => { if (e.detail === ver) return; ver = e.detail; swap(paint); });
+  document.querySelector('[data-tabs="dev"]').addEventListener('tabchange', (e) => { device.dataset.dev = e.detail; });
+  paint();
+})();
+</script>
+</body>
+</html>
