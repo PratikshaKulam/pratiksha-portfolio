@@ -74,13 +74,31 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .cycle span { display: inline-block; transition: opacity .35s var(--ease), transform .35s var(--ease); }
 .cycle span.out { opacity: 0; transform: translateY(-14px); }
 .cycle span.pre { opacity: 0; transform: translateY(14px); transition: none; }
-.photo { justify-self: end; position: relative; width: min(400px, 100%); }
-.photo-frame { background: #fff; padding: 14px 14px 58px; border-radius: 4px; box-shadow: 0 30px 60px -28px rgba(21,21,21,.35), 0 2px 6px rgba(21,21,21,.06); transform: rotate(2.5deg); transition: transform .5s var(--ease); }
-.photo:hover .photo-frame { transform: rotate(0deg) scale(1.01); }
-.photo-frame { position: relative; }
-.clip { position: absolute; top: -56px; left: 60%; width: 44px; height: 132px; transform: rotate(9deg); filter: drop-shadow(1px 3px 2px rgba(21,21,21,.28)); pointer-events: none; z-index: 2; }
+.photo { justify-self: end; position: relative; width: min(400px, 100%); margin-right: 18px; }
+.photo-frame { position: relative; background: #fff; padding: 14px 14px 58px; border-radius: 4px; box-shadow: 0 30px 60px -28px rgba(21,21,21,.35), 0 2px 6px rgba(21,21,21,.06); animation: photoIn .8s var(--ease) both; }
 .photo-frame img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 20%; }
 .photo-cap { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font-family: var(--hand); font-size: 26px; color: var(--ink); }
+
+/* Figma-style selection around the photo */
+.sel { position: absolute; inset: -10px; border: 1.5px solid var(--accent); pointer-events: none; animation: selIn .5s var(--ease) .75s both; }
+.sel i { position: absolute; width: 10px; height: 10px; background: #fff; border: 1.5px solid var(--accent); animation: handleIn .3s var(--ease) both; }
+.sel .tl { top: -6px; left: -6px; animation-delay: 1.05s; }
+.sel .tr { top: -6px; right: -6px; animation-delay: 1.12s; }
+.sel .bl { bottom: -6px; left: -6px; animation-delay: 1.19s; }
+.sel .br { bottom: -6px; right: -6px; animation-delay: 1.26s; }
+.sel-tag { position: absolute; left: 50%; top: calc(100% + 12px); transform: translateX(-50%); background: var(--accent); color: #fff; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 5px; white-space: nowrap; animation: tagIn .4s var(--ease) 1.35s both; }
+
+/* multiplayer cursor */
+.mp-cursor { position: absolute; right: -34px; top: 34%; display: flex; align-items: flex-start; gap: 2px; pointer-events: none; animation: cursorIn 1s var(--ease) 1.5s both, cursorIdle 6s ease-in-out 3s infinite; }
+.mp-cursor svg { filter: drop-shadow(0 2px 3px rgba(21,21,21,.25)); }
+.mp-cursor span { margin-top: 20px; background: var(--accent); color: #fff; font-family: var(--hand); font-size: 20px; line-height: 1; padding: 5px 10px 6px; border-radius: 4px 10px 10px 10px; white-space: nowrap; box-shadow: 0 6px 14px -6px rgba(45,62,184,.6); }
+
+@keyframes photoIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes selIn { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
+@keyframes handleIn { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: none; } }
+@keyframes tagIn { from { opacity: 0; transform: translate(-50%, -6px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes cursorIn { from { opacity: 0; transform: translate(140px, 120px); } to { opacity: 1; transform: none; } }
+@keyframes cursorIdle { 0%, 100% { transform: none; } 30% { transform: translate(-8px, 10px); } 60% { transform: translate(4px, -6px); } }
 .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 40px; }
 .tag { font-size: 13px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); background: var(--surface); }
 
@@ -167,7 +185,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   :root { --wrap: calc(100% - 48px); }
   .hero { padding-top: 120px; }
   .hero-grid, .row, .think, .contact-grid { grid-template-columns: 1fr; }
-  .photo { justify-self: start; width: min(340px, 100%); }
+  .photo { justify-self: start; width: min(340px, calc(100% - 40px)); margin: 10px 0 40px 10px !important; }
   .row { gap: 28px; }
   .row { padding: 48px 0; }
   .think-rail { display: none; }
@@ -188,5 +206,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .cycle span, .principle, .rail-fill, .rail-dot, .photo-frame, .snap, .row-media img, .btn, .bento-card { transition: none; }
+  .photo-frame, .sel, .sel i, .sel-tag, .mp-cursor { animation: none !important; }
+  .cycle span, .principle, .rail-fill, .rail-dot, .snap, .row-media img, .btn, .bento-card { transition: none; }
 }
