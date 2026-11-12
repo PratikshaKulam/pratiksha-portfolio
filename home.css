@@ -150,12 +150,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .stat-card { background: var(--accent); border-color: var(--accent); color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
 .stat-number { font-family: var(--display); font-weight: 800; font-size: 64px; letter-spacing: -0.04em; line-height: 1; }
 .stat-desc { font-size: 15px; line-height: 1.5; color: rgba(255,255,255,.82); margin-top: 18px; }
-.tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-.tool-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: var(--bg); font-size: 14px; }
+.tools-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tool-item { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 9px 12px; border-radius: 10px; background: var(--bg); font-size: 14px; }
+.tool-item svg { width: 20px; height: 20px; }
+.tool-item-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tool-item svg { flex-shrink: 0; }
 .bento-card:has(.tools-grid) { display: flex; flex-direction: column; }
 .bento-card:has(.tools-grid) .tools-grid { flex: 1; grid-auto-rows: 1fr; }
-.tool-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .bento-card--full { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; }
 
 /* ── off screen ── */
